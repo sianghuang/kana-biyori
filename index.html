@@ -14,6 +14,7 @@
 /* 假名發音：題目階段可自行選擇聽音，不會自動破題 */
 .kana-sound{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid #e9d9cf;border-radius:99px;background:#fff9f4;color:#b95e4d;padding:9px 16px;font-size:12px;font-weight:750;line-height:1.4;transition:background .15s,border-color .15s}
 .kana-sound:hover{background:#f9e8de;border-color:#d6a18e}
+.kana-sound:disabled{opacity:.45;cursor:not-allowed}
 .kana-sound span{font-size:17px;line-height:1}
 .question-sound{margin-top:17px;position:relative;z-index:2}
 .answer-sound{margin-top:13px}
@@ -203,7 +204,7 @@ body{background:#f7f6f2}
               <div class="word-en" id="wordEnglish"></div>
             </div>
             <div class="word-bottom">
-              <button type="button" class="inline-btn" id="playSound" aria-label="播放日文單字發音"><span class="audio-icon">♪</span> 聽單字</button>
+              <button type="button" class="kana-sound word-sound" id="playSound" aria-label="播放日文單字發音"><span aria-hidden="true">♪</span> 聽單字</button>
               <button type="button" class="inline-btn right" id="newExample">換單字 <span aria-hidden="true">↻</span></button>
             </div>
             <div class="extra-words" id="extraWords"></div>
