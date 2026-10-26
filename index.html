@@ -121,20 +121,24 @@ body{background:#f7f6f2}
 }
 @media(max-width:380px){.mode-btn{font-size:12px;gap:2px}.mode-btn span{font-size:10px}.settings-details summary{padding:0 8px}.secondary-button{padding:10px}.card-answer{padding:17px}.main-kana{font-size:152px}}
 
-/* Anime quote cards: the original kana-practice flow remains untouched. */
-.practice-tabs{display:flex;align-items:center;gap:5px;margin:0 0 15px;background:#eeece6;padding:5px;border-radius:13px}
-.practice-tab{flex:1;min-height:45px;border:0;border-radius:9px;background:transparent;color:#868980;font-size:15px;font-weight:780;display:flex;align-items:center;justify-content:center;gap:7px}
-.practice-tab.active{background:#fffdf9;color:#bd624e;box-shadow:0 2px 8px #0000000a}
-.tab-new{font-size:9px;color:#b36c4d;background:#f8e8dc;border-radius:4px;padding:2px 5px;letter-spacing:.4px}
-.anime-card .main-kana{font-size:clamp(29px,6vw,49px);line-height:1.5;letter-spacing:.02em;text-align:center;font-weight:760;overflow-wrap:anywhere;max-width:100%;padding:0 9px}
-.anime-card .kana-container{height:auto;min-height:242px;width:100%}
-.anime-card .kana-halo{opacity:.45}
-.anime-card .answer-roman{font-size:clamp(19px,4.4vw,28px);line-height:1.45;letter-spacing:0;overflow-wrap:anywhere}
-.anime-card .word-jp{font-size:clamp(23px,5vw,31px);line-height:1.5}
-.anime-card .word-reading{font-size:14px;line-height:1.7}
-.anime-card .word-bottom,.anime-card .extra-words{display:none!important}
-.anime-card .level-tag{font-size:11px;line-height:1.5;white-space:normal}
-@media(max-width:750px){.practice-tabs{margin-bottom:12px}.practice-tab{font-size:14px;min-height:43px}.anime-card .kana-container{min-height:225px}.anime-card .card-front{min-height:320px}}
+/* ANIME is only an optional surprise below the normal N5/N4 example word. */
+.anime-switch-group{display:flex;flex-direction:column;gap:5px}
+.anime-switch-group small{font-size:10.5px;line-height:1.5;color:#9a958e}
+.anime-easter{margin-top:5px;border:1px solid #eddfd4;border-radius:13px;background:#fcf8f4;overflow:hidden}
+.anime-easter details summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:9px;padding:13px 14px;flex-wrap:wrap}
+.anime-easter details summary::-webkit-details-marker{display:none}
+.anime-easter-tag{font-size:10px;font-weight:800;white-space:nowrap;color:#bd6650;letter-spacing:.2px;background:#f5e5da;border-radius:5px;padding:5px 7px}
+.anime-easter-title{font-size:15px;font-weight:780;line-height:1.5;color:#39433b;overflow-wrap:anywhere;flex:1;min-width:100px}
+.anime-easter-chevron{font-size:18px;color:#a18f83;transition:transform .15s}
+.anime-easter details[open] .anime-easter-chevron{transform:rotate(180deg)}
+.anime-easter-body{border-top:1px solid #f0e5dd;margin:0 14px;padding:11px 0 13px;display:flex;flex-direction:column;gap:5px;overflow-wrap:anywhere}
+.anime-easter-reading{font-size:14px;line-height:1.6;font-weight:700;color:#46534b}
+.anime-easter-reading mark{background:#ebbd9d;color:#42362f;border-radius:3px;padding:0 2px}
+.anime-easter-roman{font-size:12px;color:#867d74;line-height:1.5}
+.anime-easter-meaning{font-size:13px;font-weight:650;color:#534c47;line-height:1.5}
+.anime-easter-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#9e9287;font-size:11px;margin-top:3px}
+.anime-easter-meta button{font:inherit;border:1px solid #e7d3c5;border-radius:20px;background:#fffcf9;color:#b46351;font-size:12px;font-weight:700;padding:7px 12px}
+@media(max-width:750px){.anime-easter-title{font-size:14px}.anime-easter details summary{padding:12px}}
 </style>
 </head>
 <body>
@@ -152,10 +156,6 @@ body{background:#f7f6f2}
 
     <main class="main-layout">
       <section class="practice-section">
-        <nav class="practice-tabs" role="group" aria-label="練習內容">
-          <button class="practice-tab active" data-practice="kana" aria-pressed="true">五十音</button>
-          <button class="practice-tab" data-practice="anime" aria-pressed="false">動漫台詞 <span class="tab-new">NEW</span></button>
-        </nav>
         <div class="settings-bar">
           <div class="mode-control" role="group" aria-label="假名練習模式">
             <button class="mode-btn active" data-mode="hiragana" aria-pressed="true">あ <span>平假名</span></button>
@@ -166,6 +166,10 @@ body{background:#f7f6f2}
             <summary aria-label="更多練習設定" title="設定">⚙ <span>設定</span></summary>
             <div class="settings-popover">
               <label class="switch-setting" for="advancedSwitch"><span>加入濁音</span><span class="switch"><input id="advancedSwitch" type="checkbox"><span class="slider-switch"></span></span></label>
+              <div class="anime-switch-group">
+                <label class="switch-setting" for="animeSwitch"><span>ANIME 動漫彩蛋</span><span class="switch"><input id="animeSwitch" type="checkbox"><span class="slider-switch"></span></span></label>
+                <small>偶爾額外出現符合當前假名的動漫台詞</small>
+              </div>
               <div class="filter-row"><label for="levelSelect">單字等級</label><select id="levelSelect"><option value="all">N5 + N4</option><option value="N5">只看 N5</option><option value="N4">只看 N4</option></select></div>
               <div class="settings-data"><strong id="vocabCount">—</strong> 筆練習單字</div>
               <span class="sync-pill" id="sourceState" title="詞庫載入情況"><span class="sync-dot"></span> <span id="sourceText">載入詞庫中</span></span>
@@ -202,6 +206,21 @@ body{background:#f7f6f2}
               <button type="button" class="inline-btn right" id="newExample">換單字 <span aria-hidden="true">↻</span></button>
             </div>
             <div class="extra-words" id="extraWords"></div>
+            <aside class="anime-easter hidden" id="animeEaster" aria-label="額外的動漫彩蛋">
+              <details id="animeBonusDetails">
+                <summary>
+                  <span class="anime-easter-tag">ANIME 彩蛋</span>
+                  <span class="anime-easter-title" id="animeQuoteText"></span>
+                  <span class="anime-easter-chevron" aria-hidden="true">⌄</span>
+                </summary>
+                <div class="anime-easter-body">
+                  <div class="anime-easter-reading" id="animeQuoteReading"></div>
+                  <div class="anime-easter-roman" id="animeQuoteRoman"></div>
+                  <div class="anime-easter-meaning" id="animeQuoteMeaning"></div>
+                  <div class="anime-easter-meta"><span id="animeQuoteSeries"></span><button type="button" id="animeQuotePlay" aria-label="朗讀動漫台詞">♪ 聽台詞</button></div>
+                </div>
+              </details>
+            </aside>
           </div>
           <div class="card-footline"><span>かな 日和</span><span class="dot-group">● <span>●</span> <span>●</span></span></div>
         </div>
@@ -238,7 +257,7 @@ body{background:#f7f6f2}
     <details class="credits-details"><summary>詞庫來源與授權</summary><footer class="footer"><span>Made for daily Japanese practice · 純 JavaScript，無後端。</span><span>詞彙分級僅供參考 · <a href="https://github.com/evanclan/OpenJLPT" target="_blank" rel="noopener noreferrer">OpenJLPT</a>（<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>）及 JMdict／KANJIDIC2（EDRDG）、Jonathan Waller、Tatoeba</span></footer></details>
   </div>
 
-  <dialog id="helpDialog" class="help-dialog"><div class="dialog-content"><div class="dialog-top"><h2>操作方式</h2><button id="closeHelp" aria-label="關閉說明" class="icon-button">×</button></div><ol><li>看到假名，先自己唸出來。</li><li>按「看答案」確認讀音與例字。</li><li>按「下一題」繼續；也能用 ♪ 聽發音。</li><li>切到「動漫台詞」，練習經典短句與招式，不影響五十音題庫。</li></ol><p>空白鍵／Enter：下一步，P：聽假名。單字分類參考 N5～N4，會盡量輪替例字。</p></div></dialog>
+  <dialog id="helpDialog" class="help-dialog"><div class="dialog-content"><div class="dialog-top"><h2>操作方式</h2><button id="closeHelp" aria-label="關閉說明" class="icon-button">×</button></div><ol><li>看到假名，先自己唸出來。</li><li>按「看答案」確認讀音與例字。</li><li>按「下一題」繼續；也能用 ♪ 聽發音。</li><li>想增添趣味，可在設定開啟 ANIME 彩蛋，少數題目會額外附上與當前假名相符的動漫台詞。</li></ol><p>空白鍵／Enter：下一步，P：聽假名。單字分類參考 N5～N4，會盡量輪替例字。</p></div></dialog>
   <script>
 /* 精選短篇動漫名台詞／招式，與 N4/N5 詞庫獨立，離線也可使用。*/
 window.KANA_ANIME_QUOTES = String.raw`
@@ -926,7 +945,7 @@ const STORE='kanabiyori_state_v2';
 const ANIME_QUOTES=(window.KANA_ANIME_QUOTES||'').split('\n').map(line=>line.trim()).filter(line=>line&&!line.startsWith('#')).map((line,id)=>{const [text,reading,roman,meaning,series]=line.split('|');return {id,text,reading,roman,meaning,series}}).filter(q=>q.text&&q.reading&&q.roman&&q.meaning&&q.series);
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 let saved={};try{saved=JSON.parse(safeStorage.get(STORE)||'{}')||{}}catch{}
-const state={practice:saved.practice==='anime'?'anime':'kana',animeRecent:Array.isArray(saved.animeRecent)?saved.animeRecent:[],mode:['hiragana','katakana','mixed'].includes(saved.mode)?saved.mode:'hiragana',advanced:!!saved.advanced,level:['all','N4','N5'].includes(saved.level)?saved.level:'all',stage:'ready',card:null,primary:null,extras:[],serial:0,completed:typeof saved.completed==='number'?saved.completed:0,uniqueAll:new Set(Array.isArray(saved.uniqueAll)?saved.uniqueAll:[]),dailyDate:saved.dailyDate===today()?saved.dailyDate:today(),dailyCount:saved.dailyDate===today()?(saved.dailyCount||0):0,dailySeen:new Set(saved.dailyDate===today()&&Array.isArray(saved.dailySeen)?saved.dailySeen:[]),recent:saved.recent&&typeof saved.recent==='object'?saved.recent:{},lastKana:saved.lastKana||'',vocab:[],candidatesCache:new Map(),currentUsed:new Set(),remoteCount:0};
+const state={animeEnabled:saved.animeEnabled===true,animeRecent:Array.isArray(saved.animeRecent)?saved.animeRecent:[],animeBonus:null,mode:['hiragana','katakana','mixed'].includes(saved.mode)?saved.mode:'hiragana',advanced:!!saved.advanced,level:['all','N4','N5'].includes(saved.level)?saved.level:'all',stage:'ready',card:null,primary:null,extras:[],serial:0,completed:typeof saved.completed==='number'?saved.completed:0,uniqueAll:new Set(Array.isArray(saved.uniqueAll)?saved.uniqueAll:[]),dailyDate:saved.dailyDate===today()?saved.dailyDate:today(),dailyCount:saved.dailyDate===today()?(saved.dailyCount||0):0,dailySeen:new Set(saved.dailyDate===today()&&Array.isArray(saved.dailySeen)?saved.dailySeen:[]),recent:saved.recent&&typeof saved.recent==='object'?saved.recent:{},lastKana:saved.lastKana||'',vocab:[],candidatesCache:new Map(),currentUsed:new Set(),remoteCount:0};
 const kanaToHira=(s='')=>[...String(s)].map(ch=>{const n=ch.charCodeAt(0);return n>=0x30a1&&n<=0x30f6?String.fromCharCode(n-0x60):ch}).join('');
 const hiraToKata=(s='')=>[...String(s)].map(ch=>{const n=ch.charCodeAt(0);return n>=0x3041&&n<=0x3096?String.fromCharCode(n+0x60):ch}).join('');
 function toRomaji(input){let s=kanaToHira(input),out='';for(let i=0;i<s.length;i++){const ch=s[i],next=s[i+1]||'';if(ch==='っ'){let nxt=DIGRAPHS[next+(s[i+2]||'')]||ROMAJI[next]||'';out+=nxt.startsWith('ch')?'t':nxt[0]||'';continue}if(ch==='ー'){let m=out.match(/[aeiou]$/);out+=m?m[0]:'-';continue}if(ch==='ん'){out+='n';if(/[あいうえおやゆよ]/.test(next))out+="'";continue}const pair=DIGRAPHS[ch+next];if(pair){out+=pair;i++;continue}out+=ROMAJI[ch]||ch}return out}
@@ -940,7 +959,7 @@ async function loadRemote(){const cached=parseCachedRemote();if(cached.length){s
  try{const rs=await Promise.allSettled(requests);const got=rs.filter(x=>x.status==='fulfilled').flatMap(x=>x.value);if(got.length>400){const merged=new Map();for(const r of [...cached,...got])merged.set(`${r.word}\u0000${r.reading}`,r);const remote=[...merged.values()];state.remoteCount=remote.length;buildWords(remote);safeStorage.set('kanabiyori_jlpt_v2',JSON.stringify(remote));setSource('loaded',`已載入 ${remote.length.toLocaleString()} 筆分級詞`)}else if(!cached.length){setSource('offline',`離線 · ${localWords.length} 筆備援詞`)}}catch{if(!cached.length)setSource('offline',`離線 · ${localWords.length} 筆備援詞`)}}
 function setSource(status,label){const box=el('sourceState');box.classList.remove('loaded','offline');box.classList.add(status);el('sourceText').textContent=label}
 function updateVocabCount(){const words=state.vocab.filter(w=>state.level==='all'||w.level===state.level);el('vocabCount').textContent=words.length.toLocaleString('zh-TW')}
-function persist(){safeStorage.set(STORE,JSON.stringify({practice:state.practice,animeRecent:state.animeRecent,mode:state.mode,advanced:state.advanced,level:state.level,completed:state.completed,uniqueAll:[...state.uniqueAll],dailyDate:state.dailyDate,dailyCount:state.dailyCount,dailySeen:[...state.dailySeen],recent:state.recent,lastKana:state.lastKana}))}
+function persist(){safeStorage.set(STORE,JSON.stringify({animeEnabled:state.animeEnabled,animeRecent:state.animeRecent,mode:state.mode,advanced:state.advanced,level:state.level,completed:state.completed,uniqueAll:[...state.uniqueAll],dailyDate:state.dailyDate,dailyCount:state.dailyCount,dailySeen:[...state.dailySeen],recent:state.recent,lastKana:state.lastKana}))}
 function ensureToday(){if(state.dailyDate!==today()){state.dailyDate=today();state.dailyCount=0;state.dailySeen.clear()}}
 function updateStats(){ensureToday();el('todayQuick').textContent=`今日 ${state.dailyCount} 題`;el('dailyCount').textContent=state.dailyCount;el('uniqueCount').textContent=state.dailySeen.size;const count=BASIC.filter(c=>state.uniqueAll.has(c)).length;el('progressFraction').textContent=`${count}/46`;el('progressFill').style.width=`${(count/46*100).toFixed(1)}%`;el('progressBar').setAttribute('aria-valuenow',count)}
 function randomShuffle(arr){for(let i=arr.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
@@ -959,10 +978,10 @@ function chooseWord(hira,script,excluded=new Set()){
  const word=pool[Math.floor(Math.random()*pool.length)];if(!excluded.size){const next=[...history.filter(id=>id!==word.id),word.id];state.recent[histKey]=next.slice(-Math.min(24,Math.max(3,Math.floor(candidates.length*.7))))}return word;
 }
 function fetchExamples(){const curr=state.card;if(!curr)return;const chosen=new Set();const primary=chooseWord(curr.hira,curr.script,chosen);if(!primary){state.primary=null;state.extras=[];return}state.primary=primary;chosen.add(primary.id);state.currentUsed.add(primary.id);state.extras=[];for(let i=0;i<2;i++){const w=chooseWord(curr.hira,curr.script,chosen);if(!w)break;chosen.add(w.id);state.extras.push(w)}}
-function showQuestion(forceKana){if(state.practice==='anime'){showAnimeQuestion();return}if('speechSynthesis'in window)window.speechSynthesis.cancel();const hira=forceKana||chooseKana(),script=state.mode==='mixed'?(Math.random()<.5?'hiragana':'katakana'):state.mode;state.serial++;state.stage='question';state.card={hira,script};state.primary=null;state.extras=[];state.currentUsed=new Set();state.lastKana=hira;el('cardId').textContent=`第 ${state.serial} 題`;el('scriptName').textContent=script==='katakana'?'KATAKANA · 片假名':'HIRAGANA · 平假名';el('mainKana').textContent=script==='katakana'?hiraToKata(hira):hira;el('questionPrompt').textContent='先唸唸看';el('flashcard').classList.remove('revealed');el('answerView').classList.add('hidden');el('frontView').classList.remove('hidden');el('playKanaFront').classList.remove('hidden');el('actionBtn').innerHTML='看答案 <span class="btn-arrow" aria-hidden="true">→</span>';el('skipBtn').disabled=false;refreshGrid();persist()}
+function showQuestion(forceKana){if('speechSynthesis'in window)window.speechSynthesis.cancel();const hira=forceKana||chooseKana(),script=state.mode==='mixed'?(Math.random()<.5?'hiragana':'katakana'):state.mode;state.serial++;state.stage='question';state.card={hira,script};state.primary=null;state.extras=[];state.animeBonus=null;el('animeEaster').classList.add('hidden');el('animeBonusDetails').open=false;state.currentUsed=new Set();state.lastKana=hira;el('cardId').textContent=`第 ${state.serial} 題`;el('scriptName').textContent=script==='katakana'?'KATAKANA · 片假名':'HIRAGANA · 平假名';el('mainKana').textContent=script==='katakana'?hiraToKata(hira):hira;el('questionPrompt').textContent='先唸唸看';el('flashcard').classList.remove('revealed');el('answerView').classList.add('hidden');el('frontView').classList.remove('hidden');el('playKanaFront').classList.remove('hidden');el('actionBtn').innerHTML='看答案 <span class="btn-arrow" aria-hidden="true">→</span>';el('skipBtn').disabled=false;refreshGrid();persist()}
 function onAction(){if(state.stage==='ready'||state.stage==='answer'){showQuestion();return}showAnswer()}
 function markRead(){ensureToday();state.dailyCount++;state.completed++;state.uniqueAll.add(state.card.hira);state.dailySeen.add(`${state.card.script}:${state.card.hira}`);updateStats();persist()}
-function showAnswer(){if(state.practice==='anime'){showAnimeAnswer();return}if(!state.card||state.stage!=='question')return;state.stage='answer';markRead();fetchExamples();const k=state.card.hira,rom=k==='を'?'wo · o':ROMAJI[k]||toRomaji(k);el('kanaRoman').textContent=`${state.card.script==='katakana'?hiraToKata(k):k}  ·  ${rom}`;el('kanaNote').textContent=k==='を'?'助詞通常讀作 o':k==='ん'?'常出現在詞中或詞尾':'';el('skipBtn').disabled=true;el('flashcard').classList.add('revealed');el('frontView').classList.add('hidden');el('answerView').classList.remove('hidden');renderWord();el('actionBtn').innerHTML='下一題 <span class="btn-arrow" aria-hidden="true">→</span>';refreshGrid();persist()}
+function showAnswer(){if(!state.card||state.stage!=='question')return;state.stage='answer';markRead();fetchExamples();const k=state.card.hira,rom=k==='を'?'wo · o':ROMAJI[k]||toRomaji(k);el('kanaRoman').textContent=`${state.card.script==='katakana'?hiraToKata(k):k}  ·  ${rom}`;el('kanaNote').textContent=k==='を'?'助詞通常讀作 o':k==='ん'?'常出現在詞中或詞尾':'';el('skipBtn').disabled=true;el('flashcard').classList.add('revealed');el('frontView').classList.add('hidden');el('answerView').classList.remove('hidden');renderWord();showAnimeBonus();el('actionBtn').innerHTML='下一題 <span class="btn-arrow" aria-hidden="true">→</span>';refreshGrid();persist()}
 function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function highlightedReading(reading,k){const r=String(reading),c=kanaToHira(k);let out='';for(const ch of r){out+=kanaToHira(ch)===c?`<mark>${escapeHTML(ch)}</mark>`:escapeHTML(ch)}return out}
 function renderWord(){const w=state.primary,c=state.card;if(!w){el('wordText').textContent='—';el('wordReading').textContent='';el('wordMeaning').textContent='此音暫無符合等級的詞彙';el('wordLevel').textContent='例字';el('wordTopic').textContent='';el('wordEnglish').textContent='';el('matchTag').textContent='';el('extraWords').replaceChildren();el('newExample').disabled=true;el('playSound').disabled=true;return}el('newExample').disabled=false;el('playSound').disabled=false;el('wordText').textContent=w.word;el('wordLevel').textContent=w.level;el('wordTopic').textContent=w.topic;el('wordReading').innerHTML=`${highlightedReading(w.reading,c.hira)} <span>${escapeHTML(w.roman||toRomaji(w.reading))}</span>`;el('wordMeaning').textContent=w.zh||w.en||'—';el('wordEnglish').textContent=w.zh&&w.en?w.en:'';const realKata=/[ァ-ヺ]/.test(w.word);el('matchTag').textContent=c.hira==='を'?'助詞短句':c.script==='katakana'&&!realKata?'同音延伸':'';const extra=el('extraWords');extra.replaceChildren();for(const item of state.extras){const btn=document.createElement('button');btn.className='extra-chip';btn.type='button';const strong=document.createElement('strong');strong.textContent=item.word;btn.append(strong,document.createTextNode(` · ${item.zh||item.en||item.reading}`));btn.title='點擊換成此單字';btn.addEventListener('click',()=>{state.extras=state.extras.filter(x=>x.id!==item.id);if(state.primary)state.extras.unshift(state.primary);state.primary=item;renderWord()});extra.append(btn)}}
@@ -972,62 +991,51 @@ function setMode(next){if(state.mode===next)return;state.mode=next;$$('.mode-btn
 function toggleAdvanced(checked){state.advanced=checked;if(state.card&&!possibleKana().includes(state.card.hira))showQuestion();refreshGrid();persist()}
 function setLevel(v){state.level=v;state.candidatesCache.clear();updateVocabCount();if(state.stage==='answer'){fetchExamples();renderWord()}persist()}
 function playJapanese(text,rate=.82){if(!('speechSynthesis'in window)||typeof SpeechSynthesisUtterance==='undefined'){alert('這個瀏覽器不支援語音播放。請改用最新版 Chrome、Safari 或 Edge。');return}const synth=window.speechSynthesis;const utter=new SpeechSynthesisUtterance(text);utter.lang='ja-JP';utter.rate=rate;const voices=synth.getVoices();const voice=voices.find(v=>v.lang.toLowerCase()==='ja-jp')||voices.find(v=>v.lang.toLowerCase().startsWith('ja'));if(voice)utter.voice=voice;synth.cancel();synth.speak(utter)}
-function speakKana(){if(!state.card||state.stage==='ready')return;if(state.practice==='anime'){playJapanese(state.card.quote.reading,.77);return}const kana=state.card.script==='katakana'?hiraToKata(state.card.hira):state.card.hira;playJapanese(kana,.7)}
-function speak(){if(state.practice==='anime'){speakKana();return}if(!state.primary)return;playJapanese(state.primary.reading,.82)}
+function speakKana(){if(!state.card||state.stage==='ready')return;const kana=state.card.script==='katakana'?hiraToKata(state.card.hira):state.card.hira;playJapanese(kana,.7)}
+function speak(){if(!state.primary)return;playJapanese(state.primary.reading,.82)}
 
-function nextAnimeQuote(){
- let pool=ANIME_QUOTES.filter(q=>!state.animeRecent.includes(q.id));
- if(!pool.length){state.animeRecent=[];pool=ANIME_QUOTES;}
- const q=pool[Math.floor(Math.random()*pool.length)];
- if(!q)return null;
- state.animeRecent.push(q.id);
- state.animeRecent=state.animeRecent.slice(-Math.min(ANIME_QUOTES.length-1,30));
- return q;
+
+// Match whole kana morae; e.g. し does not match the different sound しゅ.
+function hasKanaMora(reading,hira){
+ const text=kanaToHira(reading).replace(/\s+/g,'');
+ const small='ゃゅょぁぃぅぇぉ';
+ for(let i=0;i<text.length;i++){
+  if(text[i]===hira&&!(text[i+1]&&small.includes(text[i+1])))return true;
+ }
+ return false;
 }
-function showAnimeQuestion(){
- if('speechSynthesis'in window)window.speechSynthesis.cancel();
- const q=nextAnimeQuote();if(!q)return;
- state.serial++;state.stage='question';state.card={anime:true,quote:q};state.primary=null;
- el('cardId').textContent=`第 ${state.serial} 題`;el('scriptName').textContent='ANIME · 動漫台詞';
- el('mainKana').textContent=q.text;el('questionPrompt').textContent='先唸唸看';
- el('flashcard').classList.remove('revealed');el('answerView').classList.add('hidden');
- el('frontView').classList.remove('hidden');el('playKanaFront').classList.remove('hidden');
- el('actionBtn').innerHTML='看答案 <span class="btn-arrow" aria-hidden="true">→</span>';
- el('skipBtn').disabled=false;persist();
+function chooseAnimeBonus(hira){
+ const candidates=ANIME_QUOTES.filter(q=>hasKanaMora(q.reading,hira));
+ if(!candidates.length)return null;
+ let pool=candidates.filter(q=>!state.animeRecent.includes(q.id));
+ if(!pool.length)pool=candidates;
+ const chosen=pool[Math.floor(Math.random()*pool.length)];
+ state.animeRecent=[...state.animeRecent.filter(id=>id!==chosen.id),chosen.id].slice(-Math.min(24,ANIME_QUOTES.length-1));
+ return chosen;
 }
-function showAnimeAnswer(){
- if(!state.card?.quote||state.stage!=='question')return;
- const q=state.card.quote;state.stage='answer';ensureToday();state.dailyCount++;state.completed++;updateStats();
- el('kanaRoman').textContent=q.roman;el('kanaNote').textContent='';
- el('wordLevel').textContent=q.series;el('wordTopic').textContent='';el('matchTag').textContent='';
- el('wordText').textContent=q.text;el('wordReading').textContent=q.reading;
- el('wordMeaning').textContent=q.meaning;el('wordEnglish').textContent='';
- el('answerView').classList.remove('hidden');el('frontView').classList.add('hidden');
- el('flashcard').classList.add('revealed');el('skipBtn').disabled=true;
- el('actionBtn').innerHTML='下一題 <span class="btn-arrow" aria-hidden="true">→</span>';
+function showAnimeBonus(){
+ const panel=el('animeEaster');panel.classList.add('hidden');
+ el('animeBonusDetails').open=false;
+ state.animeBonus=null;
+ if(!state.animeEnabled||state.stage!=='answer'||!state.card||Math.random()>=.28)return;
+ const q=chooseAnimeBonus(state.card.hira);
+ if(!q)return;
+ state.animeBonus=q;
+ el('animeQuoteText').textContent=q.text;
+ el('animeQuoteReading').innerHTML=highlightedReading(q.reading,state.card.hira);
+ el('animeQuoteRoman').textContent=q.roman;
+ el('animeQuoteMeaning').textContent=q.meaning;
+ el('animeQuoteSeries').textContent=q.series;
+ panel.classList.remove('hidden');
  persist();
 }
-function setPractice(next,initial=false){
- if(!['kana','anime'].includes(next))return;
- if(!initial&&state.practice===next)return;
- if('speechSynthesis'in window)window.speechSynthesis.cancel();
- state.practice=next;const anime=next==='anime';
- $$('.practice-tab').forEach(btn=>{const selected=btn.dataset.practice===next;btn.classList.toggle('active',selected);btn.setAttribute('aria-pressed',String(selected))});
- document.querySelector('.settings-bar').classList.toggle('hidden',anime);
- document.querySelector('.sidebar').classList.toggle('hidden',anime);
- el('flashcard').classList.toggle('anime-card',anime);
- el('answerView').classList.add('hidden');el('frontView').classList.remove('hidden');el('flashcard').classList.remove('revealed');
- el('cardId').textContent='準備開始';el('scriptName').textContent=anime?'動漫名台詞':'五十音練習';
- el('mainKana').textContent=anime?'「…」':'あ';el('questionPrompt').textContent=anime?'抽出經典台詞':'按下開始，抽出第一題';
- el('playKanaFront').classList.add('hidden');
- for(const [id,description] of [['playKanaFront',anime?'聽台詞發音':'聽目前假名的發音'],['playKanaAnswer',anime?'重聽台詞發音':'重聽目前假名的發音']]){
-  el(id).setAttribute('aria-label',description);el(id).innerHTML='<span aria-hidden="true">♪</span> '+(anime?'聽台詞':'聽發音');
- }
- el('answerView').querySelector('.answer-divider span').textContent=anime?'台詞解讀':'例字';
- el('skipBtn').disabled=true;el('actionBtn').innerHTML='開始練習 <span class="btn-arrow" aria-hidden="true">→</span>';
- state.card=null;state.primary=null;state.stage='ready';if(!anime)refreshGrid();persist();
+function toggleAnime(checked){
+ state.animeEnabled=checked;
+ if(state.stage==='answer')showAnimeBonus();
+ else {state.animeBonus=null;el('animeEaster').classList.add('hidden')}
+ persist();
 }
-function init(){$$('.practice-tab').forEach(btn=>btn.addEventListener('click',()=>setPractice(btn.dataset.practice)));setPractice(state.practice,true);el('advancedSwitch').checked=state.advanced;el('levelSelect').value=state.level;$$('.mode-btn').forEach(btn=>{btn.classList.toggle('active',btn.dataset.mode===state.mode);btn.setAttribute('aria-pressed',String(btn.dataset.mode===state.mode));btn.addEventListener('click',()=>setMode(btn.dataset.mode))});el('actionBtn').addEventListener('click',onAction);el('skipBtn').addEventListener('click',()=>showQuestion());el('advancedSwitch').addEventListener('change',e=>toggleAdvanced(e.target.checked));el('levelSelect').addEventListener('change',e=>setLevel(e.target.value));el('newExample').addEventListener('click',changeExample);el('playSound').addEventListener('click',speak);el('playKanaFront').addEventListener('click',speakKana);el('playKanaAnswer').addEventListener('click',speakKana);el('helpBtn').addEventListener('click',()=>el('helpDialog').showModal());el('closeHelp').addEventListener('click',()=>el('helpDialog').close());el('helpDialog').addEventListener('click',e=>{if(e.target===el('helpDialog'))el('helpDialog').close()});document.addEventListener('keydown',e=>{if(e.repeat||el('helpDialog').open)return;const tag=document.activeElement?.tagName;if(['BUTTON','INPUT','SELECT','TEXTAREA','A'].includes(tag))return;if(e.code==='KeyP'){e.preventDefault();speakKana();return}if(!['Space','Enter'].includes(e.code))return;e.preventDefault();onAction()});window.addEventListener('beforeunload',persist);refreshGrid();updateStats();buildWords();loadRemote();}
+function init(){el('animeSwitch').checked=state.animeEnabled;el('advancedSwitch').checked=state.advanced;el('levelSelect').value=state.level;$$('.mode-btn').forEach(btn=>{btn.classList.toggle('active',btn.dataset.mode===state.mode);btn.setAttribute('aria-pressed',String(btn.dataset.mode===state.mode));btn.addEventListener('click',()=>setMode(btn.dataset.mode))});el('actionBtn').addEventListener('click',onAction);el('skipBtn').addEventListener('click',()=>showQuestion());el('advancedSwitch').addEventListener('change',e=>toggleAdvanced(e.target.checked));el('animeSwitch').addEventListener('change',e=>toggleAnime(e.target.checked));el('animeQuotePlay').addEventListener('click',()=>{if(state.animeBonus)playJapanese(state.animeBonus.reading,.78)});el('levelSelect').addEventListener('change',e=>setLevel(e.target.value));el('newExample').addEventListener('click',changeExample);el('playSound').addEventListener('click',speak);el('playKanaFront').addEventListener('click',speakKana);el('playKanaAnswer').addEventListener('click',speakKana);el('helpBtn').addEventListener('click',()=>el('helpDialog').showModal());el('closeHelp').addEventListener('click',()=>el('helpDialog').close());el('helpDialog').addEventListener('click',e=>{if(e.target===el('helpDialog'))el('helpDialog').close()});document.addEventListener('keydown',e=>{if(e.repeat||el('helpDialog').open)return;const tag=document.activeElement?.tagName;if(['BUTTON','INPUT','SELECT','TEXTAREA','A'].includes(tag))return;if(e.code==='KeyP'){e.preventDefault();speakKana();return}if(!['Space','Enter'].includes(e.code))return;e.preventDefault();onAction()});window.addEventListener('beforeunload',persist);refreshGrid();updateStats();buildWords();loadRemote();}
 init();
 })();
 
