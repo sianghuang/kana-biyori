@@ -17,6 +17,109 @@
 .kana-sound span{font-size:17px;line-height:1}
 .question-sound{margin-top:17px;position:relative;z-index:2}
 .answer-sound{margin-top:13px}
+
+#skipBtn:disabled{display:none}
+/* UX v2 proposal: fewer visible actions, one primary CTA, progressive disclosure */
+:root{--accent:#ce6a52;--dark:#2b3832}
+body{background:#f7f6f2}
+.app-shell{max-width:1160px}
+.topbar{height:74px}
+.brand-seal{height:37px;width:37px;font-size:24px}
+.brand-text strong{font-size:17px}
+.today-quick{font-size:12px;color:#67736b;font-weight:700;background:#e9eee8;padding:8px 13px;border-radius:99px;white-space:nowrap}
+.main-layout{display:flex;flex-direction:column;gap:17px;max-width:660px;margin:0 auto;padding:36px 0 24px}
+.practice-section{min-width:0}
+.settings-bar{margin:0 0 18px;display:flex;flex-wrap:nowrap;align-items:center;gap:10px}
+.mode-control{flex:1;min-width:0;justify-content:space-between;background:#eae8e2;padding:5px}
+.mode-btn{flex:1;justify-content:center;padding:11px 6px;font-size:15px;gap:7px}
+.mode-btn span{font-size:13px;font-weight:700}
+.settings-details{position:relative;flex:none;z-index:10}
+.settings-details summary{display:flex;gap:6px;align-items:center;justify-content:center;list-style:none;border:1px solid #dfddd4;color:#677068;border-radius:10px;height:48px;padding:0 13px;cursor:pointer;font-size:13px;font-weight:700;background:#fffdf9}
+.settings-details summary::-webkit-details-marker{display:none}
+.settings-details[open] summary{background:#efe7de;color:#9b5749;border-color:#e1c5b9}
+.settings-popover{position:absolute;z-index:50;right:0;top:calc(100% + 9px);min-width:265px;background:#fffefa;border:1px solid #e9e2d8;box-shadow:0 17px 42px #2e2a231f;border-radius:15px;padding:20px;display:grid;gap:19px}
+.settings-popover .filter-row{margin:0;padding:0;border:0}
+.settings-popover .sync-pill{font-size:11px;color:#aaa097}
+.settings-data{font-size:12px;color:#807a72}
+.settings-data strong{font-size:16px;color:#35453d}
+.flashcard{min-height:390px;border:1px solid #eae6de;border-radius:22px;box-shadow:0 10px 45px #6150440a}
+.flashcard:after{inset:6px;border:0}
+.card-topline{padding:22px 28px 0}
+.card-id{font-size:12px;letter-spacing:.4px;color:#8b9188}
+.card-script{font-size:11px;font-weight:750;letter-spacing:.3px}
+.card-front{min-height:300px;padding:0 16px 34px;justify-content:center}
+.kana-container{height:236px}
+.kana-halo{height:206px;width:206px;background:#f6eae2}
+.main-kana{font-size:clamp(156px,18vw,196px)}
+.card-help-text{font-size:14px;color:#747d73;letter-spacing:.5px}
+.kana-sound{border:1px solid #e9ddd3;background:#fffafa;min-height:42px;padding:10px 20px;font-size:13px;color:#a55c4b}
+.question-sound{margin-top:22px}
+.answer-sound{margin-top:0;flex-shrink:0}
+.card-answer{padding:19px 30px 26px;display:flex;flex-direction:column;gap:12px}
+.answer-top{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;margin:0;padding:2px 0 11px}
+.answer-roman{font-size:clamp(32px,6vw,48px);letter-spacing:1px}
+.answer-note{display:none}
+.answer-divider{margin:0;text-align:left;line-height:1.3}
+.answer-divider:before{display:none}
+.answer-divider span{background:transparent;padding:0;color:#aaa095;font-size:12px;letter-spacing:.2px}
+.word-focus{padding:19px 22px;min-height:0;background:#f8f6f1;border-radius:13px}
+.word-heading{min-height:16px}
+.topic-tag,.match-tag{display:none}
+.level-tag{background:#efe7e0;font-size:11px;border-radius:4px;padding:3px 7px}
+.word-jp{font-size:36px;margin:4px 0}
+.word-reading{font-size:14px}
+.word-meaning{font-size:16px;margin-top:9px}
+.word-en{display:none}
+.word-bottom{margin:0;display:flex;align-items:center;gap:15px}
+.inline-btn{font-size:13px;padding:9px 4px}
+.inline-btn.right{margin-left:auto}
+.extra-words,.card-footline{display:none}
+.controls-row{margin-top:16px;gap:10px}
+.primary-button{min-height:60px;border-radius:13px;font-size:17px;font-weight:770;gap:14px}
+.secondary-button{font-size:13px;border-radius:13px;padding:13px 18px}
+.keyboard-tip{display:none}
+.sidebar{padding:0;gap:10px}
+.expand-panel{background:#fffefa;border:1px solid #ece8e2;border-radius:14px;overflow:hidden}
+.expand-panel>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;padding:18px 23px;cursor:pointer;font-size:14px;font-weight:750;color:#38443b}
+.expand-panel>summary::-webkit-details-marker{display:none}
+.expand-panel .summary-hint{font-size:12px;font-weight:500;color:#9d9b91}
+.expand-panel[open] .summary-hint span{display:inline-block;transform:rotate(180deg)}
+.expand-panel .side-panel{border:0;border-top:1px solid #f0eee7;box-shadow:none;padding:13px 23px 20px;border-radius:0}
+.expand-panel .stats-display{margin:5px 0 20px}
+.credits-details{font-size:11px;color:#a6a39b;max-width:660px;margin:15px auto 40px;}
+.credits-details summary{cursor:pointer;text-align:center;list-style:none;padding:10px}
+.credits-details summary::-webkit-details-marker{display:none}
+.credits-details .footer{font-size:10px;padding:12px 0}
+@media(max-width:750px){
+ .app-shell{padding:0 16px}
+ .topbar{height:66px}
+ .top-actions{gap:8px}
+ .today-quick{font-size:11px;padding:7px 10px}
+ .main-layout{padding:19px 0 16px;gap:13px}
+ .settings-bar{gap:7px;margin-bottom:12px}
+ .mode-btn{padding:9px 5px;gap:5px;font-size:14px}
+ .mode-btn span{font-size:11px}
+ .settings-details summary{padding:0 10px;height:44px}
+ .settings-details summary span{display:none}
+ .settings-popover{right:0;min-width:270px}
+ .flashcard{min-height:375px;border-radius:20px}
+ .card-topline{padding:17px 19px 0}
+ .card-front{min-height:330px;padding:0 16px 28px}
+ .kana-container{height:234px}
+ .kana-halo{width:200px;height:200px}
+ .main-kana{font-size:170px}
+ .card-help-text{font-size:13px}
+ .card-answer{padding:22px 20px 28px;gap:15px}
+ .answer-roman{font-size:40px}
+ .answer-sound{padding:9px 11px;font-size:12px}
+ .word-jp{font-size:31px}
+ .controls-row{position:sticky;bottom:0;z-index:7;padding:10px 0 12px;margin-top:7px;background:linear-gradient(0deg,#f7f6f2 83%,#f7f6f2d9 95%,transparent)}
+ .primary-button{min-height:59px;font-size:17px}
+ .secondary-button{padding:12px 14px}
+ .expand-panel>summary{padding:17px 19px}
+ .credits-details{margin:8px auto 25px}
+}
+@media(max-width:380px){.mode-btn{font-size:12px;gap:2px}.mode-btn span{font-size:10px}.settings-details summary{padding:0 8px}.secondary-button{padding:10px}.card-answer{padding:17px}.main-kana{font-size:152px}}
 </style>
 </head>
 <body>
@@ -27,50 +130,47 @@
         <span class="brand-text"><strong>かな日和</strong><small>KANA BIYORI</small></span>
       </a>
       <div class="top-actions">
-        <span class="sync-pill" id="sourceState" title="詞庫載入情況"><span class="sync-dot"></span> <span id="sourceText">載入詞庫中</span></span>
+        <span class="today-quick" id="todayQuick" aria-label="今日已練習題數">今日 0 題</span>
         <button class="icon-button" id="helpBtn" title="操作說明" aria-label="操作說明">?</button>
       </div>
     </header>
 
     <main class="main-layout">
       <section class="practice-section">
-        <div class="intro-row">
-          <div>
-            <div class="eyebrow"><span class="eyebrow-line"></span> DAILY JAPANESE PRACTICE</div>
-            <h1>每天一點，<em>唸出日語。</em></h1>
-            <p class="intro-desc">先自己讀出假名，再翻牌確認。每一題，都認識一個真正的日文單字。</p>
-          </div>
-          <div class="decor-hanko" aria-hidden="true"><span>い</span><span>ろ</span><span>は</span></div>
-        </div>
-
         <div class="settings-bar">
-          <div class="setting-label">練習模式</div>
-          <div class="mode-control" role="group" aria-label="選擇假名模式">
+          <div class="mode-control" role="group" aria-label="假名練習模式">
             <button class="mode-btn active" data-mode="hiragana" aria-pressed="true">あ <span>平假名</span></button>
             <button class="mode-btn" data-mode="katakana" aria-pressed="false">ア <span>片假名</span></button>
             <button class="mode-btn" data-mode="mixed" aria-pressed="false">あア <span>混合</span></button>
           </div>
-          <div class="bar-divider"></div>
-          <label class="switch-setting" for="advancedSwitch"><span>加入濁音</span><span class="switch"><input id="advancedSwitch" type="checkbox"><span class="slider-switch"></span></span></label>
+          <details class="settings-details">
+            <summary aria-label="更多練習設定" title="設定">⚙ <span>設定</span></summary>
+            <div class="settings-popover">
+              <label class="switch-setting" for="advancedSwitch"><span>加入濁音</span><span class="switch"><input id="advancedSwitch" type="checkbox"><span class="slider-switch"></span></span></label>
+              <div class="filter-row"><label for="levelSelect">單字等級</label><select id="levelSelect"><option value="all">N5 + N4</option><option value="N5">只看 N5</option><option value="N4">只看 N4</option></select></div>
+              <div class="settings-data"><strong id="vocabCount">—</strong> 筆練習單字</div>
+              <span class="sync-pill" id="sourceState" title="詞庫載入情況"><span class="sync-dot"></span> <span id="sourceText">載入詞庫中</span></span>
+            </div>
+          </details>
         </div>
 
         <div class="flashcard" id="flashcard" aria-live="polite">
           <div class="card-topline">
-            <span class="card-id" id="cardId">READY TO BEGIN</span>
+            <span class="card-id" id="cardId">準備開始</span>
             <span class="card-script" id="scriptName">五十音練習</span>
           </div>
           <div class="card-front" id="frontView">
             <div class="kana-container"><div class="kana-halo" aria-hidden="true"></div><div class="main-kana" id="mainKana">あ</div></div>
-            <div class="card-help-text" id="questionPrompt">點擊「開始練習」抽出第一題</div>
-            <button type="button" class="kana-sound question-sound hidden" id="playKanaFront" aria-label="聽目前假名的發音"><span aria-hidden="true">♪</span> 聽假名發音</button>
+            <div class="card-help-text" id="questionPrompt">按下開始，抽出第一題</div>
+            <button type="button" class="kana-sound question-sound hidden" id="playKanaFront" aria-label="聽目前假名的發音"><span aria-hidden="true">♪</span> 聽發音</button>
           </div>
           <div class="card-answer hidden" id="answerView">
             <div class="answer-top">
               <span class="answer-roman" id="kanaRoman">a</span>
               <span class="answer-note" id="kanaNote">請確認你的發音</span>
-              <button type="button" class="kana-sound answer-sound" id="playKanaAnswer" aria-label="重聽目前假名的發音"><span aria-hidden="true">♪</span> 重聽假名發音</button>
+              <button type="button" class="kana-sound answer-sound" id="playKanaAnswer" aria-label="重聽目前假名的發音"><span aria-hidden="true">♪</span> 聽發音</button>
             </div>
-            <div class="answer-divider"><span>VOCABULARY · 單字延伸</span></div>
+            <div class="answer-divider"><span>例字</span></div>
             <div class="word-focus">
               <div class="word-heading"><span class="level-tag" id="wordLevel">N5</span><span class="topic-tag" id="wordTopic">日常</span><span class="match-tag" id="matchTag"></span></div>
               <div class="word-jp" id="wordText">朝</div>
@@ -79,8 +179,8 @@
               <div class="word-en" id="wordEnglish"></div>
             </div>
             <div class="word-bottom">
-              <button type="button" class="inline-btn" id="playSound" aria-label="播放日文單字發音"><span class="audio-icon">♪</span> 聽單字發音</button>
-              <button type="button" class="inline-btn right" id="newExample">換一個例字 <span aria-hidden="true">↗</span></button>
+              <button type="button" class="inline-btn" id="playSound" aria-label="播放日文單字發音"><span class="audio-icon">♪</span> 聽單字</button>
+              <button type="button" class="inline-btn right" id="newExample">換單字 <span aria-hidden="true">↻</span></button>
             </div>
             <div class="extra-words" id="extraWords"></div>
           </div>
@@ -89,35 +189,37 @@
 
         <div class="controls-row">
           <button class="primary-button" id="actionBtn" type="button">開始練習 <span class="btn-arrow" aria-hidden="true">→</span></button>
-          <button class="secondary-button" id="skipBtn" type="button" disabled>跳過這題 <span aria-hidden="true">↗</span></button>
+          <button class="secondary-button" id="skipBtn" type="button" disabled>略過 <span aria-hidden="true">↷</span></button>
         </div>
-        <p class="keyboard-tip">鍵盤 <kbd>Space</kbd>／<kbd>Enter</kbd> 翻牌／下一題，<kbd>P</kbd> 聽假名</p>
+        
       </section>
 
       <aside class="sidebar">
-        <section class="stat-panel side-panel">
-          <div class="panel-title-row"><h2>今日練習</h2><span class="panel-decoration">✳</span></div>
-          <div class="stats-display">
-            <div class="stat"><span class="stat-value" id="dailyCount">0</span><span class="stat-desc">完成題數</span></div>
-            <div class="stat"><span class="stat-value" id="uniqueCount">0</span><span class="stat-desc">今日不同假名</span></div>
-          </div>
-          <div class="progress-header"><span>基礎假名探索進度</span><strong id="progressFraction">0/46</strong></div>
-          <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="46" aria-label="基礎假名進度" id="progressBar"><div id="progressFill"></div></div>
-          <p class="footnote">進度保存在此裝置的瀏覽器，免登入。</p>
-        </section>
-
-        <section class="kana-panel side-panel">
-          <div class="panel-title-row"><h2>五十音表</h2><span class="panel-subtitle">點字練習指定音</span></div>
-          <div class="kana-grid" id="kanaGrid" aria-label="五十音表"></div>
-          <div class="grid-legend"><span><i class="legend-color seen"></i> 已練過</span><span><i class="legend-color current"></i> 目前題目</span></div>
-        </section>
-        <section class="library-panel side-panel"><span class="tiny-label">YOUR WORD LIBRARY</span><div><strong id="vocabCount">—</strong><span> 筆日文詞彙可練習</span></div><p>從日常、餐飲、旅遊、工作到生活各種主題，輪流出現不同單字。</p><div class="filter-row"><label for="levelSelect">單字等級</label><select id="levelSelect"><option value="all">N5 + N4</option><option value="N5">只看 N5</option><option value="N4">只看 N4</option></select></div></section>
+        <details class="expand-panel" id="kanaTableDetails">
+          <summary><span>五十音表</span><span class="summary-hint">指定題目 <span aria-hidden="true">⌄</span></span></summary>
+          <section class="kana-panel side-panel">
+            <div class="kana-grid" id="kanaGrid" aria-label="五十音表"></div>
+            <div class="grid-legend"><span><i class="legend-color seen"></i> 已練</span><span><i class="legend-color current"></i> 當前</span></div>
+          </section>
+        </details>
+        <details class="expand-panel" id="progressDetails">
+          <summary><span>練習進度</span><span class="summary-hint">查看紀錄 <span aria-hidden="true">⌄</span></span></summary>
+          <section class="stat-panel side-panel">
+            <div class="stats-display">
+              <div class="stat"><span class="stat-value" id="dailyCount">0</span><span class="stat-desc">今日題數</span></div>
+              <div class="stat"><span class="stat-value" id="uniqueCount">0</span><span class="stat-desc">今日不同假名</span></div>
+            </div>
+            <div class="progress-header"><span>假名探索</span><strong id="progressFraction">0/46</strong></div>
+            <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="46" aria-label="基礎假名進度" id="progressBar"><div id="progressFill"></div></div>
+            <p class="footnote">紀錄保存在此瀏覽器。</p>
+          </section>
+        </details>
       </aside>
     </main>
-    <footer class="footer"><span>Made for daily Japanese practice · 純 JavaScript，無後端。</span><span>詞彙分級僅供參考 · <a href="https://github.com/evanclan/OpenJLPT" target="_blank" rel="noopener noreferrer">OpenJLPT</a>（<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>）及 JMdict／KANJIDIC2（EDRDG）、Jonathan Waller、Tatoeba</span></footer>
+    <details class="credits-details"><summary>詞庫來源與授權</summary><footer class="footer"><span>Made for daily Japanese practice · 純 JavaScript，無後端。</span><span>詞彙分級僅供參考 · <a href="https://github.com/evanclan/OpenJLPT" target="_blank" rel="noopener noreferrer">OpenJLPT</a>（<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>）及 JMdict／KANJIDIC2（EDRDG）、Jonathan Waller、Tatoeba</span></footer></details>
   </div>
 
-  <dialog id="helpDialog" class="help-dialog"><div class="dialog-content"><div class="dialog-top"><h2>如何使用</h2><button id="closeHelp" aria-label="關閉說明" class="icon-button">×</button></div><ol><li>選擇平假名、片假名或混合模式。</li><li>按「開始練習」，看著大字<strong>先自己唸出來</strong>。</li><li>題目時可以先自己唸，再按「聽假名發音」確認，翻牌後也能重聽平假名／片假名單音。</li><li>再按「查看答案」，顯示羅馬拼音與 N5～N4 實際單字。</li><li>你可按「換一個例字」學更多同音單字，按「下一題」繼續。</li><li>右邊的五十音表可直接指定想加強的字。</li></ol><p>「を／ヲ」主要對應助詞，因此範例是自然的短句；「ん／ン」通常出現在詞中或詞尾。片假名練習優先顯示外來語，必要時補充相同發音的其他日文詞。瀏覽器語音播放會受裝置可用的日文語音包影響。</p><p>開啟網站時會嘗試擴充 OpenJLPT 分級詞庫；若無網路，仍有內建備援詞庫可用。練習進度不會跨裝置同步。</p></div></dialog>
+  <dialog id="helpDialog" class="help-dialog"><div class="dialog-content"><div class="dialog-top"><h2>操作方式</h2><button id="closeHelp" aria-label="關閉說明" class="icon-button">×</button></div><ol><li>看到假名，先自己唸出來。</li><li>按「看答案」確認讀音與例字。</li><li>按「下一題」繼續；也能用 ♪ 聽發音。</li></ol><p>空白鍵／Enter：下一步，P：聽假名。單字分類參考 N5～N4，會盡量輪替例字。</p></div></dialog>
   <script>
 /* 手工整理的備援入門詞彙。OpenJLPT 網路詞庫載入後將自動擴充。*/
 window.KANA_LOCAL_WORDS = String.raw`
@@ -778,7 +880,7 @@ function setSource(status,label){const box=el('sourceState');box.classList.remov
 function updateVocabCount(){const words=state.vocab.filter(w=>state.level==='all'||w.level===state.level);el('vocabCount').textContent=words.length.toLocaleString('zh-TW')}
 function persist(){safeStorage.set(STORE,JSON.stringify({mode:state.mode,advanced:state.advanced,level:state.level,completed:state.completed,uniqueAll:[...state.uniqueAll],dailyDate:state.dailyDate,dailyCount:state.dailyCount,dailySeen:[...state.dailySeen],recent:state.recent,lastKana:state.lastKana}))}
 function ensureToday(){if(state.dailyDate!==today()){state.dailyDate=today();state.dailyCount=0;state.dailySeen.clear()}}
-function updateStats(){ensureToday();el('dailyCount').textContent=state.dailyCount;el('uniqueCount').textContent=state.dailySeen.size;const count=BASIC.filter(c=>state.uniqueAll.has(c)).length;el('progressFraction').textContent=`${count}/46`;el('progressFill').style.width=`${(count/46*100).toFixed(1)}%`;el('progressBar').setAttribute('aria-valuenow',count)}
+function updateStats(){ensureToday();el('todayQuick').textContent=`今日 ${state.dailyCount} 題`;el('dailyCount').textContent=state.dailyCount;el('uniqueCount').textContent=state.dailySeen.size;const count=BASIC.filter(c=>state.uniqueAll.has(c)).length;el('progressFraction').textContent=`${count}/46`;el('progressFill').style.width=`${(count/46*100).toFixed(1)}%`;el('progressBar').setAttribute('aria-valuenow',count)}
 function randomShuffle(arr){for(let i=arr.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
 function possibleKana(){return state.advanced?[...BASIC,...VOICED]:BASIC}
 function chooseKana(){const options=possibleKana();const recent=state.lastKana;let bag=options.filter(c=>c!==recent);if(!bag.length)bag=options;let min=Infinity;for(const ch of bag){const seen=state.uniqueAll.has(ch)?1:0;if(seen<min)min=seen}if(Math.random()<.43){bag=bag.filter(c=>Number(state.uniqueAll.has(c))===min)}return bag[Math.floor(Math.random()*bag.length)]}
@@ -795,10 +897,10 @@ function chooseWord(hira,script,excluded=new Set()){
  const word=pool[Math.floor(Math.random()*pool.length)];if(!excluded.size){const next=[...history.filter(id=>id!==word.id),word.id];state.recent[histKey]=next.slice(-Math.min(24,Math.max(3,Math.floor(candidates.length*.7))))}return word;
 }
 function fetchExamples(){const curr=state.card;if(!curr)return;const chosen=new Set();const primary=chooseWord(curr.hira,curr.script,chosen);if(!primary){state.primary=null;state.extras=[];return}state.primary=primary;chosen.add(primary.id);state.currentUsed.add(primary.id);state.extras=[];for(let i=0;i<2;i++){const w=chooseWord(curr.hira,curr.script,chosen);if(!w)break;chosen.add(w.id);state.extras.push(w)}}
-function showQuestion(forceKana){if('speechSynthesis'in window)window.speechSynthesis.cancel();const hira=forceKana||chooseKana(),script=state.mode==='mixed'?(Math.random()<.5?'hiragana':'katakana'):state.mode;state.serial++;state.stage='question';state.card={hira,script};state.primary=null;state.extras=[];state.currentUsed=new Set();state.lastKana=hira;el('cardId').textContent=`QUESTION ${String(state.serial).padStart(3,'0')}`;el('scriptName').textContent=script==='katakana'?'KATAKANA · 片假名':'HIRAGANA · 平假名';el('mainKana').textContent=script==='katakana'?hiraToKata(hira):hira;el('questionPrompt').textContent='先試著大聲唸出這個假名';el('flashcard').classList.remove('revealed');el('answerView').classList.add('hidden');el('frontView').classList.remove('hidden');el('playKanaFront').classList.remove('hidden');el('actionBtn').innerHTML='查看答案 <span class="btn-arrow" aria-hidden="true">→</span>';el('skipBtn').disabled=false;refreshGrid();persist()}
+function showQuestion(forceKana){if('speechSynthesis'in window)window.speechSynthesis.cancel();const hira=forceKana||chooseKana(),script=state.mode==='mixed'?(Math.random()<.5?'hiragana':'katakana'):state.mode;state.serial++;state.stage='question';state.card={hira,script};state.primary=null;state.extras=[];state.currentUsed=new Set();state.lastKana=hira;el('cardId').textContent=`第 ${state.serial} 題`;el('scriptName').textContent=script==='katakana'?'KATAKANA · 片假名':'HIRAGANA · 平假名';el('mainKana').textContent=script==='katakana'?hiraToKata(hira):hira;el('questionPrompt').textContent='先唸唸看';el('flashcard').classList.remove('revealed');el('answerView').classList.add('hidden');el('frontView').classList.remove('hidden');el('playKanaFront').classList.remove('hidden');el('actionBtn').innerHTML='看答案 <span class="btn-arrow" aria-hidden="true">→</span>';el('skipBtn').disabled=false;refreshGrid();persist()}
 function onAction(){if(state.stage==='ready'||state.stage==='answer'){showQuestion();return}showAnswer()}
 function markRead(){ensureToday();state.dailyCount++;state.completed++;state.uniqueAll.add(state.card.hira);state.dailySeen.add(`${state.card.script}:${state.card.hira}`);updateStats();persist()}
-function showAnswer(){if(!state.card||state.stage!=='question')return;state.stage='answer';markRead();fetchExamples();const k=state.card.hira,rom=k==='を'?'wo · o':ROMAJI[k]||toRomaji(k);el('kanaRoman').textContent=`${state.card.script==='katakana'?hiraToKata(k):k}  ·  ${rom}`;el('kanaNote').textContent=k==='を'?'助詞「を」實際通常唸作 o':k==='ん'?'通常出現在單字中間或結尾':'確認讀音後，認識對應單字';el('flashcard').classList.add('revealed');el('frontView').classList.add('hidden');el('answerView').classList.remove('hidden');renderWord();el('actionBtn').innerHTML='下一題 <span class="btn-arrow" aria-hidden="true">→</span>';refreshGrid();persist()}
+function showAnswer(){if(!state.card||state.stage!=='question')return;state.stage='answer';markRead();fetchExamples();const k=state.card.hira,rom=k==='を'?'wo · o':ROMAJI[k]||toRomaji(k);el('kanaRoman').textContent=`${state.card.script==='katakana'?hiraToKata(k):k}  ·  ${rom}`;el('kanaNote').textContent=k==='を'?'助詞通常讀作 o':k==='ん'?'常出現在詞中或詞尾':'';el('skipBtn').disabled=true;el('flashcard').classList.add('revealed');el('frontView').classList.add('hidden');el('answerView').classList.remove('hidden');renderWord();el('actionBtn').innerHTML='下一題 <span class="btn-arrow" aria-hidden="true">→</span>';refreshGrid();persist()}
 function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function highlightedReading(reading,k){const r=String(reading),c=kanaToHira(k);let out='';for(const ch of r){out+=kanaToHira(ch)===c?`<mark>${escapeHTML(ch)}</mark>`:escapeHTML(ch)}return out}
 function renderWord(){const w=state.primary,c=state.card;if(!w){el('wordText').textContent='—';el('wordReading').textContent='';el('wordMeaning').textContent='此音暫無符合等級的詞彙';el('wordLevel').textContent='例字';el('wordTopic').textContent='';el('wordEnglish').textContent='';el('matchTag').textContent='';el('extraWords').replaceChildren();el('newExample').disabled=true;el('playSound').disabled=true;return}el('newExample').disabled=false;el('playSound').disabled=false;el('wordText').textContent=w.word;el('wordLevel').textContent=w.level;el('wordTopic').textContent=w.topic;el('wordReading').innerHTML=`${highlightedReading(w.reading,c.hira)} <span>${escapeHTML(w.roman||toRomaji(w.reading))}</span>`;el('wordMeaning').textContent=w.zh||w.en||'—';el('wordEnglish').textContent=w.zh&&w.en?w.en:'';const realKata=/[ァ-ヺ]/.test(w.word);el('matchTag').textContent=c.hira==='を'?'助詞短句':c.script==='katakana'&&!realKata?'同音延伸':'';const extra=el('extraWords');extra.replaceChildren();for(const item of state.extras){const btn=document.createElement('button');btn.className='extra-chip';btn.type='button';const strong=document.createElement('strong');strong.textContent=item.word;btn.append(strong,document.createTextNode(` · ${item.zh||item.en||item.reading}`));btn.title='點擊換成此單字';btn.addEventListener('click',()=>{state.extras=state.extras.filter(x=>x.id!==item.id);if(state.primary)state.extras.unshift(state.primary);state.primary=item;renderWord()});extra.append(btn)}}
