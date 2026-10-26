@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f5f0">
+  <meta name="description" content="50 音讀音練習：平假名、片假名、N5～N4 真實日文單字，純前端免費練習。">
+  <title>かな日和 · 日文五十音練習</title>
+  
+  
+  <style>
+:root{color-scheme:light;--bg:#f7f5f0;--ink:#272a29;--sub:#7e807a;--line:#e5e2da;--accent:#d2634e;--dark:#303936;--cream:#fffdf9;--light-accent:#fae7dd;--font:"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP","PingFang TC","Microsoft JhengHei",sans-serif}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased}button,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #e5a296;outline-offset:3px}.app-shell{max-width:1268px;margin:auto;padding:0 46px}.topbar{height:104px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}.brand-seal{height:43px;width:43px;display:grid;place-items:center;border:1.8px solid var(--accent);border-radius:13px;color:var(--accent);font-size:27px;font-weight:700;transform:rotate(-8deg)}.brand-text{display:flex;flex-direction:column;gap:2px}.brand-text strong{font-weight:750;font-size:19px;letter-spacing:2px}.brand-text small{letter-spacing:2.2px;color:var(--sub);font-size:9px;font-weight:800}.top-actions{display:flex;align-items:center;gap:16px}.sync-pill{display:flex;align-items:center;gap:8px;font-size:11px;color:#777b70}.sync-dot{width:7px;height:7px;background:#b8bc9c;display:inline-block;border-radius:50%}.sync-pill.loaded .sync-dot{background:#72a37d}.sync-pill.offline .sync-dot{background:#d3a06b}.icon-button{border:1px solid var(--line);height:34px;width:34px;border-radius:50%;background:transparent;color:var(--sub);font-size:17px}.main-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(294px,.78fr);gap:56px;padding:54px 0 62px}.intro-row{position:relative;display:flex;justify-content:space-between;min-height:151px}.eyebrow{font-size:10px;letter-spacing:2.9px;color:var(--accent);display:flex;gap:10px;align-items:center;font-weight:700}.eyebrow-line{height:1px;width:22px;background:var(--accent)}h1{font-size:clamp(30px,3.2vw,44px);letter-spacing:1px;font-weight:750;line-height:1.35;margin:20px 0 14px}h1 em{font-weight:700;font-style:normal;color:var(--accent)}.intro-desc{font-size:12.5px;line-height:1.9;letter-spacing:.15px;color:var(--sub);max-width:560px;margin:0}.decor-hanko{display:flex;gap:0;align-self:center;transform:rotate(-16deg) translate(0,-12px);opacity:.18;font-family:serif;font-weight:800;font-size:28px;writing-mode:vertical-rl;color:var(--accent);border:2px solid var(--accent);padding:14px 8px}.settings-bar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:32px 0 18px}.setting-label{font-size:12px;color:#4b504b;font-weight:750;white-space:nowrap}.mode-control{display:flex;background:#ebe9e3;padding:4px;border-radius:11px;gap:4px}.mode-btn{border:0;color:#81837c;background:transparent;border-radius:8px;padding:8px 13px;font-size:13px;font-weight:750;display:flex;gap:7px;align-items:center;white-space:nowrap;transition:background .15s,color .15s}.mode-btn span{font-size:11px;font-weight:650}.mode-btn.active{background:var(--cream);color:var(--accent);box-shadow:0 2px 7px #0000000d}.bar-divider{height:20px;width:1px;background:#dcd9d0}.switch-setting{display:flex;align-items:center;gap:9px;white-space:nowrap;font-size:12px;font-weight:700;color:#666b66}.switch{display:inline-flex;width:36px;height:21px;position:relative}.switch input{opacity:0;width:0;height:0}.slider-switch{position:absolute;inset:0;background:#d8d7d1;border-radius:12px;transition:background .18s}.slider-switch:before{content:"";position:absolute;left:3px;top:3px;width:15px;height:15px;background:white;border-radius:50%;transition:transform .18s;box-shadow:0 1px 2px #0002}.switch input:checked+.slider-switch{background:var(--accent)}.switch input:checked+.slider-switch:before{transform:translateX(15px)}.flashcard{background:var(--cream);border:1px solid #e6e3db;border-radius:18px;min-height:456px;position:relative;overflow:hidden;box-shadow:0 7px 35px #6b59450b;display:flex;flex-direction:column;transition:box-shadow .18s}.flashcard:after{content:"";pointer-events:none;position:absolute;inset:8px;border:1px solid #f0eee9;border-radius:12px}.card-topline,.card-footline{z-index:1;display:flex;justify-content:space-between;align-items:center;padding:24px 30px 0}.card-id,.card-script{color:#aaa89e;font-size:10px;letter-spacing:1.8px;font-weight:700}.card-script{color:var(--accent);letter-spacing:1px}.card-front{min-height:361px;display:flex;flex:1;align-items:center;justify-content:center;flex-direction:column;padding:8px 20px}.kana-container{display:grid;place-items:center;position:relative;height:263px;width:300px;max-width:100%}.kana-halo{position:absolute;width:226px;height:226px;border-radius:50%;background:#f8efea;opacity:.6}.kana-halo:before,.kana-halo:after{content:"";position:absolute;width:6px;height:6px;background:#e9c1b5;border-radius:50%;top:18%;left:5%}.kana-halo:after{top:80%;left:92%;width:4px;height:4px}.main-kana{position:relative;line-height:1;font-size:clamp(140px,16vw,196px);font-weight:450;color:#293630;filter:drop-shadow(0 2px 0 #e7e4de)}.card-help-text{color:#9b9b91;font-size:12px;letter-spacing:1px;text-align:center}.card-footline{margin-top:auto;padding:0 30px 18px;color:#c3beb4;font-size:11px;letter-spacing:2px}.dot-group{color:var(--accent);letter-spacing:4px;font-size:7px}.dot-group span{color:#e5dfd7}.card-answer{padding:0 31px 8px;position:relative;z-index:1;animation:fadeIn .2s ease}.hidden{display:none!important}.flashcard.revealed .card-front{display:none}.answer-top{text-align:center;margin:10px auto 22px}.answer-roman{display:block;color:#293630;font-size:49px;font-weight:750;line-height:1.15;letter-spacing:2px}.answer-note{display:block;margin-top:5px;color:#aaa298;font-size:12px}.answer-divider{position:relative;text-align:center;margin-bottom:22px}.answer-divider:before{content:"";position:absolute;height:1px;background:#eeeae2;left:0;right:0;top:50%}.answer-divider span{position:relative;background:var(--cream);padding:0 13px;color:var(--accent);font-size:10px;letter-spacing:1.5px;font-weight:750}.word-focus{background:#fbf9f5;border-radius:13px;padding:19px 21px 16px;min-height:158px}.word-heading{display:flex;align-items:center;gap:7px;min-height:22px}.level-tag{font-size:10px;font-weight:800;padding:4px 8px;color:#b95e4d;background:#f7e6df;border-radius:5px}.topic-tag,.match-tag{font-size:10px;color:#99978e}.match-tag{margin-left:auto;color:#bf9d8d}.word-jp{font-weight:720;font-size:33px;line-height:1.45;margin:4px 0 2px;color:var(--ink);word-break:break-word}.word-reading{font-size:13px;color:var(--accent);display:flex;gap:13px;align-items:center;flex-wrap:wrap}.word-reading span{color:#a59d93;letter-spacing:.5px}.word-reading mark{color:#fff;background:var(--accent);border-radius:3px;padding:0 2px}.word-meaning{font-size:15px;font-weight:750;color:#4e5550;margin-top:13px}.word-en{font-size:11px;margin-top:5px;color:#a6a49d}.word-en:empty{display:none}.word-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:12px 0 9px}.inline-btn{border:0;background:transparent;color:#888b84;font-size:11px;padding:7px 3px;display:inline-flex;gap:6px;align-items:center}.inline-btn:hover{color:var(--accent)}.inline-btn.right{color:var(--accent);font-weight:700}.audio-icon{font-size:19px;line-height:10px}.extra-words{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 13px}.extra-chip{border:1px solid #e9e4dc;background:#fffdf9;color:#8c8b84;border-radius:50px;padding:7px 12px;font-size:11px}.extra-chip strong{font-weight:750;color:#424944}.extra-chip:hover{border-color:#d7a897;color:var(--accent)}.controls-row{display:flex;gap:12px;margin-top:20px}.primary-button{display:flex;justify-content:center;gap:30px;align-items:center;background:var(--dark);border:1px solid var(--dark);color:white;min-height:54px;border-radius:9px;padding:13px 28px;font-weight:750;font-size:14px;flex:1;box-shadow:0 6px 20px #28362e12;transition:background .18s,transform .18s}.primary-button:hover{background:#46544e;transform:translateY(-1px)}.btn-arrow{font-size:21px;line-height:1}.secondary-button{background:transparent;color:#82867d;border:1px solid #dedbd3;border-radius:9px;padding:14px 26px;font-size:12px;font-weight:750;white-space:nowrap}.secondary-button:hover:enabled{border-color:var(--accent);color:var(--accent)}.secondary-button:disabled{opacity:.42;cursor:not-allowed}.keyboard-tip{font-size:11px;color:#a09e95;text-align:center;margin:17px 0 0}kbd{font-family:inherit;border:1px solid #d8d5cb;border-radius:4px;padding:1px 6px;font-size:10px;color:#89877e}.sidebar{padding-top:11px;display:flex;flex-direction:column;gap:18px}.side-panel{background:#fffefa;border:1px solid #ebe8e0;border-radius:12px;padding:23px 24px}.panel-title-row{display:flex;justify-content:space-between;align-items:center;gap:12px}.panel-title-row h2{font-size:15px;letter-spacing:.6px;margin:0;font-weight:800}.panel-decoration{font-size:25px;color:#dfbaa3}.stats-display{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:24px 0 25px}.stat{display:flex;flex-direction:column;gap:5px}.stat+.stat{border-left:1px solid #ebe8e0;padding-left:25px}.stat-value{font-size:39px;letter-spacing:-1px;line-height:1.12;font-weight:750;color:#38443b;font-variant-numeric:tabular-nums}.stat-desc{font-size:11px;color:#aaa69e}.progress-header{font-size:11px;color:#777b71;display:flex;justify-content:space-between;margin-bottom:10px}.progress-header strong{color:#617366;font-size:11px}.progress-track{height:6px;background:#f0eee8;border-radius:99px;overflow:hidden}.progress-track>div{height:100%;background:#cf8168;width:0%;transition:width .3s;border-radius:99px}.footnote{color:#a6a39a;font-size:10.5px;line-height:1.6;margin:13px 0 0}.panel-subtitle{font-size:10px;color:#a49f96}.kana-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:18px}.kana-cell{height:41px;display:grid;place-items:center;border:1px solid #efede6;background:#f9f8f3;color:#555b54;border-radius:7px;font-size:18px;font-weight:540;transition:background .13s,color .13s}.kana-cell:hover:not(:disabled){border-color:#dfb8a9;color:var(--accent)}.kana-cell.seen{background:#eef2ed;border-color:#dce8d9;color:#69816c}.kana-cell.current{background:var(--accent);border-color:var(--accent);color:white}.kana-cell:disabled{background:transparent;border-color:transparent;cursor:default}.grid-legend{display:flex;gap:16px;margin-top:13px;color:#aaa59e;font-size:10px}.grid-legend span{display:flex;align-items:center;gap:6px}.legend-color{width:8px;height:8px;border-radius:2px;display:inline-block}.legend-color.seen{background:#b4ccb8}.legend-color.current{background:var(--accent)}.library-panel{background:#eee8df;border:0;padding-top:20px}.tiny-label{letter-spacing:1.5px;font-weight:750;font-size:9px;color:#a69686}.library-panel>div:not(.filter-row){margin-top:10px}.library-panel strong{font-size:29px;color:#3b443e;font-weight:770}.library-panel>div>span{color:#847b70;font-size:11px}.library-panel p{font-size:11px;color:#968b81;line-height:1.85;margin:10px 0 15px}.filter-row{border-top:1px solid #ddd4c7;padding-top:13px;display:flex;justify-content:space-between;align-items:center;gap:9px;font-size:11px;color:#706960}.filter-row select{background:#fffdf9;color:#4d524b;border:1px solid #e2d9cd;border-radius:6px;padding:7px 9px;font-size:11px;min-width:122px}.footer{border-top:1px solid var(--line);padding:23px 0 38px;display:flex;align-items:flex-start;justify-content:space-between;gap:22px;font-size:10px;line-height:1.8;color:#aaa69d}.footer span:last-child{text-align:right}.footer a{color:#777f75}.help-dialog{max-width:490px;width:calc(100vw - 36px);border:1px solid #e7e1d8;border-radius:16px;padding:0;box-shadow:0 16px 80px #2b2c2547;background:var(--cream)}.help-dialog::backdrop{background:#1c2724aa;backdrop-filter:blur(2px)}.dialog-content{padding:24px 27px;color:#555a55}.dialog-top{display:flex;align-items:center;justify-content:space-between}.dialog-top h2{font-size:21px;margin:0}.dialog-content ol{font-size:13px;line-height:2;padding-left:22px;margin:20px 0}.dialog-content li{padding-left:4px}.dialog-content p{font-size:11px;color:#898a82;line-height:1.9}@keyframes fadeIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}@media(max-width:1070px){.app-shell{padding:0 28px}.main-layout{gap:30px;grid-template-columns:minmax(0,1.2fr) minmax(260px,.75fr)}.settings-bar{gap:10px}.mode-btn{padding:8px}.mode-btn span{font-size:10px}.bar-divider{display:none}}@media(max-width:750px){.app-shell{padding:0 19px}.topbar{height:74px}.brand-text strong{font-size:17px}.brand-text small{font-size:8px}.brand-seal{width:38px;height:38px;font-size:23px}.sync-pill{font-size:10px}.main-layout{padding:33px 0 42px;grid-template-columns:1fr;gap:29px}.sidebar{padding:0}.intro-row{min-height:auto}.decor-hanko{display:none}h1{font-size:32px;margin:14px 0 8px}.intro-desc{font-size:12px;line-height:1.8}.settings-bar{margin:23px 0 13px;gap:12px}.setting-label{width:100%}.mode-control{flex:1;justify-content:space-around}.mode-btn{flex:1;justify-content:center;padding:9px 6px}.switch-setting{margin-left:0}.flashcard{min-height:400px}.card-front{min-height:320px}.kana-container{height:245px}.main-kana{font-size:160px}.kana-halo{width:200px;height:200px}.card-topline{padding:20px 22px 0}.card-footline{padding:0 22px 14px}.card-answer{padding:0 20px 4px}.answer-roman{font-size:44px}.word-jp{font-size:30px}.controls-row{margin-top:13px}.secondary-button{padding:13px 15px}.primary-button{padding:12px 20px}.stats-display{margin:15px 0 17px}.footer{flex-direction:column;gap:6px;padding-bottom:25px}.footer span:last-child{text-align:left}}@media(max-width:380px){.mode-btn{font-size:11px;gap:4px}.mode-btn span{font-size:9px}.mode-control{padding:3px}.settings-bar{gap:8px}.switch-setting{font-size:11px}.controls-row{gap:7px}.primary-button{font-size:13px;gap:10px}.secondary-button{padding:10px;font-size:11px}.word-focus{padding:16px}.word-jp{font-size:27px}}
+
+</style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a href="#" class="brand" aria-label="かな日和 首頁">
+        <span class="brand-seal">か</span>
+        <span class="brand-text"><strong>かな日和</strong><small>KANA BIYORI</small></span>
+      </a>
+      <div class="top-actions">
+        <span class="sync-pill" id="sourceState" title="詞庫載入情況"><span class="sync-dot"></span> <span id="sourceText">載入詞庫中</span></span>
+        <button class="icon-button" id="helpBtn" title="操作說明" aria-label="操作說明">?</button>
+      </div>
+    </header>
+
+    <main class="main-layout">
+      <section class="practice-section">
+        <div class="intro-row">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span> DAILY JAPANESE PRACTICE</div>
+            <h1>每天一點，<em>唸出日語。</em></h1>
+            <p class="intro-desc">先自己讀出假名，再翻牌確認。每一題，都認識一個真正的日文單字。</p>
+          </div>
+          <div class="decor-hanko" aria-hidden="true"><span>い</span><span>ろ</span><span>は</span></div>
+        </div>
+
+        <div class="settings-bar">
+          <div class="setting-label">練習模式</div>
+          <div class="mode-control" role="group" aria-label="選擇假名模式">
+            <button class="mode-btn active" data-mode="hiragana" aria-pressed="true">あ <span>平假名</span></button>
+            <button class="mode-btn" data-mode="katakana" aria-pressed="false">ア <span>片假名</span></button>
+            <button class="mode-btn" data-mode="mixed" aria-pressed="false">あア <span>混合</span></button>
+          </div>
+          <div class="bar-divider"></div>
+          <label class="switch-setting" for="advancedSwitch"><span>加入濁音</span><span class="switch"><input id="advancedSwitch" type="checkbox"><span class="slider-switch"></span></span></label>
+        </div>
+
+        <div class="flashcard" id="flashcard" aria-live="polite">
+          <div class="card-topline">
+            <span class="card-id" id="cardId">READY TO BEGIN</span>
+            <span class="card-script" id="scriptName">五十音練習</span>
+          </div>
+          <div class="card-front" id="frontView">
+            <div class="kana-container"><div class="kana-halo" aria-hidden="true"></div><div class="main-kana" id="mainKana">あ</div></div>
+            <div class="card-help-text" id="questionPrompt">點擊「開始練習」抽出第一題</div>
+          </div>
+          <div class="card-answer hidden" id="answerView">
+            <div class="answer-top">
+              <span class="answer-roman" id="kanaRoman">a</span>
+              <span class="answer-note" id="kanaNote">請確認你的發音</span>
+            </div>
+            <div class="answer-divider"><span>VOCABULARY · 單字延伸</span></div>
+            <div class="word-focus">
+              <div class="word-heading"><span class="level-tag" id="wordLevel">N5</span><span class="topic-tag" id="wordTopic">日常</span><span class="match-tag" id="matchTag"></span></div>
+              <div class="word-jp" id="wordText">朝</div>
+              <div class="word-reading" id="wordReading">あさ <span>asa</span></div>
+              <div class="word-meaning" id="wordMeaning">早上</div>
+              <div class="word-en" id="wordEnglish"></div>
+            </div>
+            <div class="word-bottom">
+              <button type="button" class="inline-btn" id="playSound" aria-label="播放日文單字發音"><span class="audio-icon">♪</span> 聽單字發音</button>
+              <button type="button" class="inline-btn right" id="newExample">換一個例字 <span aria-hidden="true">↗</span></button>
+            </div>
+            <div class="extra-words" id="extraWords"></div>
+          </div>
+          <div class="card-footline"><span>かな 日和</span><span class="dot-group">● <span>●</span> <span>●</span></span></div>
+        </div>
+
+        <div class="controls-row">
+          <button class="primary-button" id="actionBtn" type="button">開始練習 <span class="btn-arrow" aria-hidden="true">→</span></button>
+          <button class="secondary-button" id="skipBtn" type="button" disabled>跳過這題 <span aria-hidden="true">↗</span></button>
+        </div>
+        <p class="keyboard-tip">鍵盤 <kbd>Space</kbd> ／ <kbd>Enter</kbd> 也能開始、翻牌、下一題</p>
+      </section>
+
+      <aside class="sidebar">
+        <section class="stat-panel side-panel">
+          <div class="panel-title-row"><h2>今日練習</h2><span class="panel-decoration">✳</span></div>
+          <div class="stats-display">
+            <div class="stat"><span class="stat-value" id="dailyCount">0</span><span class="stat-desc">完成題數</span></div>
+            <div class="stat"><span class="stat-value" id="uniqueCount">0</span><span class="stat-desc">今日不同假名</span></div>
+          </div>
+          <div class="progress-header"><span>基礎假名探索進度</span><strong id="progressFraction">0/46</strong></div>
+          <div class="progress-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="46" aria-label="基礎假名進度" id="progressBar"><div id="progressFill"></div></div>
+          <p class="footnote">進度保存在此裝置的瀏覽器，免登入。</p>
+        </section>
+
+        <section class="kana-panel side-panel">
+          <div class="panel-title-row"><h2>五十音表</h2><span class="panel-subtitle">點字練習指定音</span></div>
+          <div class="kana-grid" id="kanaGrid" aria-label="五十音表"></div>
+          <div class="grid-legend"><span><i class="legend-color seen"></i> 已練過</span><span><i class="legend-color current"></i> 目前題目</span></div>
+        </section>
+        <section class="library-panel side-panel"><span class="tiny-label">YOUR WORD LIBRARY</span><div><strong id="vocabCount">—</strong><span> 筆日文詞彙可練習</span></div><p>從日常、餐飲、旅遊、工作到生活各種主題，輪流出現不同單字。</p><div class="filter-row"><label for="levelSelect">單字等級</label><select id="levelSelect"><option value="all">N5 + N4</option><option value="N5">只看 N5</option><option value="N4">只看 N4</option></select></div></section>
+      </aside>
+    </main>
+    <footer class="footer"><span>Made for daily Japanese practice · 純 JavaScript，無後端。</span><span>詞彙分級僅供參考 · <a href="https://github.com/evanclan/OpenJLPT" target="_blank" rel="noopener noreferrer">OpenJLPT</a>（<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>）及 JMdict／KANJIDIC2（EDRDG）、Jonathan Waller、Tatoeba</span></footer>
+  </div>
+
+  <dialog id="helpDialog" class="help-dialog"><div class="dialog-content"><div class="dialog-top"><h2>如何使用</h2><button id="closeHelp" aria-label="關閉說明" class="icon-button">×</button></div><ol><li>選擇平假名、片假名或混合模式。</li><li>按「開始練習」，看著大字<strong>先自己唸出來</strong>。</li><li>再按「查看答案」，顯示羅馬拼音與 N5～N4 實際單字。</li><li>你可按「換一個例字」學更多同音單字，按「下一題」繼續。</li><li>右邊的五十音表可直接指定想加強的字。</li></ol><p>「を／ヲ」主要對應助詞，因此範例是自然的短句；「ん／ン」通常出現在詞中或詞尾。片假名練習優先顯示外來語，必要時補充相同發音的其他日文詞。瀏覽器語音播放會受裝置可用的日文語音包影響。</p><p>開啟網站時會嘗試擴充 OpenJLPT 分級詞庫；若無網路，仍有內建備援詞庫可用。練習進度不會跨裝置同步。</p></div></dialog>
+  <script>
+/* 手工整理的備援入門詞彙。OpenJLPT 網路詞庫載入後將自動擴充。*/
+window.KANA_LOCAL_WORDS = String.raw`
+# 招呼與人際
+会う|あう|見面|N5
+挨拶|あいさつ|打招呼|N4
+ありがとう|ありがとう|謝謝|N5
+おはよう|おはよう|早安|N5
+こんにちは|こんにちは|你好|N5
+こんばんは|こんばんは|晚上好|N5
+さようなら|さようなら|再見|N5
+すみません|すみません|不好意思|N5
+お願いします|おねがいします|拜託您|N5
+名前|なまえ|名字|N5
+人|ひと|人|N5
+友達|ともだち|朋友|N5
+家族|かぞく|家人|N5
+父|ちち|父親（自己的）|N5
+母|はは|母親（自己的）|N5
+兄|あに|哥哥（自己的）|N5
+姉|あね|姊姊（自己的）|N5
+弟|おとうと|弟弟|N5
+妹|いもうと|妹妹|N5
+子供|こども|小孩|N5
+両親|りょうしん|雙親|N4
+祖父|そふ|祖父|N4
+祖母|そぼ|祖母|N4
+男|おとこ|男人|N5
+女|おんな|女人|N5
+大人|おとな|大人|N5
+赤ちゃん|あかちゃん|嬰兒|N4
+先生|せんせい|老師|N5
+学生|がくせい|學生|N5
+会社員|かいしゃいん|公司職員|N5
+医者|いしゃ|醫生|N5
+警察|けいさつ|警察|N4
+# 時間與日期
+今|いま|現在|N5
+今日|きょう|今天|N5
+昨日|きのう|昨天|N5
+明日|あした|明天|N5
+一昨日|おととい|前天|N5
+明後日|あさって|後天|N5
+朝|あさ|早上|N5
+昼|ひる|中午|N5
+夜|よる|夜晚|N5
+夕方|ゆうがた|傍晚|N5
+毎日|まいにち|每天|N5
+毎週|まいしゅう|每週|N5
+毎月|まいつき|每月|N5
+毎年|まいとし|每年|N5
+先週|せんしゅう|上週|N5
+今週|こんしゅう|本週|N5
+来週|らいしゅう|下週|N5
+去年|きょねん|去年|N5
+今年|ことし|今年|N5
+来年|らいねん|明年|N5
+時間|じかん|時間|N5
+時計|とけい|鐘錶|N5
+午前|ごぜん|上午|N5
+午後|ごご|下午|N5
+月曜日|げつようび|星期一|N5
+火曜日|かようび|星期二|N5
+水曜日|すいようび|星期三|N5
+木曜日|もくようび|星期四|N5
+金曜日|きんようび|星期五|N5
+土曜日|どようび|星期六|N5
+日曜日|にちようび|星期日|N5
+春|はる|春天|N5
+夏|なつ|夏天|N5
+秋|あき|秋天|N5
+冬|ふゆ|冬天|N5
+季節|きせつ|季節|N4
+予定|よてい|計畫安排|N4
+最近|さいきん|最近|N4
+昔|むかし|從前|N4
+急ぐ|いそぐ|趕緊|N4
+遅れる|おくれる|遲到|N4
+# 食物與餐飲
+食べる|たべる|吃|N5
+飲む|のむ|喝|N5
+水|みず|水|N5
+お茶|おちゃ|茶|N5
+紅茶|こうちゃ|紅茶|N5
+牛乳|ぎゅうにゅう|牛奶|N5
+コーヒー|こーひー|咖啡|N5
+ジュース|じゅーす|果汁|N5
+ご飯|ごはん|飯|N5
+朝ご飯|あさごはん|早餐|N5
+昼ご飯|ひるごはん|午餐|N5
+晩ご飯|ばんごはん|晚餐|N5
+パン|ぱん|麵包|N5
+卵|たまご|雞蛋|N5
+肉|にく|肉|N5
+魚|さかな|魚|N5
+野菜|やさい|蔬菜|N5
+果物|くだもの|水果|N5
+りんご|りんご|蘋果|N5
+みかん|みかん|橘子|N5
+バナナ|ばなな|香蕉|N5
+いちご|いちご|草莓|N4
+ぶどう|ぶどう|葡萄|N4
+レモン|れもん|檸檬|N4
+トマト|とまと|番茄|N5
+じゃがいも|じゃがいも|馬鈴薯|N4
+玉ねぎ|たまねぎ|洋蔥|N4
+塩|しお|鹽|N5
+砂糖|さとう|砂糖|N5
+醤油|しょうゆ|醬油|N4
+スープ|すーぷ|湯|N5
+カレー|かれー|咖哩|N5
+ラーメン|らーめん|拉麵|N5
+うどん|うどん|烏龍麵|N4
+そば|そば|蕎麥麵|N4
+すし|すし|壽司|N5
+天ぷら|てんぷら|天婦羅|N4
+弁当|べんとう|便當|N4
+ケーキ|けーき|蛋糕|N5
+アイスクリーム|あいすくりーむ|冰淇淋|N5
+チョコレート|ちょこれーと|巧克力|N5
+お菓子|おかし|點心|N5
+レストラン|れすとらん|餐廳|N5
+喫茶店|きっさてん|咖啡店|N5
+食堂|しょくどう|食堂|N4
+料理|りょうり|料理|N5
+味|あじ|味道|N4
+甘い|あまい|甜的|N5
+辛い|からい|辣的|N4
+苦い|にがい|苦的|N4
+おいしい|おいしい|好吃|N5
+まずい|まずい|難吃|N4
+# 購物與金錢
+買う|かう|買|N5
+売る|うる|賣|N4
+店|みせ|商店|N5
+お店|おみせ|店鋪|N5
+スーパー|すーぱー|超市|N5
+デパート|でぱーと|百貨公司|N5
+コンビニ|こんびに|便利商店|N4
+市場|いちば|市場|N4
+お金|おかね|錢|N5
+財布|さいふ|錢包|N5
+値段|ねだん|價錢|N5
+安い|やすい|便宜|N5
+高い|たかい|貴；高|N5
+便利|べんり|方便|N4
+買い物|かいもの|購物|N5
+銀行|ぎんこう|銀行|N5
+郵便局|ゆうびんきょく|郵局|N5
+切手|きって|郵票|N5
+手紙|てがみ|信|N5
+荷物|にもつ|行李；包裹|N4
+贈り物|おくりもの|禮物|N4
+プレゼント|ぷれぜんと|禮物|N5
+服|ふく|衣服|N5
+靴|くつ|鞋子|N5
+靴下|くつした|襪子|N5
+帽子|ぼうし|帽子|N5
+傘|かさ|雨傘|N5
+鞄|かばん|包包|N5
+シャツ|しゃつ|襯衫|N5
+ズボン|ずぼん|褲子|N5
+スカート|すかーと|裙子|N5
+コート|こーと|大衣|N5
+セーター|せーたー|毛衣|N5
+ポケット|ぽけっと|口袋|N4
+眼鏡|めがね|眼鏡|N5
+サイズ|さいず|尺寸|N4
+色|いろ|顏色|N5
+赤|あか|紅色|N5
+青|あお|藍色|N5
+白|しろ|白色|N5
+黒|くろ|黑色|N5
+黄色|きいろ|黃色|N5
+茶色|ちゃいろ|咖啡色|N5
+# 交通與旅遊
+旅行|りょこう|旅行|N5
+旅館|りょかん|日式旅館|N5
+ホテル|ほてる|飯店|N5
+部屋|へや|房間|N5
+予約|よやく|預約|N4
+切符|きっぷ|車票|N5
+駅|えき|車站|N5
+電車|でんしゃ|電車|N5
+地下鉄|ちかてつ|地下鐵|N5
+新幹線|しんかんせん|新幹線|N4
+バス|ばす|公車|N5
+タクシー|たくしー|計程車|N5
+自転車|じてんしゃ|腳踏車|N5
+車|くるま|汽車|N5
+飛行機|ひこうき|飛機|N5
+船|ふね|船|N5
+道路|どうろ|道路|N4
+道|みち|道路|N5
+交差点|こうさてん|十字路口|N4
+信号|しんごう|紅綠燈|N4
+駐車場|ちゅうしゃじょう|停車場|N4
+運転|うんてん|駕駛|N4
+乗る|のる|搭乘|N5
+降りる|おりる|下車|N5
+出発|しゅっぱつ|出發|N4
+到着|とうちゃく|抵達|N4
+着く|つく|抵達|N4
+歩く|あるく|走路|N5
+走る|はしる|跑步|N5
+渡る|わたる|穿越|N4
+曲がる|まがる|轉彎|N5
+右|みぎ|右邊|N5
+左|ひだり|左邊|N5
+前|まえ|前方|N5
+後ろ|うしろ|後面|N5
+近く|ちかく|附近|N5
+遠い|とおい|遠的|N5
+地図|ちず|地圖|N5
+場所|ばしょ|場所|N4
+住所|じゅうしょ|地址|N4
+空港|くうこう|機場|N4
+パスポート|ぱすぽーと|護照|N4
+外国|がいこく|外國|N5
+日本|にほん|日本|N5
+台湾|たいわん|台灣|N5
+東京|とうきょう|東京|N5
+京都|きょうと|京都|N5
+大阪|おおさか|大阪|N5
+# 學校與工作
+学校|がっこう|學校|N5
+大学|だいがく|大學|N5
+教室|きょうしつ|教室|N5
+授業|じゅぎょう|課程|N4
+宿題|しゅくだい|作業|N5
+試験|しけん|考試|N4
+勉強|べんきょう|學習|N5
+練習|れんしゅう|練習|N4
+問題|もんだい|問題|N4
+質問|しつもん|提問|N4
+答え|こたえ|答案|N4
+本|ほん|書|N5
+辞書|じしょ|字典|N5
+教科書|きょうかしょ|教科書|N4
+ノート|のーと|筆記本|N5
+ペン|ぺん|筆|N5
+鉛筆|えんぴつ|鉛筆|N5
+消しゴム|けしごむ|橡皮擦|N5
+紙|かみ|紙|N5
+机|つくえ|桌子|N5
+椅子|いす|椅子|N5
+図書館|としょかん|圖書館|N5
+日本語|にほんご|日文|N5
+英語|えいご|英文|N5
+漢字|かんじ|漢字|N5
+言葉|ことば|詞彙；話語|N5
+意味|いみ|意思|N4
+文法|ぶんぽう|文法|N4
+読む|よむ|閱讀|N5
+書く|かく|寫|N5
+聞く|きく|聽|N5
+話す|はなす|說話|N5
+覚える|おぼえる|記住|N4
+忘れる|わすれる|忘記|N4
+教える|おしえる|教導|N5
+習う|ならう|學習|N5
+使う|つかう|使用|N5
+働く|はたらく|工作|N5
+仕事|しごと|工作|N5
+会社|かいしゃ|公司|N5
+会議|かいぎ|會議|N4
+事務所|じむしょ|辦公室|N4
+工場|こうじょう|工廠|N4
+アルバイト|あるばいと|打工|N4
+パソコン|ぱそこん|個人電腦|N4
+コンピューター|こんぴゅーたー|電腦|N4
+メール|めーる|電子郵件|N4
+電話|でんわ|電話|N5
+スマートフォン|すまーとふぉん|智慧型手機|N4
+テレビ|てれび|電視|N5
+ラジオ|らじお|收音機|N5
+ニュース|にゅーす|新聞；消息|N4
+写真|しゃしん|照片|N5
+映画|えいが|電影|N5
+音楽|おんがく|音樂|N5
+歌|うた|歌曲|N5
+歌う|うたう|唱歌|N5
+# 生活與住家
+家|いえ|家|N5
+うち|うち|家裡|N5
+台所|だいどころ|廚房|N5
+玄関|げんかん|玄關|N4
+窓|まど|窗戶|N5
+ドア|どあ|門|N5
+階段|かいだん|樓梯|N4
+庭|にわ|庭院|N5
+鍵|かぎ|鑰匙|N4
+冷蔵庫|れいぞうこ|冰箱|N4
+洗濯機|せんたくき|洗衣機|N4
+エアコン|えあこん|冷氣機|N4
+電気|でんき|電；電燈|N5
+電池|でんち|電池|N4
+トイレ|といれ|廁所|N5
+お風呂|おふろ|浴室；洗澡|N5
+シャワー|しゃわー|淋浴|N4
+石鹸|せっけん|肥皂|N4
+タオル|たおる|毛巾|N5
+歯ブラシ|はぶらし|牙刷|N4
+ベッド|べっど|床|N5
+布団|ふとん|日式棉被|N5
+枕|まくら|枕頭|N4
+掃除|そうじ|打掃|N5
+洗濯|せんたく|洗衣|N5
+料理する|りょうりする|煮飯|N5
+片付ける|かたづける|整理收拾|N4
+開ける|あける|打開|N5
+閉める|しめる|關閉|N5
+付ける|つける|開啟；附上|N5
+消す|けす|關掉；消除|N5
+置く|おく|放置|N5
+取る|とる|拿取|N5
+持つ|もつ|拿；持有|N5
+入れる|いれる|放進|N5
+出す|だす|拿出|N5
+入る|はいる|進入|N5
+出る|でる|出去|N5
+座る|すわる|坐下|N5
+立つ|たつ|站立|N5
+寝る|ねる|睡覺|N5
+起きる|おきる|起床|N5
+休む|やすむ|休息|N5
+洗う|あらう|清洗|N5
+着る|きる|穿（上衣）|N5
+脱ぐ|ぬぐ|脫衣|N5
+# 身體與健康
+体|からだ|身體|N5
+頭|あたま|頭|N5
+顔|かお|臉|N5
+目|め|眼睛|N5
+耳|みみ|耳朵|N5
+鼻|はな|鼻子|N5
+口|くち|嘴巴|N5
+歯|は|牙齒|N5
+首|くび|脖子|N5
+手|て|手|N5
+足|あし|腳|N5
+指|ゆび|手指|N5
+お腹|おなか|肚子|N5
+背中|せなか|背部|N4
+心|こころ|心|N4
+元気|げんき|有精神|N5
+病気|びょうき|生病|N5
+薬|くすり|藥物|N5
+病院|びょういん|醫院|N5
+痛い|いたい|痛的|N5
+熱|ねつ|發燒；熱|N4
+風邪|かぜ|感冒|N5
+治る|なおる|痊癒|N4
+疲れる|つかれる|疲累|N4
+大丈夫|だいじょうぶ|沒問題|N5
+危ない|あぶない|危險|N5
+怪我|けが|受傷|N4
+# 天氣、自然與動物
+天気|てんき|天氣|N5
+晴れ|はれ|晴天|N5
+雨|あめ|雨|N5
+雪|ゆき|雪|N5
+風|かぜ|風|N5
+曇り|くもり|陰天|N5
+曇る|くもる|變陰天|N5
+暑い|あつい|炎熱|N5
+寒い|さむい|寒冷|N5
+暖かい|あたたかい|溫暖|N5
+涼しい|すずしい|涼爽|N5
+空|そら|天空|N5
+雲|くも|雲|N5
+太陽|たいよう|太陽|N4
+月|つき|月亮|N5
+星|ほし|星星|N5
+山|やま|山|N5
+川|かわ|河川|N5
+海|うみ|海|N5
+湖|みずうみ|湖泊|N4
+森|もり|森林|N4
+木|き|樹木|N5
+花|はな|花朵|N5
+草|くさ|草|N5
+葉|は|葉子|N4
+犬|いぬ|狗|N5
+猫|ねこ|貓|N5
+鳥|とり|鳥|N5
+虫|むし|昆蟲|N4
+馬|うま|馬|N4
+牛|うし|牛|N5
+豚|ぶた|豬|N4
+動物|どうぶつ|動物|N5
+公園|こうえん|公園|N5
+花見|はなみ|賞花|N4
+# 動作與感受
+する|する|做|N5
+できる|できる|能夠|N5
+ある|ある|有（無生命）|N5
+いる|いる|有（有生命）|N5
+行く|いく|去|N5
+来る|くる|來|N5
+帰る|かえる|回家|N5
+見る|みる|看|N5
+見せる|みせる|展示|N4
+待つ|まつ|等待|N5
+呼ぶ|よぶ|呼叫|N4
+遊ぶ|あそぶ|玩|N5
+泳ぐ|およぐ|游泳|N5
+飛ぶ|とぶ|飛|N4
+跳ぶ|とぶ|跳|N4
+踊る|おどる|跳舞|N4
+作る|つくる|製作|N5
+直す|なおす|修理；修正|N4
+壊れる|こわれる|壞掉|N4
+探す|さがす|尋找|N4
+選ぶ|えらぶ|選擇|N4
+決める|きめる|決定|N4
+考える|かんがえる|思考|N4
+思う|おもう|認為|N4
+知る|しる|知道|N4
+分かる|わかる|明白|N5
+始める|はじめる|開始|N4
+終わる|おわる|結束|N5
+続ける|つづける|繼續|N4
+止まる|とまる|停止|N4
+止める|とめる|停止（他動）|N4
+貸す|かす|借出|N5
+借りる|かりる|借入|N5
+返す|かえす|歸還|N5
+あげる|あげる|給予|N5
+もらう|もらう|收到|N5
+くれる|くれる|給我方|N4
+手伝う|てつだう|幫忙|N4
+忘れ物|わすれもの|遺失物|N4
+困る|こまる|困擾|N4
+笑う|わらう|笑|N4
+泣く|なく|哭|N4
+怒る|おこる|生氣|N4
+好き|すき|喜歡|N5
+嫌い|きらい|討厭|N5
+楽しい|たのしい|快樂|N5
+嬉しい|うれしい|開心|N4
+悲しい|かなしい|悲傷|N4
+寂しい|さびしい|寂寞|N4
+怖い|こわい|害怕|N4
+面白い|おもしろい|有趣|N5
+つまらない|つまらない|無聊|N5
+難しい|むずかしい|困難|N5
+易しい|やさしい|簡單|N5
+優しい|やさしい|溫柔|N4
+大切|たいせつ|重要|N4
+大好き|だいすき|非常喜歡|N5
+# 特徵與形容
+大きい|おおきい|大的|N5
+小さい|ちいさい|小的|N5
+長い|ながい|長的|N5
+短い|みじかい|短的|N5
+広い|ひろい|寬廣|N5
+狭い|せまい|狹窄|N4
+重い|おもい|重的|N5
+軽い|かるい|輕的|N4
+新しい|あたらしい|新的|N5
+古い|ふるい|舊的|N5
+若い|わかい|年輕|N5
+美しい|うつくしい|美麗|N4
+綺麗|きれい|漂亮；乾淨|N5
+汚い|きたない|髒的|N4
+静か|しずか|安靜|N5
+賑やか|にぎやか|熱鬧|N5
+明るい|あかるい|明亮|N5
+暗い|くらい|昏暗|N5
+強い|つよい|強的|N4
+弱い|よわい|弱的|N4
+早い|はやい|早的|N5
+速い|はやい|快的|N5
+遅い|おそい|慢的；晚的|N5
+多い|おおい|多的|N5
+少ない|すくない|少的|N5
+同じ|おなじ|相同|N5
+違う|ちがう|不同|N4
+色々|いろいろ|各式各樣|N5
+全部|ぜんぶ|全部|N4
+# 更多片假名日常用語
+アパート|あぱーと|公寓|N5
+アルバム|あるばむ|相簿|N4
+アニメ|あにめ|動畫|N4
+イメージ|いめーじ|印象；形象|N4
+インターネット|いんたーねっと|網際網路|N4
+インク|いんく|墨水|N4
+ウイスキー|ういすきー|威士忌|N4
+ウール|うーる|羊毛|N4
+エレベーター|えれべーたー|電梯|N4
+エスカレーター|えすかれーたー|手扶梯|N4
+エンジン|えんじん|引擎|N4
+オレンジ|おれんじ|柳橙|N4
+オートバイ|おーとばい|機車|N4
+カメラ|かめら|相機|N5
+カレンダー|かれんだー|月曆|N4
+カップ|かっぷ|杯子|N4
+カーテン|かーてん|窗簾|N4
+ギター|ぎたー|吉他|N5
+キロ|きろ|公斤／公里的千|N5
+クラス|くらす|班級|N5
+クラブ|くらぶ|社團|N5
+クリスマス|くりすます|聖誕節|N4
+クーラー|くーらー|冷氣|N4
+グラス|ぐらす|玻璃杯|N4
+ケータイ|けーたい|手機|N4
+ケース|けーす|盒子；案例|N4
+ゲーム|げーむ|遊戲|N5
+コピー|こぴー|影印|N4
+コップ|こっぷ|杯子|N5
+ゴミ|ごみ|垃圾|N5
+サラダ|さらだ|沙拉|N5
+サンドイッチ|さんどいっち|三明治|N4
+サービス|さーびす|服務|N4
+シート|しーと|座位；座椅套|N4
+シャワー|しゃわー|淋浴|N4
+スキー|すきー|滑雪|N5
+スケート|すけーと|溜冰|N4
+スイッチ|すいっち|開關|N4
+ステーキ|すてーき|牛排|N4
+ストーブ|すとーぶ|暖爐|N4
+スプーン|すぷーん|湯匙|N5
+スポーツ|すぽーつ|運動|N5
+セーター|せーたー|毛衣|N5
+セット|せっと|一組|N4
+ソファー|そふぁー|沙發|N4
+ソース|そーす|醬汁|N4
+ソフト|そふと|軟體；柔軟|N4
+タイプ|たいぷ|類型|N4
+タオル|たおる|毛巾|N5
+タンス|たんす|衣櫥|N4
+チーズ|ちーず|起司|N5
+チケット|ちけっと|票券|N4
+チーム|ちーむ|隊伍|N4
+テーブル|てーぶる|桌子|N5
+テスト|てすと|考試|N5
+テニス|てにす|網球|N5
+デザイン|でざいん|設計|N4
+トイレ|といれ|廁所|N5
+トラック|とらっく|卡車|N4
+トランプ|とらんぷ|撲克牌|N4
+ナイフ|ないふ|刀具|N5
+ナプキン|なぷきん|餐巾紙|N4
+ニュース|にゅーす|新聞|N4
+ニット|にっと|針織品|N4
+ネクタイ|ねくたい|領帶|N5
+ノート|のーと|筆記本|N5
+ノック|のっく|敲門|N4
+ハンカチ|はんかち|手帕|N5
+ハンバーグ|はんばーぐ|漢堡排|N4
+ハンバーガー|はんばーがー|漢堡|N4
+パーティー|ぱーてぃー|派對|N4
+ピアノ|ぴあの|鋼琴|N5
+ビール|びーる|啤酒|N5
+プール|ぷーる|游泳池|N5
+プリント|ぷりんと|列印資料|N4
+プレーヤー|ぷれーやー|播放器|N4
+ペット|ぺっと|寵物|N4
+ベルト|べると|皮帶|N4
+ポスト|ぽすと|信箱|N5
+ボール|ぼーる|球|N5
+ボタン|ぼたん|按鈕|N4
+マッチ|まっち|火柴|N4
+マフラー|まふらー|圍巾|N4
+マンション|まんしょん|公寓大廈|N4
+ミルク|みるく|牛奶|N5
+メニュー|めにゅー|菜單|N4
+メートル|めーとる|公尺|N5
+モーター|もーたー|馬達|N4
+モデル|もでる|模特兒；模型|N4
+ヨーグルト|よーぐると|優格|N4
+ラジオ|らじお|收音機|N5
+ラケット|らけっと|球拍|N4
+ランチ|らんち|午餐|N4
+リボン|りぼん|緞帶|N4
+リットル|りっとる|公升|N5
+ルール|るーる|規則|N4
+ルーム|るーむ|房間|N4
+レコード|れこーど|唱片|N4
+レジ|れじ|收銀台|N4
+レンタル|れんたる|租借|N4
+ロビー|ろびー|大廳|N4
+ローマ字|ろーまじ|羅馬字|N4
+ワイシャツ|わいしゃつ|襯衫|N5
+ワイン|わいん|葡萄酒|N4
+ワンピース|わんぴーす|洋裝|N4
+ヌードル|ぬーどる|麵條（外來語）|N4
+# 稀少假名補充
+下手|へた|不擅長|N5
+返事|へんじ|回覆|N4
+変|へん|奇怪；不尋常|N4
+辺|へん|附近；一帶|N4
+減る|へる|減少|N4
+平日|へいじつ|平日|N4
+部屋着|へやぎ|居家服|N4
+ヘリコプター|へりこぷたー|直升機|N4
+盗む|ぬすむ|偷竊|N4
+布|ぬの|布|N4
+濡れる|ぬれる|濕掉|N4
+塗る|ぬる|塗抹|N4
+縫う|ぬう|縫紉|N4
+縮む|ちぢむ|縮小|N4
+鼻血|はなぢ|鼻血|N4
+身近|みぢか|身邊；切身|N4
+気付く|きづく|察覺|N4
+引っ越す|ひっこす|搬家|N4
+拾う|ひろう|撿拾|N4
+冷える|ひえる|變冷|N4
+久しぶり|ひさしぶり|好久不見|N4
+本当|ほんとう|真的|N4
+ほとんど|ほとんど|幾乎|N4
+細い|ほそい|細的|N4
+他|ほか|其他|N4
+褒める|ほめる|稱讚|N4
+# 「を」僅在助詞與短句中使用；不當作一般單字
+水を飲む|みずをのむ|喝水|N5|用法|mizu o nomu
+本を読む|ほんをよむ|看書|N5|用法|hon o yomu
+ご飯を食べる|ごはんをたべる|吃飯|N5|用法|gohan o taberu
+映画を見る|えいがをみる|看電影|N5|用法|eiga o miru
+音楽を聞く|おんがくをきく|聽音樂|N5|用法|ongaku o kiku
+写真を撮る|しゃしんをとる|拍照|N5|用法|shashin o toru
+買い物をする|かいものをする|購物|N5|用法|kaimono o suru
+日本語を勉強する|にほんごをべんきょうする|學日文|N5|用法|nihongo o benkyou suru
+宿題を忘れる|しゅくだいをわすれる|忘記作業|N4|用法|shukudai o wasureru
+部屋を片付ける|へやをかたづける|收拾房間|N4|用法|heya o katazukeru
+答えを考える|こたえをかんがえる|思考答案|N4|用法|kotae o kangaeru
+予約をする|よやくをする|進行預約|N4|用法|yoyaku o suru
+`;
+
+</script>
+  <script>
+(()=>{'use strict';
+const BASIC_ROWS=[['あ','い','う','え','お'],['か','き','く','け','こ'],['さ','し','す','せ','そ'],['た','ち','つ','て','と'],['な','に','ぬ','ね','の'],['は','ひ','ふ','へ','ほ'],['ま','み','む','め','も'],['や',null,'ゆ',null,'よ'],['ら','り','る','れ','ろ'],['わ',null,null,null,'を'],['ん',null,null,null,null]];
+const VOICED_ROWS=[['が','ぎ','ぐ','げ','ご'],['ざ','じ','ず','ぜ','ぞ'],['だ','ぢ','づ','で','ど'],['ば','び','ぶ','べ','ぼ'],['ぱ','ぴ','ぷ','ぺ','ぽ']];
+const ROMAJI={あ:'a',い:'i',う:'u',え:'e',お:'o',か:'ka',き:'ki',く:'ku',け:'ke',こ:'ko',さ:'sa',し:'shi',す:'su',せ:'se',そ:'so',た:'ta',ち:'chi',つ:'tsu',て:'te',と:'to',な:'na',に:'ni',ぬ:'nu',ね:'ne',の:'no',は:'ha',ひ:'hi',ふ:'fu',へ:'he',ほ:'ho',ま:'ma',み:'mi',む:'mu',め:'me',も:'mo',や:'ya',ゆ:'yu',よ:'yo',ら:'ra',り:'ri',る:'ru',れ:'re',ろ:'ro',わ:'wa',を:'wo',ん:'n',が:'ga',ぎ:'gi',ぐ:'gu',げ:'ge',ご:'go',ざ:'za',じ:'ji',ず:'zu',ぜ:'ze',ぞ:'zo',だ:'da',ぢ:'ji',づ:'zu',で:'de',ど:'do',ば:'ba',び:'bi',ぶ:'bu',べ:'be',ぼ:'bo',ぱ:'pa',ぴ:'pi',ぷ:'pu',ぺ:'pe',ぽ:'po',ゃ:'ya',ゅ:'yu',ょ:'yo',ぁ:'a',ぃ:'i',ぅ:'u',ぇ:'e',ぉ:'o',ゔ:'vu'};
+const DIGRAPHS={'きゃ':'kya','きゅ':'kyu','きょ':'kyo','しゃ':'sha','しゅ':'shu','しょ':'sho','ちゃ':'cha','ちゅ':'chu','ちょ':'cho','にゃ':'nya','にゅ':'nyu','にょ':'nyo','ひゃ':'hya','ひゅ':'hyu','ひょ':'hyo','みゃ':'mya','みゅ':'myu','みょ':'myo','りゃ':'rya','りゅ':'ryu','りょ':'ryo','ぎゃ':'gya','ぎゅ':'gyu','ぎょ':'gyo','じゃ':'ja','じゅ':'ju','じょ':'jo','びゃ':'bya','びゅ':'byu','びょ':'byo','ぴゃ':'pya','ぴゅ':'pyu','ぴょ':'pyo','てぃ':'ti','でぃ':'di','ふぁ':'fa','ふぃ':'fi','ふぇ':'fe','ふぉ':'fo','うぃ':'wi','うぇ':'we','うぉ':'wo','しぇ':'she','ちぇ':'che','じぇ':'je'};
+const BASIC=BASIC_ROWS.flat().filter(Boolean), VOICED=VOICED_ROWS.flat();
+const el=id=>document.getElementById(id);
+const $$=sel=>[...document.querySelectorAll(sel)];
+const safeStorage={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v)}catch{}}};
+const STORE='kanabiyori_state_v2';
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+let saved={};try{saved=JSON.parse(safeStorage.get(STORE)||'{}')||{}}catch{}
+const state={mode:['hiragana','katakana','mixed'].includes(saved.mode)?saved.mode:'hiragana',advanced:!!saved.advanced,level:['all','N4','N5'].includes(saved.level)?saved.level:'all',stage:'ready',card:null,primary:null,extras:[],serial:0,completed:typeof saved.completed==='number'?saved.completed:0,uniqueAll:new Set(Array.isArray(saved.uniqueAll)?saved.uniqueAll:[]),dailyDate:saved.dailyDate===today()?saved.dailyDate:today(),dailyCount:saved.dailyDate===today()?(saved.dailyCount||0):0,dailySeen:new Set(saved.dailyDate===today()&&Array.isArray(saved.dailySeen)?saved.dailySeen:[]),recent:saved.recent&&typeof saved.recent==='object'?saved.recent:{},lastKana:saved.lastKana||'',vocab:[],candidatesCache:new Map(),currentUsed:new Set(),remoteCount:0};
+const kanaToHira=(s='')=>[...String(s)].map(ch=>{const n=ch.charCodeAt(0);return n>=0x30a1&&n<=0x30f6?String.fromCharCode(n-0x60):ch}).join('');
+const hiraToKata=(s='')=>[...String(s)].map(ch=>{const n=ch.charCodeAt(0);return n>=0x3041&&n<=0x3096?String.fromCharCode(n+0x60):ch}).join('');
+function toRomaji(input){let s=kanaToHira(input),out='';for(let i=0;i<s.length;i++){const ch=s[i],next=s[i+1]||'';if(ch==='っ'){let nxt=DIGRAPHS[next+(s[i+2]||'')]||ROMAJI[next]||'';out+=nxt.startsWith('ch')?'t':nxt[0]||'';continue}if(ch==='ー'){let m=out.match(/[aeiou]$/);out+=m?m[0]:'-';continue}if(ch==='ん'){out+='n';if(/[あいうえおやゆよ]/.test(next))out+="'";continue}const pair=DIGRAPHS[ch+next];if(pair){out+=pair;i++;continue}out+=ROMAJI[ch]||ch}return out}
+function parseLocal(){const list=[];let topic='日常';for(const line of (window.KANA_LOCAL_WORDS||'').split('\n')){const row=line.trim();if(!row)continue;if(row.startsWith('#')){topic=row.slice(1).trim();continue}const [word,reading,zh,level,override,customRoman]=row.split('|');if(!word||!reading||!zh)continue;list.push({word:word.trim(),reading:reading.trim(),roman:customRoman||toRomaji(reading.trim()),zh:zh.trim(),level:level||'N5',topic:override||topic,en:'',local:true,id:`local:${word}|${reading}`})}return list}
+let localWords=parseLocal();
+function buildWords(remote=[]){const map=new Map();for(const w of localWords)map.set(`${w.word}\u0000${w.reading}`,w);for(const item of remote){if(!item||typeof item.word!=='string'||typeof item.reading!=='string'||!['N4','N5'].includes(item.level))continue;const key=`${item.word}\u0000${item.reading}`,prev=map.get(key);const t={id:item.id||key,word:item.word,reading:item.reading,roman:item.romaji||toRomaji(item.reading),zh:prev?.zh||'',topic:prev?.topic||'生活詞彙',level:item.level,en:Array.isArray(item.meanings)?item.meanings[0]||'':'',local:!!prev};map.set(key,t)}state.vocab=[...map.values()].filter(x=>x.reading&&x.word&&!x.word.includes('　'));state.candidatesCache.clear();updateVocabCount()}
+function parseCachedRemote(){try{const cache=JSON.parse(safeStorage.get('kanabiyori_jlpt_v2')||'null');return Array.isArray(cache)?cache:[]}catch{return []}}
+async function loadRemote(){const cached=parseCachedRemote();if(cached.length){state.remoteCount=cached.length;buildWords(cached);setSource('loaded',`已載入 ${cached.length.toLocaleString()} 筆分級詞`)}else{buildWords();setSource('offline',`內建 ${state.vocab.length} 筆中文詞`)}
+ const levels=['n5','n4'];
+ const requests=levels.map(async level=>{const hosts=[`https://cdn.jsdelivr.net/gh/evanclan/OpenJLPT@main/data/json/vocab/${level}.json`,`https://raw.githubusercontent.com/evanclan/OpenJLPT/main/data/json/vocab/${level}.json`];let result=null;for(const url of hosts){const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),9000);try{const resp=await fetch(url,{signal:ctrl.signal});if(!resp.ok)throw new Error('fetch failed');const json=await resp.json();if(!Array.isArray(json)||!json.length)throw new Error('invalid data');result=json.filter(x=>x&&x.word&&x.reading).map(x=>({id:x.id,word:x.word,reading:x.reading,romaji:x.romaji,meanings:x.meanings?.slice(0,1)||[],level:x.level}));break}catch{}finally{clearTimeout(timer)}}if(!result)throw new Error('all sources unavailable');return result});
+ try{const rs=await Promise.allSettled(requests);const got=rs.filter(x=>x.status==='fulfilled').flatMap(x=>x.value);if(got.length>400){const merged=new Map();for(const r of [...cached,...got])merged.set(`${r.word}\u0000${r.reading}`,r);const remote=[...merged.values()];state.remoteCount=remote.length;buildWords(remote);safeStorage.set('kanabiyori_jlpt_v2',JSON.stringify(remote));setSource('loaded',`已載入 ${remote.length.toLocaleString()} 筆分級詞`)}else if(!cached.length){setSource('offline',`離線 · ${localWords.length} 筆備援詞`)}}catch{if(!cached.length)setSource('offline',`離線 · ${localWords.length} 筆備援詞`)}}
+function setSource(status,label){const box=el('sourceState');box.classList.remove('loaded','offline');box.classList.add(status);el('sourceText').textContent=label}
+function updateVocabCount(){const words=state.vocab.filter(w=>state.level==='all'||w.level===state.level);el('vocabCount').textContent=words.length.toLocaleString('zh-TW')}
+function persist(){safeStorage.set(STORE,JSON.stringify({mode:state.mode,advanced:state.advanced,level:state.level,completed:state.completed,uniqueAll:[...state.uniqueAll],dailyDate:state.dailyDate,dailyCount:state.dailyCount,dailySeen:[...state.dailySeen],recent:state.recent,lastKana:state.lastKana}))}
+function ensureToday(){if(state.dailyDate!==today()){state.dailyDate=today();state.dailyCount=0;state.dailySeen.clear()}}
+function updateStats(){ensureToday();el('dailyCount').textContent=state.dailyCount;el('uniqueCount').textContent=state.dailySeen.size;const count=BASIC.filter(c=>state.uniqueAll.has(c)).length;el('progressFraction').textContent=`${count}/46`;el('progressFill').style.width=`${(count/46*100).toFixed(1)}%`;el('progressBar').setAttribute('aria-valuenow',count)}
+function randomShuffle(arr){for(let i=arr.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+function possibleKana(){return state.advanced?[...BASIC,...VOICED]:BASIC}
+function chooseKana(){const options=possibleKana();const recent=state.lastKana;let bag=options.filter(c=>c!==recent);if(!bag.length)bag=options;let min=Infinity;for(const ch of bag){const seen=state.uniqueAll.has(ch)?1:0;if(seen<min)min=seen}if(Math.random()<.43){bag=bag.filter(c=>Number(state.uniqueAll.has(c))===min)}return bag[Math.floor(Math.random()*bag.length)]}
+function getCandidates(hira){const key=`${state.level}:${hira}`,old=state.candidatesCache.get(key);if(old)return old;const matches=state.vocab.filter(w=>(state.level==='all'||w.level===state.level)&&kanaToHira(w.reading).includes(hira)&&(hira!=='を'||w.topic==='用法'));
+ state.candidatesCache.set(key,matches);return matches}
+function chooseWord(hira,script,excluded=new Set()){
+ const candidates=getCandidates(hira).filter(x=>!excluded.has(x.id));if(!candidates.length)return null;
+ const histKey=`${script}:${hira}:${state.level}`,history=state.recent[histKey]||[];
+ let pool=candidates.filter(w=>!history.includes(w.id));if(!pool.length)pool=candidates;
+ // 優先對應假名開頭；片假名題偏重真正以片假名書寫的外來語。
+ if(hira!=='ん'&&hira!=='を'&&Math.random()<.64){const begins=pool.filter(w=>kanaToHira(w.reading).startsWith(hira));if(begins.length>=2)pool=begins}
+ if(script==='katakana'&&Math.random()<.76){const loan=pool.filter(w=>/[ァ-ヺ]/.test(w.word));if(loan.length)pool=loan}
+ if(script==='hiragana'&&Math.random()<.7){const native=pool.filter(w=>!/[ァ-ヺ]/.test(w.word));if(native.length)pool=native}
+ const word=pool[Math.floor(Math.random()*pool.length)];if(!excluded.size){const next=[...history.filter(id=>id!==word.id),word.id];state.recent[histKey]=next.slice(-Math.min(24,Math.max(3,Math.floor(candidates.length*.7))))}return word;
+}
+function fetchExamples(){const curr=state.card;if(!curr)return;const chosen=new Set();const primary=chooseWord(curr.hira,curr.script,chosen);if(!primary){state.primary=null;state.extras=[];return}state.primary=primary;chosen.add(primary.id);state.currentUsed.add(primary.id);state.extras=[];for(let i=0;i<2;i++){const w=chooseWord(curr.hira,curr.script,chosen);if(!w)break;chosen.add(w.id);state.extras.push(w)}}
+function showQuestion(forceKana){const hira=forceKana||chooseKana(),script=state.mode==='mixed'?(Math.random()<.5?'hiragana':'katakana'):state.mode;state.serial++;state.stage='question';state.card={hira,script};state.primary=null;state.extras=[];state.currentUsed=new Set();state.lastKana=hira;el('cardId').textContent=`QUESTION ${String(state.serial).padStart(3,'0')}`;el('scriptName').textContent=script==='katakana'?'KATAKANA · 片假名':'HIRAGANA · 平假名';el('mainKana').textContent=script==='katakana'?hiraToKata(hira):hira;el('questionPrompt').textContent='先試著大聲唸出這個假名';el('flashcard').classList.remove('revealed');el('answerView').classList.add('hidden');el('frontView').classList.remove('hidden');el('actionBtn').innerHTML='查看答案 <span class="btn-arrow" aria-hidden="true">→</span>';el('skipBtn').disabled=false;refreshGrid();persist()}
+function onAction(){if(state.stage==='ready'||state.stage==='answer'){showQuestion();return}showAnswer()}
+function markRead(){ensureToday();state.dailyCount++;state.completed++;state.uniqueAll.add(state.card.hira);state.dailySeen.add(`${state.card.script}:${state.card.hira}`);updateStats();persist()}
+function showAnswer(){if(!state.card||state.stage!=='question')return;state.stage='answer';markRead();fetchExamples();const k=state.card.hira,rom=k==='を'?'wo · o':ROMAJI[k]||toRomaji(k);el('kanaRoman').textContent=`${state.card.script==='katakana'?hiraToKata(k):k}  ·  ${rom}`;el('kanaNote').textContent=k==='を'?'助詞「を」實際通常唸作 o':k==='ん'?'通常出現在單字中間或結尾':'確認讀音後，認識對應單字';el('flashcard').classList.add('revealed');el('frontView').classList.add('hidden');el('answerView').classList.remove('hidden');renderWord();el('actionBtn').innerHTML='下一題 <span class="btn-arrow" aria-hidden="true">→</span>';refreshGrid();persist()}
+function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function highlightedReading(reading,k){const r=String(reading),c=kanaToHira(k);let out='';for(const ch of r){out+=kanaToHira(ch)===c?`<mark>${escapeHTML(ch)}</mark>`:escapeHTML(ch)}return out}
+function renderWord(){const w=state.primary,c=state.card;if(!w){el('wordText').textContent='—';el('wordReading').textContent='';el('wordMeaning').textContent='此音暫無符合等級的詞彙';el('wordLevel').textContent='例字';el('wordTopic').textContent='';el('wordEnglish').textContent='';el('matchTag').textContent='';el('extraWords').replaceChildren();el('newExample').disabled=true;el('playSound').disabled=true;return}el('newExample').disabled=false;el('playSound').disabled=false;el('wordText').textContent=w.word;el('wordLevel').textContent=w.level;el('wordTopic').textContent=w.topic;el('wordReading').innerHTML=`${highlightedReading(w.reading,c.hira)} <span>${escapeHTML(w.roman||toRomaji(w.reading))}</span>`;el('wordMeaning').textContent=w.zh||w.en||'—';el('wordEnglish').textContent=w.zh&&w.en?w.en:'';const realKata=/[ァ-ヺ]/.test(w.word);el('matchTag').textContent=c.hira==='を'?'助詞短句':c.script==='katakana'&&!realKata?'同音延伸':'';const extra=el('extraWords');extra.replaceChildren();for(const item of state.extras){const btn=document.createElement('button');btn.className='extra-chip';btn.type='button';const strong=document.createElement('strong');strong.textContent=item.word;btn.append(strong,document.createTextNode(` · ${item.zh||item.en||item.reading}`));btn.title='點擊換成此單字';btn.addEventListener('click',()=>{state.extras=state.extras.filter(x=>x.id!==item.id);if(state.primary)state.extras.unshift(state.primary);state.primary=item;renderWord()});extra.append(btn)}}
+function changeExample(){if(!state.card||state.stage!=='answer')return;const excl=new Set(state.currentUsed);const next=chooseWord(state.card.hira,state.card.script,excl)||chooseWord(state.card.hira,state.card.script,new Set([state.primary?.id]));if(!next)return;state.primary=next;state.currentUsed.add(next.id);const selected=new Set([next.id]);state.extras=[];for(let i=0;i<2;i++){const x=chooseWord(state.card.hira,state.card.script,selected);if(!x)break;selected.add(x.id);state.extras.push(x)}renderWord();persist()}
+function refreshGrid(){const container=el('kanaGrid');container.replaceChildren();const rows=state.advanced?[...BASIC_ROWS,...VOICED_ROWS]:BASIC_ROWS;for(const row of rows){for(const ch of row){const btn=document.createElement('button');btn.type='button';btn.className='kana-cell';if(ch){btn.textContent=state.mode==='katakana'?hiraToKata(ch):ch;btn.setAttribute('aria-label',`練習 ${ch}`);if(state.uniqueAll.has(ch))btn.classList.add('seen');if(state.card?.hira===ch)btn.classList.add('current');btn.addEventListener('click',()=>showQuestion(ch))}else{btn.disabled=true;btn.setAttribute('aria-hidden','true')}container.append(btn)}}}
+function setMode(next){if(state.mode===next)return;state.mode=next;$$('.mode-btn').forEach(b=>{const active=b.dataset.mode===next;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});refreshGrid();if(state.card){const hira=state.card.hira;showQuestion(hira)}persist()}
+function toggleAdvanced(checked){state.advanced=checked;if(state.card&&!possibleKana().includes(state.card.hira))showQuestion();refreshGrid();persist()}
+function setLevel(v){state.level=v;state.candidatesCache.clear();updateVocabCount();if(state.stage==='answer'){fetchExamples();renderWord()}persist()}
+function speak(){if(!state.primary||!('speechSynthesis'in window)) {alert('這個瀏覽器不支援語音播放。');return}const utter=new SpeechSynthesisUtterance(state.primary.reading);utter.lang='ja-JP';utter.rate=.82;const voices=window.speechSynthesis.getVoices();const voice=voices.find(v=>v.lang.toLowerCase()==='ja-jp')||voices.find(v=>v.lang.toLowerCase().startsWith('ja'));if(voice)utter.voice=voice;window.speechSynthesis.cancel();window.speechSynthesis.speak(utter)}
+function init(){el('advancedSwitch').checked=state.advanced;el('levelSelect').value=state.level;$$('.mode-btn').forEach(btn=>{btn.classList.toggle('active',btn.dataset.mode===state.mode);btn.setAttribute('aria-pressed',String(btn.dataset.mode===state.mode));btn.addEventListener('click',()=>setMode(btn.dataset.mode))});el('actionBtn').addEventListener('click',onAction);el('skipBtn').addEventListener('click',()=>showQuestion());el('advancedSwitch').addEventListener('change',e=>toggleAdvanced(e.target.checked));el('levelSelect').addEventListener('change',e=>setLevel(e.target.value));el('newExample').addEventListener('click',changeExample);el('playSound').addEventListener('click',speak);el('helpBtn').addEventListener('click',()=>el('helpDialog').showModal());el('closeHelp').addEventListener('click',()=>el('helpDialog').close());el('helpDialog').addEventListener('click',e=>{if(e.target===el('helpDialog'))el('helpDialog').close()});document.addEventListener('keydown',e=>{if(!['Space','Enter'].includes(e.code)||e.repeat||el('helpDialog').open)return;const tag=document.activeElement?.tagName;if(['BUTTON','INPUT','SELECT','TEXTAREA','A'].includes(tag))return;e.preventDefault();onAction()});window.addEventListener('beforeunload',persist);refreshGrid();updateStats();buildWords();loadRemote();}
+init();
+})();
+
+</script>
+</body>
+</html>
