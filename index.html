@@ -139,6 +139,7 @@ body{background:#f7f6f2}
 .anime-easter-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#9e9287;font-size:11px;margin-top:3px}
 .anime-easter-meta button{font:inherit;border:1px solid #e7d3c5;border-radius:20px;background:#fffcf9;color:#b46351;font-size:12px;font-weight:700;padding:7px 12px}
 @media(max-width:750px){.anime-easter-title{font-size:14px}.anime-easter details summary{padding:12px}}
+.main-kana.ready-kana{font-size:clamp(105px,12vw,144px);font-weight:350;color:#b9beb8;filter:none;user-select:none}
 </style>
 </head>
 <body>
@@ -183,13 +184,13 @@ body{background:#f7f6f2}
             <span class="card-script" id="scriptName">五十音練習</span>
           </div>
           <div class="card-front" id="frontView">
-            <div class="kana-container"><div class="kana-halo" aria-hidden="true"></div><div class="main-kana" id="mainKana">あ</div></div>
-            <div class="card-help-text" id="questionPrompt">按下開始，抽出第一題</div>
+            <div class="kana-container"><div class="kana-halo" aria-hidden="true"></div><div class="main-kana ready-kana" id="mainKana">?</div></div>
+            <div class="card-help-text" id="questionPrompt">準備好了嗎？</div>
             <button type="button" class="kana-sound question-sound hidden" id="playKanaFront" aria-label="聽目前假名的發音"><span aria-hidden="true">♪</span> 聽發音</button>
           </div>
           <div class="card-answer hidden" id="answerView">
             <div class="answer-top">
-              <span class="answer-roman" id="kanaRoman">a</span>
+              <span class="answer-roman" id="kanaRoman"></span>
               <span class="answer-note" id="kanaNote">請確認你的發音</span>
               <button type="button" class="kana-sound answer-sound" id="playKanaAnswer" aria-label="重聽目前假名的發音"><span aria-hidden="true">♪</span> 聽發音</button>
             </div>
@@ -1154,7 +1155,7 @@ function chooseWord(hira,script,excluded=new Set()){
   return word;
 }
 function fetchExamples(){const curr=state.card;if(!curr)return;const chosen=new Set();const primary=chooseWord(curr.hira,curr.script,chosen);if(!primary){state.primary=null;state.extras=[];return}state.primary=primary;chosen.add(primary.id);state.currentUsed.add(primary.id);state.extras=[];for(let i=0;i<2;i++){const w=chooseWord(curr.hira,curr.script,chosen);if(!w)break;chosen.add(w.id);state.extras.push(w)}}
-function showQuestion(forceKana){if('speechSynthesis'in window)window.speechSynthesis.cancel();const script=state.mode==='mixed'?(Math.random()<.5?'hiragana':'katakana'):state.mode,hira=forceKana||chooseKana(script);state.serial++;state.stage='question';state.card={hira,script};state.primary=null;state.extras=[];state.animeBonus=null;el('animeEaster').classList.add('hidden');el('animeBonusDetails').open=false;state.currentUsed=new Set();state.lastKana=hira;el('cardId').textContent=`第 ${state.serial} 題`;el('scriptName').textContent=script==='katakana'?'KATAKANA · 片假名':'HIRAGANA · 平假名';el('mainKana').textContent=script==='katakana'?hiraToKata(hira):hira;el('questionPrompt').textContent='先唸唸看';el('flashcard').classList.remove('revealed');el('answerView').classList.add('hidden');el('frontView').classList.remove('hidden');el('playKanaFront').classList.remove('hidden');el('actionBtn').innerHTML='看答案 <span class="btn-arrow" aria-hidden="true">→</span>';el('skipBtn').disabled=false;refreshGrid();persist()}
+function showQuestion(forceKana){if('speechSynthesis'in window)window.speechSynthesis.cancel();const script=state.mode==='mixed'?(Math.random()<.5?'hiragana':'katakana'):state.mode,hira=forceKana||chooseKana(script);state.serial++;state.stage='question';state.card={hira,script};state.primary=null;state.extras=[];state.animeBonus=null;el('animeEaster').classList.add('hidden');el('animeBonusDetails').open=false;state.currentUsed=new Set();state.lastKana=hira;el('cardId').textContent=`第 ${state.serial} 題`;el('scriptName').textContent=script==='katakana'?'KATAKANA · 片假名':'HIRAGANA · 平假名';el('mainKana').textContent=script==='katakana'?hiraToKata(hira):hira;el('mainKana').classList.remove('ready-kana');el('questionPrompt').textContent='先唸唸看';el('flashcard').classList.remove('revealed');el('answerView').classList.add('hidden');el('frontView').classList.remove('hidden');el('playKanaFront').classList.remove('hidden');el('actionBtn').innerHTML='看答案 <span class="btn-arrow" aria-hidden="true">→</span>';el('skipBtn').disabled=false;refreshGrid();persist()}
 function onAction(){if(state.stage==='ready'||state.stage==='answer'){showQuestion();return}showAnswer()}
 function markRead(){ensureToday();state.dailyCount++;state.completed++;state.uniqueAll.add(state.card.hira);state.dailySeen.add(`${state.card.script}:${state.card.hira}`);updateStats();persist()}
 function showAnswer(){if(!state.card||state.stage!=='question')return;state.stage='answer';markRead();fetchExamples();const k=state.card.hira,rom=k==='を'?'wo · o':ROMAJI[k]||toRomaji(k);el('kanaRoman').textContent=`${state.card.script==='katakana'?hiraToKata(k):k}  ·  ${rom}`;el('kanaNote').textContent=k==='を'?'助詞通常讀作 o':k==='ん'?'常出現在詞中或詞尾':'';el('skipBtn').disabled=true;el('flashcard').classList.add('revealed');el('frontView').classList.add('hidden');el('answerView').classList.remove('hidden');renderWord();showAnimeBonus();el('actionBtn').innerHTML='下一題 <span class="btn-arrow" aria-hidden="true">→</span>';refreshGrid();persist()}
