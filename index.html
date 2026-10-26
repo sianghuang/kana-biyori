@@ -1045,7 +1045,8 @@ function buildWords(){
     const level=prev&&JLPT_ORDER[prev.level]<JLPT_ORDER[word.level]?prev.level:word.level;
     map.set(key,{...prev,...word,level});
   }
-  state.vocab=[...map.values()].filter(w=>w.word&&w.reading&&w.zh&&w.en);
+  state.vocab=[...map.values()].filter(w=>w.word&&w.reading&&w.zh&&w.en
+    &&(isWordForScript(w.word,'hiragana')||isWordForScript(w.word,'katakana')));
   state.candidatesCache.clear();updateVocabCount();
   setSource('loaded','已內建 '+state.vocab.length.toLocaleString('zh-TW')+' 筆中英對照詞');
 }
