@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f7f5f0">
-  <meta name="description" content="50 音讀音練習：平假名、片假名、N5～N4 真實日文單字，純前端免費練習。">
+  <meta name="description" content="50 音讀音練習：平假名、片假名、N5～N3 真實日文單字，純前端免費練習。">
   <title>かな日和 · 日文五十音練習</title>
   
   
@@ -170,7 +170,7 @@ body{background:#f7f6f2}
                 <label class="switch-setting" for="animeSwitch"><span>ANIME 動漫彩蛋</span><span class="switch"><input id="animeSwitch" type="checkbox"><span class="slider-switch"></span></span></label>
                 <small>偶爾額外出現符合當前假名的動漫台詞</small>
               </div>
-              <div class="filter-row"><label for="levelSelect">單字等級</label><select id="levelSelect"><option value="all">N5 + N4</option><option value="N5">只看 N5</option><option value="N4">只看 N4</option></select></div>
+              <div class="filter-row"><label for="levelSelect">單字等級</label><select id="levelSelect"><option value="all">N5 + N4 + N3</option><option value="N5">只看 N5</option><option value="N4">只看 N4</option><option value="N3">只看 N3</option></select></div>
               <div class="settings-data"><strong id="vocabCount">—</strong> 筆練習單字</div>
               <span class="sync-pill" id="sourceState" title="詞庫載入情況"><span class="sync-dot"></span> <span id="sourceText">載入詞庫中</span></span>
             </div>
@@ -257,7 +257,7 @@ body{background:#f7f6f2}
     <details class="credits-details"><summary>詞庫來源與授權</summary><footer class="footer"><span>Made for daily Japanese practice · 純 JavaScript，無後端。</span><span>詞彙分級僅供參考 · <a href="https://github.com/evanclan/OpenJLPT" target="_blank" rel="noopener noreferrer">OpenJLPT</a>（<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>）及 JMdict／KANJIDIC2（EDRDG）、Jonathan Waller、Tatoeba</span></footer></details>
   </div>
 
-  <dialog id="helpDialog" class="help-dialog"><div class="dialog-content"><div class="dialog-top"><h2>操作方式</h2><button id="closeHelp" aria-label="關閉說明" class="icon-button">×</button></div><ol><li>看到假名，先自己唸出來。</li><li>按「看答案」確認讀音與例字。</li><li>按「下一題」繼續；也能用 ♪ 聽發音。</li><li>想增添趣味，可在設定開啟 ANIME 彩蛋，少數題目會額外附上與當前假名相符的動漫台詞。</li></ol><p>空白鍵／Enter：下一步，P：聽假名。單字分類參考 N5～N4，會盡量輪替例字。</p></div></dialog>
+  <dialog id="helpDialog" class="help-dialog"><div class="dialog-content"><div class="dialog-top"><h2>操作方式</h2><button id="closeHelp" aria-label="關閉說明" class="icon-button">×</button></div><ol><li>看到假名，先自己唸出來。</li><li>按「看答案」確認讀音與例字。</li><li>按「下一題」繼續；也能用 ♪ 聽發音。</li><li>想增添趣味，可在設定開啟 ANIME 彩蛋，少數題目會額外附上與當前假名相符的動漫台詞。</li></ol><p>空白鍵／Enter：下一步，P：聽假名。單字分類參考 N5～N3，會盡量輪替例字。</p></div></dialog>
   <script>
 /* 精選短篇動漫名台詞／招式，與 N4/N5 詞庫獨立，離線也可使用。*/
 window.KANA_ANIME_QUOTES = String.raw`
@@ -928,6 +928,23 @@ window.KANA_LOCAL_WORDS = String.raw`
 部屋を片付ける|へやをかたづける|收拾房間|N4|用法|heya o katazukeru
 答えを考える|こたえをかんがえる|思考答案|N4|用法|kotae o kangaeru
 予約をする|よやくをする|進行預約|N4|用法|yoyaku o suru
+# N3 原有日常詞庫擴充（等級僅供參考）
+あいにく|あいにく|不巧；遺憾|N3
+アイスクリーム|あいすくりーむ|冰淇淋|N3
+アイロン|あいろん|熨斗|N3
+アウト|あうと|出界；出局|N3
+あちこち|あちこち|到處；這裡那裡|N3
+いたずら|いたずら|惡作劇|N3
+あるいは|あるいは|或者；也許|N3
+アルバム|あるばむ|相簿|N3
+あんなに|あんなに|那麼地|N3
+いつか|いつか|總有一天|N3
+いつでも|いつでも|隨時|N3
+いつまでも|いつまでも|一直；永遠|N3
+いけない|いけない|不可以；不好|N3
+いただきます|いただきます|開動了（餐前用語）|N3
+あらゆる|あらゆる|所有的；各種|N3
+あんまり|あんまり|不太；過度|N3
 `;
 
 </script>
@@ -945,54 +962,179 @@ const STORE='kanabiyori_state_v2';
 const ANIME_QUOTES=(window.KANA_ANIME_QUOTES||'').split('\n').map(line=>line.trim()).filter(line=>line&&!line.startsWith('#')).map((line,id)=>{const [text,reading,roman,meaning,series]=line.split('|');return {id,text,reading,roman,meaning,series}}).filter(q=>q.text&&q.reading&&q.roman&&q.meaning&&q.series);
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 let saved={};try{saved=JSON.parse(safeStorage.get(STORE)||'{}')||{}}catch{}
-const state={animeEnabled:saved.animeEnabled===true,animeRecent:Array.isArray(saved.animeRecent)?saved.animeRecent:[],animeBonus:null,mode:['hiragana','katakana','mixed'].includes(saved.mode)?saved.mode:'hiragana',advanced:!!saved.advanced,level:['all','N4','N5'].includes(saved.level)?saved.level:'all',stage:'ready',card:null,primary:null,extras:[],serial:0,completed:typeof saved.completed==='number'?saved.completed:0,uniqueAll:new Set(Array.isArray(saved.uniqueAll)?saved.uniqueAll:[]),dailyDate:saved.dailyDate===today()?saved.dailyDate:today(),dailyCount:saved.dailyDate===today()?(saved.dailyCount||0):0,dailySeen:new Set(saved.dailyDate===today()&&Array.isArray(saved.dailySeen)?saved.dailySeen:[]),recent:saved.recent&&typeof saved.recent==='object'?saved.recent:{},lastKana:saved.lastKana||'',vocab:[],candidatesCache:new Map(),currentUsed:new Set(),remoteCount:0};
+const state={animeEnabled:saved.animeEnabled===true,animeRecent:Array.isArray(saved.animeRecent)?saved.animeRecent:[],animeBonus:null,mode:['hiragana','katakana','mixed'].includes(saved.mode)?saved.mode:'hiragana',advanced:!!saved.advanced,level:['all','N3','N4','N5'].includes(saved.level)?saved.level:'all',stage:'ready',card:null,primary:null,extras:[],serial:0,completed:typeof saved.completed==='number'?saved.completed:0,uniqueAll:new Set(Array.isArray(saved.uniqueAll)?saved.uniqueAll:[]),dailyDate:saved.dailyDate===today()?saved.dailyDate:today(),dailyCount:saved.dailyDate===today()?(saved.dailyCount||0):0,dailySeen:new Set(saved.dailyDate===today()&&Array.isArray(saved.dailySeen)?saved.dailySeen:[]),recent:saved.recent&&typeof saved.recent==='object'?saved.recent:{},lastKana:saved.lastKana||'',vocab:[],candidatesCache:new Map(),currentUsed:new Set(),remoteCount:0};
 const kanaToHira=(s='')=>[...String(s)].map(ch=>{const n=ch.charCodeAt(0);return n>=0x30a1&&n<=0x30f6?String.fromCharCode(n-0x60):ch}).join('');
 const hiraToKata=(s='')=>[...String(s)].map(ch=>{const n=ch.charCodeAt(0);return n>=0x3041&&n<=0x3096?String.fromCharCode(n+0x60):ch}).join('');
 function toRomaji(input){let s=kanaToHira(input),out='';for(let i=0;i<s.length;i++){const ch=s[i],next=s[i+1]||'';if(ch==='っ'){let nxt=DIGRAPHS[next+(s[i+2]||'')]||ROMAJI[next]||'';out+=nxt.startsWith('ch')?'t':nxt[0]||'';continue}if(ch==='ー'){let m=out.match(/[aeiou]$/);out+=m?m[0]:'-';continue}if(ch==='ん'){out+='n';if(/[あいうえおやゆよ]/.test(next))out+="'";continue}const pair=DIGRAPHS[ch+next];if(pair){out+=pair;i++;continue}out+=ROMAJI[ch]||ch}return out}
-function parseLocal(){const list=[];let topic='日常';for(const line of (window.KANA_LOCAL_WORDS||'').split('\n')){const row=line.trim();if(!row)continue;if(row.startsWith('#')){topic=row.slice(1).trim();continue}const [word,reading,zh,level,override,customRoman]=row.split('|');if(!word||!reading||!zh)continue;list.push({word:word.trim(),reading:reading.trim(),roman:customRoman||toRomaji(reading.trim()),zh:zh.trim(),level:level||'N5',topic:override||topic,en:'',local:true,id:`local:${word}|${reading}`})}return list}
+const JLPT_ORDER={N5:0,N4:1,N3:2};
+function normalizeReading(word,reading){
+  const name=String(word||'').trim(),raw=String(reading||'').trim();
+  const fallback=/^[ぁ-ゖァ-ヺー・]+$/.test(name)?name:'';
+  const normalized=kanaToHira(raw||fallback).replace(/\s+/g,'');
+  return /^[ぁ-ゖー・]+$/.test(normalized)?normalized:'';
+}
+function validGloss(item){
+  const meanings=Array.isArray(item.meanings)?item.meanings:[];
+  return meanings.map(v=>String(v||'').trim()).find(v=>v&&!/^(?:todo|tbd|unknown|undefined|n\/a)\b/i.test(v))||'';
+}
+function parseLocal(){
+  const list=[];let topic='日常';
+  for(const line of (window.KANA_LOCAL_WORDS||'').split('\n')){
+    const row=line.trim();if(!row)continue;
+    if(row.startsWith('#')){topic=row.slice(1).trim();continue}
+    const [word,reading,zh,level,override,customRoman]=row.split('|');
+    if(!word||!zh||!(level in JLPT_ORDER))continue;
+    const normalized=normalizeReading(word,reading);
+    if(!normalized)continue;
+    list.push({word:word.trim(),reading:normalized,roman:customRoman||toRomaji(normalized),
+       zh:zh.trim(),level,topic:override||topic,en:'',local:true,id:'local:'+word+'|'+normalized});
+  }
+  return list;
+}
 let localWords=parseLocal();
-function buildWords(remote=[]){const map=new Map();for(const w of localWords)map.set(`${w.word}\u0000${w.reading}`,w);for(const item of remote){if(!item||typeof item.word!=='string'||typeof item.reading!=='string'||!['N4','N5'].includes(item.level))continue;const key=`${item.word}\u0000${item.reading}`,prev=map.get(key);const t={id:item.id||key,word:item.word,reading:item.reading,roman:item.romaji||toRomaji(item.reading),zh:prev?.zh||'',topic:prev?.topic||'生活詞彙',level:item.level,en:Array.isArray(item.meanings)?item.meanings[0]||'':'',local:!!prev};map.set(key,t)}state.vocab=[...map.values()].filter(x=>x.reading&&x.word&&!x.word.includes('　'));state.candidatesCache.clear();updateVocabCount()}
-function parseCachedRemote(){try{const cache=JSON.parse(safeStorage.get('kanabiyori_jlpt_v2')||'null');return Array.isArray(cache)?cache:[]}catch{return []}}
-async function loadRemote(){const cached=parseCachedRemote();if(cached.length){state.remoteCount=cached.length;buildWords(cached);setSource('loaded',`已載入 ${cached.length.toLocaleString()} 筆分級詞`)}else{buildWords();setSource('offline',`內建 ${state.vocab.length} 筆中文詞`)}
- const levels=['n5','n4'];
- const requests=levels.map(async level=>{const hosts=[`https://cdn.jsdelivr.net/gh/evanclan/OpenJLPT@main/data/json/vocab/${level}.json`,`https://raw.githubusercontent.com/evanclan/OpenJLPT/main/data/json/vocab/${level}.json`];let result=null;for(const url of hosts){const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),9000);try{const resp=await fetch(url,{signal:ctrl.signal});if(!resp.ok)throw new Error('fetch failed');const json=await resp.json();if(!Array.isArray(json)||!json.length)throw new Error('invalid data');result=json.filter(x=>x&&x.word&&x.reading).map(x=>({id:x.id,word:x.word,reading:x.reading,romaji:x.romaji,meanings:x.meanings?.slice(0,1)||[],level:x.level}));break}catch{}finally{clearTimeout(timer)}}if(!result)throw new Error('all sources unavailable');return result});
- try{const rs=await Promise.allSettled(requests);const got=rs.filter(x=>x.status==='fulfilled').flatMap(x=>x.value);if(got.length>400){const merged=new Map();for(const r of [...cached,...got])merged.set(`${r.word}\u0000${r.reading}`,r);const remote=[...merged.values()];state.remoteCount=remote.length;buildWords(remote);safeStorage.set('kanabiyori_jlpt_v2',JSON.stringify(remote));setSource('loaded',`已載入 ${remote.length.toLocaleString()} 筆分級詞`)}else if(!cached.length){setSource('offline',`離線 · ${localWords.length} 筆備援詞`)}}catch{if(!cached.length)setSource('offline',`離線 · ${localWords.length} 筆備援詞`)}}
+function buildWords(remote=[]){
+  const map=new Map();
+  // Keep first clean entry for exact duplicates and use the easiest JLPT level.
+  for(const w of localWords){
+    const key=w.word+'\u0000'+w.reading,old=map.get(key);
+    if(!old||JLPT_ORDER[w.level]<JLPT_ORDER[old.level])map.set(key,w);
+  }
+  for(const item of remote){
+    if(!item||typeof item.word!=='string'||!(item.level in JLPT_ORDER))continue;
+    const word=item.word.trim();
+    if(!word||word.length>50||word.includes('　'))continue;
+    const reading=normalizeReading(word,item.reading);
+    if(!reading)continue;
+    const key=word+'\u0000'+reading,prev=map.get(key),gloss=validGloss(item);
+    if(!gloss&&!prev)continue;
+    const level=prev&&JLPT_ORDER[prev.level]<JLPT_ORDER[item.level]?prev.level:item.level;
+    map.set(key,{id:prev?.id||item.id||key,word,reading,roman:toRomaji(reading),
+      zh:prev?.zh||'',topic:prev?.topic||'生活詞彙',level,en:gloss||prev?.en||'',local:!!prev?.local});
+  }
+  state.vocab=[...map.values()].filter(w=>w.word&&w.reading);
+  state.candidatesCache.clear();updateVocabCount();
+}
+function parseCachedRemote(){
+  try{
+    const cache=JSON.parse(safeStorage.get('kanabiyori_jlpt_v3')||safeStorage.get('kanabiyori_jlpt_v2')||'null');
+    return Array.isArray(cache)?cache:[];
+  }catch{return []}
+}
+async function loadRemote(){
+  const cached=parseCachedRemote();
+  if(cached.length){
+    state.remoteCount=cached.length;buildWords(cached);
+    setSource('loaded','已載入 '+cached.length.toLocaleString()+' 筆分級詞');
+  }else{
+    buildWords();setSource('offline','內建 '+state.vocab.length+' 筆中文詞');
+  }
+  const requests=['n5','n4','n3'].map(async level=>{
+    const urls=[
+      'https://cdn.jsdelivr.net/gh/evanclan/OpenJLPT@main/data/json/vocab/'+level+'.json',
+      'https://raw.githubusercontent.com/evanclan/OpenJLPT/main/data/json/vocab/'+level+'.json'
+    ];
+    for(const url of urls){
+      const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),14000);
+      try{
+        const response=await fetch(url,{signal:controller.signal});
+        if(!response.ok)throw Error('HTTP '+response.status);
+        const json=await response.json();
+        if(!Array.isArray(json)||!json.length)throw Error('Invalid vocabulary');
+        return json.filter(x=>x&&typeof x.word==='string').map(x=>({
+          id:x.id,word:x.word,reading:x.reading||'',
+          meanings:Array.isArray(x.meanings)?x.meanings.slice(0,3):[],
+          level:x.level||level.toUpperCase()
+        }));
+      }catch{}finally{clearTimeout(timer)}
+    }
+    throw Error('Failed downloading '+level);
+  });
+  const results=await Promise.allSettled(requests);
+  const fetched=results.filter(x=>x.status==='fulfilled').flatMap(x=>x.value);
+  if(fetched.length){
+    const cleaned=new Map();
+    for(const item of [...cached,...fetched]){
+      if(!item||!item.word||!(item.level in JLPT_ORDER))continue;
+      const reading=normalizeReading(item.word,item.reading);
+      if(!reading||!validGloss(item))continue;
+      const key=item.word+'\u0000'+reading,prev=cleaned.get(key);
+      if(!prev||JLPT_ORDER[item.level]<JLPT_ORDER[prev.level])cleaned.set(key,{...item,reading});
+    }
+    const remote=[...cleaned.values()];
+    state.remoteCount=remote.length;buildWords(remote);
+    safeStorage.set('kanabiyori_jlpt_v3',JSON.stringify(remote));
+    setSource('loaded','已載入 '+remote.length.toLocaleString()+' 筆分級詞');
+  }else if(!cached.length){
+    setSource('offline','離線 · '+localWords.length+' 筆備援詞');
+  }
+}
 function setSource(status,label){const box=el('sourceState');box.classList.remove('loaded','offline');box.classList.add(status);el('sourceText').textContent=label}
-function updateVocabCount(){const words=state.vocab.filter(w=>state.level==='all'||w.level===state.level);el('vocabCount').textContent=words.length.toLocaleString('zh-TW')}
+function updateVocabCount(){
+  const scripts=state.mode==='mixed'?['hiragana','katakana']:[state.mode];
+  const available=state.vocab.filter(w=>(state.level==='all'||w.level===state.level)
+    &&scripts.some(script=>isWordForScript(w.word,script)));
+  el('vocabCount').textContent=available.length.toLocaleString('zh-TW');
+}
 function persist(){safeStorage.set(STORE,JSON.stringify({animeEnabled:state.animeEnabled,animeRecent:state.animeRecent,mode:state.mode,advanced:state.advanced,level:state.level,completed:state.completed,uniqueAll:[...state.uniqueAll],dailyDate:state.dailyDate,dailyCount:state.dailyCount,dailySeen:[...state.dailySeen],recent:state.recent,lastKana:state.lastKana}))}
 function ensureToday(){if(state.dailyDate!==today()){state.dailyDate=today();state.dailyCount=0;state.dailySeen.clear()}}
 function updateStats(){ensureToday();el('todayQuick').textContent=`今日 ${state.dailyCount} 題`;el('dailyCount').textContent=state.dailyCount;el('uniqueCount').textContent=state.dailySeen.size;const count=BASIC.filter(c=>state.uniqueAll.has(c)).length;el('progressFraction').textContent=`${count}/46`;el('progressFill').style.width=`${(count/46*100).toFixed(1)}%`;el('progressBar').setAttribute('aria-valuenow',count)}
 function randomShuffle(arr){for(let i=arr.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
 function possibleKana(){return state.advanced?[...BASIC,...VOICED]:BASIC}
-function chooseKana(){const options=possibleKana();const recent=state.lastKana;let bag=options.filter(c=>c!==recent);if(!bag.length)bag=options;let min=Infinity;for(const ch of bag){const seen=state.uniqueAll.has(ch)?1:0;if(seen<min)min=seen}if(Math.random()<.43){bag=bag.filter(c=>Number(state.uniqueAll.has(c))===min)}return bag[Math.floor(Math.random()*bag.length)]}
-function getCandidates(hira){const key=`${state.level}:${hira}`,old=state.candidatesCache.get(key);if(old)return old;const matches=state.vocab.filter(w=>(state.level==='all'||w.level===state.level)&&kanaToHira(w.reading).includes(hira)&&(hira!=='を'||w.topic==='用法'));
- state.candidatesCache.set(key,matches);return matches}
+function chooseKana(script){
+  const all=possibleKana(),supported=all.filter(ch=>getCandidates(ch,script).length>0);
+  let bag=(supported.length?supported:all).filter(ch=>ch!==state.lastKana);
+  if(!bag.length)bag=supported.length?supported:all;
+  const unseen=bag.filter(ch=>!state.uniqueAll.has(ch));
+  if(unseen.length&&Math.random()<.43)bag=unseen;
+  return bag[Math.floor(Math.random()*bag.length)];
+}
+function isWordForScript(word,script){
+  if(script==='hiragana')return !/[ァ-ヺ]/.test(word);
+  if(script==='katakana')return /^[ァ-ヺー・]+$/.test(word);
+  return false;
+}
+function getCandidates(hira,script){
+  const key=state.level+':'+script+':'+hira,cached=state.candidatesCache.get(key);
+  if(cached)return cached;
+  const matches=state.vocab.filter(w=>(state.level==='all'||w.level===state.level)
+    &&isWordForScript(w.word,script)&&hasKanaMora(w.reading,hira)
+    &&(hira!=='を'||(script==='hiragana'&&w.topic==='用法')));
+  state.candidatesCache.set(key,matches);
+  return matches;
+}
 function chooseWord(hira,script,excluded=new Set()){
- const candidates=getCandidates(hira).filter(x=>!excluded.has(x.id));if(!candidates.length)return null;
- const histKey=`${script}:${hira}:${state.level}`,history=state.recent[histKey]||[];
- let pool=candidates.filter(w=>!history.includes(w.id));if(!pool.length)pool=candidates;
- // 優先對應假名開頭；片假名題偏重真正以片假名書寫的外來語。
- if(hira!=='ん'&&hira!=='を'&&Math.random()<.64){const begins=pool.filter(w=>kanaToHira(w.reading).startsWith(hira));if(begins.length>=2)pool=begins}
- if(script==='katakana'&&Math.random()<.76){const loan=pool.filter(w=>/[ァ-ヺ]/.test(w.word));if(loan.length)pool=loan}
- if(script==='hiragana'&&Math.random()<.7){const native=pool.filter(w=>!/[ァ-ヺ]/.test(w.word));if(native.length)pool=native}
- const word=pool[Math.floor(Math.random()*pool.length)];if(!excluded.size){const next=[...history.filter(id=>id!==word.id),word.id];state.recent[histKey]=next.slice(-Math.min(24,Math.max(3,Math.floor(candidates.length*.7))))}return word;
+  const options=getCandidates(hira,script).filter(w=>!excluded.has(w.id));
+  if(!options.length)return null;
+  const histKey=script+':'+hira+':'+state.level,history=state.recent[histKey]||[];
+  let pool=options.filter(w=>!history.includes(w.id));
+  if(!pool.length)pool=options;
+  if(hira!=='ん'&&hira!=='を'&&Math.random()<.64){
+    const starts=pool.filter(w=>kanaToHira(w.reading).startsWith(hira));
+    if(starts.length>=2)pool=starts;
+  }
+  const word=pool[Math.floor(Math.random()*pool.length)];
+  if(!excluded.size){
+    state.recent[histKey]=[...history.filter(x=>x!==word.id),word.id]
+      .slice(-Math.min(24,Math.max(3,Math.floor(options.length*.7))));
+  }
+  return word;
 }
 function fetchExamples(){const curr=state.card;if(!curr)return;const chosen=new Set();const primary=chooseWord(curr.hira,curr.script,chosen);if(!primary){state.primary=null;state.extras=[];return}state.primary=primary;chosen.add(primary.id);state.currentUsed.add(primary.id);state.extras=[];for(let i=0;i<2;i++){const w=chooseWord(curr.hira,curr.script,chosen);if(!w)break;chosen.add(w.id);state.extras.push(w)}}
-function showQuestion(forceKana){if('speechSynthesis'in window)window.speechSynthesis.cancel();const hira=forceKana||chooseKana(),script=state.mode==='mixed'?(Math.random()<.5?'hiragana':'katakana'):state.mode;state.serial++;state.stage='question';state.card={hira,script};state.primary=null;state.extras=[];state.animeBonus=null;el('animeEaster').classList.add('hidden');el('animeBonusDetails').open=false;state.currentUsed=new Set();state.lastKana=hira;el('cardId').textContent=`第 ${state.serial} 題`;el('scriptName').textContent=script==='katakana'?'KATAKANA · 片假名':'HIRAGANA · 平假名';el('mainKana').textContent=script==='katakana'?hiraToKata(hira):hira;el('questionPrompt').textContent='先唸唸看';el('flashcard').classList.remove('revealed');el('answerView').classList.add('hidden');el('frontView').classList.remove('hidden');el('playKanaFront').classList.remove('hidden');el('actionBtn').innerHTML='看答案 <span class="btn-arrow" aria-hidden="true">→</span>';el('skipBtn').disabled=false;refreshGrid();persist()}
+function showQuestion(forceKana){if('speechSynthesis'in window)window.speechSynthesis.cancel();const script=state.mode==='mixed'?(Math.random()<.5?'hiragana':'katakana'):state.mode,hira=forceKana||chooseKana(script);state.serial++;state.stage='question';state.card={hira,script};state.primary=null;state.extras=[];state.animeBonus=null;el('animeEaster').classList.add('hidden');el('animeBonusDetails').open=false;state.currentUsed=new Set();state.lastKana=hira;el('cardId').textContent=`第 ${state.serial} 題`;el('scriptName').textContent=script==='katakana'?'KATAKANA · 片假名':'HIRAGANA · 平假名';el('mainKana').textContent=script==='katakana'?hiraToKata(hira):hira;el('questionPrompt').textContent='先唸唸看';el('flashcard').classList.remove('revealed');el('answerView').classList.add('hidden');el('frontView').classList.remove('hidden');el('playKanaFront').classList.remove('hidden');el('actionBtn').innerHTML='看答案 <span class="btn-arrow" aria-hidden="true">→</span>';el('skipBtn').disabled=false;refreshGrid();persist()}
 function onAction(){if(state.stage==='ready'||state.stage==='answer'){showQuestion();return}showAnswer()}
 function markRead(){ensureToday();state.dailyCount++;state.completed++;state.uniqueAll.add(state.card.hira);state.dailySeen.add(`${state.card.script}:${state.card.hira}`);updateStats();persist()}
 function showAnswer(){if(!state.card||state.stage!=='question')return;state.stage='answer';markRead();fetchExamples();const k=state.card.hira,rom=k==='を'?'wo · o':ROMAJI[k]||toRomaji(k);el('kanaRoman').textContent=`${state.card.script==='katakana'?hiraToKata(k):k}  ·  ${rom}`;el('kanaNote').textContent=k==='を'?'助詞通常讀作 o':k==='ん'?'常出現在詞中或詞尾':'';el('skipBtn').disabled=true;el('flashcard').classList.add('revealed');el('frontView').classList.add('hidden');el('answerView').classList.remove('hidden');renderWord();showAnimeBonus();el('actionBtn').innerHTML='下一題 <span class="btn-arrow" aria-hidden="true">→</span>';refreshGrid();persist()}
 function escapeHTML(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function highlightedReading(reading,k){const r=String(reading),c=kanaToHira(k);let out='';for(const ch of r){out+=kanaToHira(ch)===c?`<mark>${escapeHTML(ch)}</mark>`:escapeHTML(ch)}return out}
-function renderWord(){const w=state.primary,c=state.card;if(!w){el('wordText').textContent='—';el('wordReading').textContent='';el('wordMeaning').textContent='此音暫無符合等級的詞彙';el('wordLevel').textContent='例字';el('wordTopic').textContent='';el('wordEnglish').textContent='';el('matchTag').textContent='';el('extraWords').replaceChildren();el('newExample').disabled=true;el('playSound').disabled=true;return}el('newExample').disabled=false;el('playSound').disabled=false;el('wordText').textContent=w.word;el('wordLevel').textContent=w.level;el('wordTopic').textContent=w.topic;el('wordReading').innerHTML=`${highlightedReading(w.reading,c.hira)} <span>${escapeHTML(w.roman||toRomaji(w.reading))}</span>`;el('wordMeaning').textContent=w.zh||w.en||'—';el('wordEnglish').textContent=w.zh&&w.en?w.en:'';const realKata=/[ァ-ヺ]/.test(w.word);el('matchTag').textContent=c.hira==='を'?'助詞短句':c.script==='katakana'&&!realKata?'同音延伸':'';const extra=el('extraWords');extra.replaceChildren();for(const item of state.extras){const btn=document.createElement('button');btn.className='extra-chip';btn.type='button';const strong=document.createElement('strong');strong.textContent=item.word;btn.append(strong,document.createTextNode(` · ${item.zh||item.en||item.reading}`));btn.title='點擊換成此單字';btn.addEventListener('click',()=>{state.extras=state.extras.filter(x=>x.id!==item.id);if(state.primary)state.extras.unshift(state.primary);state.primary=item;renderWord()});extra.append(btn)}}
+function renderWord(){const w=state.primary,c=state.card;if(!w){el('wordText').textContent='—';el('wordReading').textContent='';el('wordMeaning').textContent=c.script==='katakana'?'此音暫無常見的純片假名例字':'此音暫無符合等級的例字';el('wordLevel').textContent='例字';el('wordTopic').textContent='';el('wordEnglish').textContent='';el('matchTag').textContent='';el('extraWords').replaceChildren();el('newExample').disabled=true;el('playSound').disabled=true;return}el('newExample').disabled=false;el('playSound').disabled=false;el('wordText').textContent=w.word;el('wordLevel').textContent=w.level;el('wordTopic').textContent=w.topic;const shownReading=c.script==='katakana'?hiraToKata(w.reading):w.reading;el('wordReading').innerHTML=`${highlightedReading(shownReading,c.hira)} <span>${escapeHTML(w.roman||toRomaji(w.reading))}</span>`;el('wordMeaning').textContent=w.zh||w.en||'—';el('wordEnglish').textContent=w.zh&&w.en?w.en:'';const realKata=/[ァ-ヺ]/.test(w.word);el('matchTag').textContent=c.hira==='を'?'助詞短句':'';const extra=el('extraWords');extra.replaceChildren();for(const item of state.extras){const btn=document.createElement('button');btn.className='extra-chip';btn.type='button';const strong=document.createElement('strong');strong.textContent=item.word;btn.append(strong,document.createTextNode(` · ${item.zh||item.en||item.reading}`));btn.title='點擊換成此單字';btn.addEventListener('click',()=>{state.extras=state.extras.filter(x=>x.id!==item.id);if(state.primary)state.extras.unshift(state.primary);state.primary=item;renderWord()});extra.append(btn)}}
 function changeExample(){if(!state.card||state.stage!=='answer')return;const excl=new Set(state.currentUsed);const next=chooseWord(state.card.hira,state.card.script,excl)||chooseWord(state.card.hira,state.card.script,new Set([state.primary?.id]));if(!next)return;state.primary=next;state.currentUsed.add(next.id);const selected=new Set([next.id]);state.extras=[];for(let i=0;i<2;i++){const x=chooseWord(state.card.hira,state.card.script,selected);if(!x)break;selected.add(x.id);state.extras.push(x)}renderWord();persist()}
 function refreshGrid(){const container=el('kanaGrid');container.replaceChildren();const rows=state.advanced?[...BASIC_ROWS,...VOICED_ROWS]:BASIC_ROWS;for(const row of rows){for(const ch of row){const btn=document.createElement('button');btn.type='button';btn.className='kana-cell';if(ch){btn.textContent=state.mode==='katakana'?hiraToKata(ch):ch;btn.setAttribute('aria-label',`練習 ${ch}`);if(state.uniqueAll.has(ch))btn.classList.add('seen');if(state.card?.hira===ch)btn.classList.add('current');btn.addEventListener('click',()=>showQuestion(ch))}else{btn.disabled=true;btn.setAttribute('aria-hidden','true')}container.append(btn)}}}
-function setMode(next){if(state.mode===next)return;state.mode=next;$$('.mode-btn').forEach(b=>{const active=b.dataset.mode===next;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});refreshGrid();if(state.card){const hira=state.card.hira;showQuestion(hira)}persist()}
+function setMode(next){if(state.mode===next)return;state.mode=next;updateVocabCount();$$('.mode-btn').forEach(b=>{const active=b.dataset.mode===next;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});refreshGrid();if(state.card){const hira=state.card.hira;showQuestion(hira)}persist()}
 function toggleAdvanced(checked){state.advanced=checked;if(state.card&&!possibleKana().includes(state.card.hira))showQuestion();refreshGrid();persist()}
 function setLevel(v){state.level=v;state.candidatesCache.clear();updateVocabCount();if(state.stage==='answer'){fetchExamples();renderWord()}persist()}
 function playJapanese(text,rate=.82){if(!('speechSynthesis'in window)||typeof SpeechSynthesisUtterance==='undefined'){alert('這個瀏覽器不支援語音播放。請改用最新版 Chrome、Safari 或 Edge。');return}const synth=window.speechSynthesis;const utter=new SpeechSynthesisUtterance(text);utter.lang='ja-JP';utter.rate=rate;const voices=synth.getVoices();const voice=voices.find(v=>v.lang.toLowerCase()==='ja-jp')||voices.find(v=>v.lang.toLowerCase().startsWith('ja'));if(voice)utter.voice=voice;synth.cancel();synth.speak(utter)}
 function speakKana(){if(!state.card||state.stage==='ready')return;const kana=state.card.script==='katakana'?hiraToKata(state.card.hira):state.card.hira;playJapanese(kana,.7)}
-function speak(){if(!state.primary)return;playJapanese(state.primary.reading,.82)}
+function speak(){if(!state.primary)return;playJapanese(state.card?.script==='katakana'?hiraToKata(state.primary.reading):state.primary.reading,.82)}
 
 
 // Match whole kana morae; e.g. し does not match the different sound しゅ.
@@ -1005,7 +1147,7 @@ function hasKanaMora(reading,hira){
  return false;
 }
 function chooseAnimeBonus(hira){
- const candidates=ANIME_QUOTES.filter(q=>hasKanaMora(q.reading,hira));
+ const candidates=ANIME_QUOTES.filter(q=>hasKanaMora(q.reading,hira)&&isWordForScript(q.text,state.card.script));
  if(!candidates.length)return null;
  let pool=candidates.filter(q=>!state.animeRecent.includes(q.id));
  if(!pool.length)pool=candidates;
@@ -1022,7 +1164,7 @@ function showAnimeBonus(){
  if(!q)return;
  state.animeBonus=q;
  el('animeQuoteText').textContent=q.text;
- el('animeQuoteReading').innerHTML=highlightedReading(q.reading,state.card.hira);
+ el('animeQuoteReading').innerHTML=highlightedReading(state.card.script==='katakana'?hiraToKata(q.reading):q.reading,state.card.hira);
  el('animeQuoteRoman').textContent=q.roman;
  el('animeQuoteMeaning').textContent=q.meaning;
  el('animeQuoteSeries').textContent=q.series;
