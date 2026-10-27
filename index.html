@@ -180,7 +180,7 @@ body{background:#f7f6f2}
                 <small>偶爾額外出現符合當前假名的動漫台詞</small>
               </div>
               <div class="filter-row"><label for="levelSelect">單字等級</label><select id="levelSelect"><option value="all">N5 + N4 + N3</option><option value="N5">只看 N5</option><option value="N4">只看 N4</option><option value="N3">只看 N3</option></select></div>
-              <div class="voice-setting"><label for="voiceSelect">日文聲音</label><div class="voice-setting-control"><select id="voiceSelect" aria-describedby="voiceHint"><option value="auto">自動（優先女性）</option></select><button type="button" id="previewVoice" aria-label="試聽所選日文語音">試聽 ♪</button></div><small id="voiceHint">可用聲音取決於瀏覽器與裝置。</small></div>
+              <div class="voice-setting"><label for="voiceSelect">日文聲音</label><div class="voice-setting-control"><select id="voiceSelect" aria-describedby="voiceHint"><option value="">載入日文語音…</option></select><button type="button" id="previewVoice" aria-label="試聽所選日文語音">試聽 ♪</button></div><small id="voiceHint">可用聲音取決於瀏覽器與裝置。</small></div>
               <div class="settings-data"><strong id="vocabCount">—</strong> 筆練習單字</div>
               <span class="sync-pill" id="sourceState" title="詞庫載入情況"><span class="sync-dot"></span> <span id="sourceText">已內建雙語詞庫</span></span>
             </div>
@@ -1007,7 +1007,7 @@ const STORE='kanabiyori_state_v2';
 const ANIME_QUOTES=(window.KANA_ANIME_QUOTES||'').split('\n').map(line=>line.trim()).filter(line=>line&&!line.startsWith('#')).map((line,id)=>{const [text,reading,roman,meaning,series]=line.split('|');return {id,text,reading,roman,meaning,series}}).filter(q=>q.text&&q.reading&&q.roman&&q.meaning&&q.series);
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 let saved={};try{saved=JSON.parse(safeStorage.get(STORE)||'{}')||{}}catch{}
-const state={animeEnabled:saved.animeDefaultOnApplied===true?saved.animeEnabled!==false:true,animeRecent:Array.isArray(saved.animeRecent)?saved.animeRecent:[],animeBonus:null,mode:['hiragana','katakana','mixed'].includes(saved.mode)?saved.mode:'hiragana',advanced:!!saved.advanced,voiceId:typeof saved.voiceId==='string'?saved.voiceId:'auto',level:['all','N3','N4','N5'].includes(saved.level)?saved.level:'all',stage:'ready',card:null,primary:null,extras:[],serial:0,completed:typeof saved.completed==='number'?saved.completed:0,uniqueAll:new Set(Array.isArray(saved.uniqueAll)?saved.uniqueAll:[]),dailyDate:saved.dailyDate===today()?saved.dailyDate:today(),dailyCount:saved.dailyDate===today()?(saved.dailyCount||0):0,dailySeen:new Set(saved.dailyDate===today()&&Array.isArray(saved.dailySeen)?saved.dailySeen:[]),recent:saved.recent&&typeof saved.recent==='object'?saved.recent:{},lastKana:saved.lastKana||'',vocab:[],candidatesCache:new Map(),currentUsed:new Set(),remoteCount:0};
+const state={animeEnabled:saved.animeDefaultOnApplied===true?saved.animeEnabled!==false:true,animeRecent:Array.isArray(saved.animeRecent)?saved.animeRecent:[],animeBonus:null,mode:['hiragana','katakana','mixed'].includes(saved.mode)?saved.mode:'hiragana',advanced:!!saved.advanced,voiceId:typeof saved.voiceId==='string'&&saved.voiceId!=='auto'&&!/(?:kyoto|kyoko|kyōko|kyouko|きょうこ|京都)/i.test(saved.voiceId)?saved.voiceId:'google',level:['all','N3','N4','N5'].includes(saved.level)?saved.level:'all',stage:'ready',card:null,primary:null,extras:[],serial:0,completed:typeof saved.completed==='number'?saved.completed:0,uniqueAll:new Set(Array.isArray(saved.uniqueAll)?saved.uniqueAll:[]),dailyDate:saved.dailyDate===today()?saved.dailyDate:today(),dailyCount:saved.dailyDate===today()?(saved.dailyCount||0):0,dailySeen:new Set(saved.dailyDate===today()&&Array.isArray(saved.dailySeen)?saved.dailySeen:[]),recent:saved.recent&&typeof saved.recent==='object'?saved.recent:{},lastKana:saved.lastKana||'',vocab:[],candidatesCache:new Map(),currentUsed:new Set(),remoteCount:0};
 const kanaToHira=(s='')=>[...String(s)].map(ch=>{const n=ch.charCodeAt(0);return n>=0x30a1&&n<=0x30f6?String.fromCharCode(n-0x60):ch}).join('');
 const hiraToKata=(s='')=>[...String(s)].map(ch=>{const n=ch.charCodeAt(0);return n>=0x3041&&n<=0x3096?String.fromCharCode(n+0x60):ch}).join('');
 function toRomaji(input){let s=kanaToHira(input),out='';for(let i=0;i<s.length;i++){const ch=s[i],next=s[i+1]||'';if(ch==='っ'){let nxt=DIGRAPHS[next+(s[i+2]||'')]||ROMAJI[next]||'';out+=nxt.startsWith('ch')?'t':nxt[0]||'';continue}if(ch==='ー'){let m=out.match(/[aeiou]$/);out+=m?m[0]:'-';continue}if(ch==='ん'){out+='n';if(/[あいうえおやゆよ]/.test(next))out+="'";continue}const pair=DIGRAPHS[ch+next];if(pair){out+=pair;i++;continue}out+=ROMAJI[ch]||ch}return out}
@@ -1122,42 +1122,49 @@ function refreshGrid(){const container=el('kanaGrid');container.replaceChildren(
 function setMode(next){if(state.mode===next)return;state.mode=next;updateVocabCount();$$('.mode-btn').forEach(b=>{const active=b.dataset.mode===next;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});refreshGrid();if(state.card){const hira=state.card.hira;showQuestion(hira)}persist()}
 function toggleAdvanced(checked){state.advanced=checked;if(state.card&&!possibleKana().includes(state.card.hira))showQuestion();refreshGrid();persist()}
 function setLevel(v){state.level=v;state.candidatesCache.clear();updateVocabCount();if(state.stage==='answer'){fetchExamples();renderWord()}persist()}
-// Web Speech API exposes voice name and language, but no reliable gender property.
-// Prioritize known Japanese female voice names; unknown voices remain user-selectable.
-const FEMALE_JA_VOICE=/nanami|aoi|mayu|shiori|sakura|kyoko|o-ren|mizuki|haruka|yuna|sayaka|hikari|yumi|女性|女声|女聲|female/i;
+// Browser voice lists vary by device. Prefer Google Japanese and exclude
+// Kyoto/Kyoko voices reported to be silent; keep other voices as fallbacks.
+const UNAVAILABLE_JA_VOICE=/(?:kyoto|kyoko|kyōko|kyouko|きょうこ|京都)/i;
+const GOOGLE_JA_VOICE=/google/i;
+const FEMALE_JA_VOICE=/nanami|aoi|mayu|shiori|sakura|o-ren|mizuki|haruka|yuna|sayaka|hikari|yumi|女性|女声|女聲|female/i;
 const MALE_JA_VOICE=/keita|daichi|naoki|masaru|takumi|ichiro|otoya|hattori|男性|男声|男聲|male/i;
 const voiceKey=v=>[v.name,v.lang,v.voiceURI].join('|');
-const japaneseVoices=()=>('speechSynthesis'in window)?window.speechSynthesis.getVoices().filter(v=>/^ja(?:-|$)/i.test(v.lang||'')):[];
+const voiceName=v=>`${v.name||''} ${v.voiceURI||''}`;
+const isGoogleVoice=v=>GOOGLE_JA_VOICE.test(voiceName(v));
+const japaneseVoices=()=>('speechSynthesis'in window)?window.speechSynthesis.getVoices().filter(v=>/^ja(?:-|$)/i.test(v.lang||'')&&!UNAVAILABLE_JA_VOICE.test(voiceName(v))):[];
 function preferredVoice(voices){
   if(!voices.length)return null;
-  if(state.voiceId!=='auto'){
-    const selected=voices.find(v=>voiceKey(v)===state.voiceId);
-    if(selected)return selected;
-  }
+  const chosen=voices.find(v=>voiceKey(v)===state.voiceId);
+  if(chosen)return chosen;
+  const google=voices.filter(isGoogleVoice);
+  const candidates=google.length?google:voices;
   const rank=v=>{
     const name=v.name||'';
     const gender=FEMALE_JA_VOICE.test(name)?2:MALE_JA_VOICE.test(name)?0:1;
     return gender*10+(/^ja-jp$/i.test(v.lang)?3:0);
   };
-  return [...voices].sort((a,b)=>rank(b)-rank(a))[0];
+  return [...candidates].sort((a,b)=>rank(b)-rank(a))[0];
 }
 function refreshVoiceOptions(){
   const select=el('voiceSelect');if(!select)return;
-  const voices=japaneseVoices(),selected=state.voiceId;
+  const voices=japaneseVoices(),active=preferredVoice(voices);
   select.replaceChildren();
-  const automatic=document.createElement('option');
-  automatic.value='auto';automatic.textContent='自動（優先女性）';select.append(automatic);
-  for(const voice of voices){
+  if(!voices.length){
     const option=document.createElement('option');
-    option.value=voiceKey(voice);option.textContent=voice.name+' · '+voice.lang;select.append(option);
+    option.value='';option.textContent='尚無可用日文語音';select.append(option);
+  }else{
+    const ordered=[...voices].sort((a,b)=>Number(isGoogleVoice(b))-Number(isGoogleVoice(a)));
+    for(const voice of ordered){
+      const option=document.createElement('option');
+      option.value=voiceKey(voice);option.textContent=voice.name+' · '+voice.lang;select.append(option);
+    }
+    select.value=voiceKey(active);
   }
-  const exists=voices.some(v=>voiceKey(v)===selected);
-  select.value=selected==='auto'||exists?selected:'auto';
   select.disabled=!voices.length;
   el('voiceHint').textContent=!('speechSynthesis'in window)?'此瀏覽器不支援語音播放。':
-    !voices.length?'尚未偵測到日文語音，請確認裝置語音設定。':
-    !voices.some(v=>FEMALE_JA_VOICE.test(v.name||''))?'找不到已辨識的女聲；可以先試聽清單中的聲音。':
-    '預設優先女性聲音，也可以試聽其他聲音。';
+    !voices.length?'尚未偵測到可用的日文語音，請確認裝置語音設定。':
+    voices.some(isGoogleVoice)?'優先使用 Google 日文語音，也可試聽其他聲音。':
+    '此裝置沒有 Google 日文語音，已改用其他可用的日文聲音。';
 }
 function playJapanese(text,rate=.82){
   if(!('speechSynthesis'in window)||typeof SpeechSynthesisUtterance==='undefined'){
