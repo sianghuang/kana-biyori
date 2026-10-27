@@ -41,7 +41,7 @@ window.KanaJapaneseSpeech=(()=>{
     if(chosenVoice(preference)&&isGoogle(chosenVoice(preference)))return 'google';
     return 'japanese';
   }
-  function speak(text,{rate=.82,preference=GOOGLE,onError=()=>{}}={}){
+  function speak(text,{rate=.82,preference=GOOGLE,onError=()=>{},onEnd=()=>{}}={}){
     if(!supported()){onError('unsupported');return false}
     if(!String(text||'').trim())return false;
     const synth=window.speechSynthesis;
@@ -54,6 +54,7 @@ window.KanaJapaneseSpeech=(()=>{
         utterance.lang='ja-JP';
         utterance.rate=rate;
         if(selected)utterance.voice=selected;
+        utterance.onend=()=>{if(requestId===lastRequest)onEnd()};
         utterance.onerror=event=>{
           if(requestId!==lastRequest||['canceled','interrupted'].includes(event.error))return;
           // If the named voice is broken, try the browser's ja-JP voice resolver.
@@ -73,5 +74,6 @@ window.KanaJapaneseSpeech=(()=>{
     attempt(chosenVoice(preference),true);
     return true;
   }
-  return {supported,voices,voiceKey,isGoogle,chosenVoice,status,speak,GOOGLE,SYSTEM};
+  function stop(){++lastRequest;if(supported())window.speechSynthesis.cancel()}
+  return {supported,voices,voiceKey,isGoogle,chosenVoice,status,speak,stop,GOOGLE,SYSTEM};
 })();
