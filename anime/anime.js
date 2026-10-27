@@ -19,7 +19,7 @@
   const savedFavorites=readSaved(FAVORITES_KEY,[]);
   const savedStudy=readSaved(STUDY_KEY,{});
   const state={
-    category:'all',query:'',spotlight:null,
+    category:'all',kind:'all',query:'',spotlight:null,
     favorites:new Set(Array.isArray(savedFavorites)?savedFavorites.filter(x=>typeof x==='string'):[]),
     hideReadings:savedStudy&&savedStudy.hideReadings===true,
     hideMeaning:savedStudy&&savedStudy.hideMeaning===true
@@ -55,7 +55,7 @@
     refreshVoice();
     if(!chosenVoice){notice('尚未載入可用的日文語音，請稍後重新試聽或檢查語音設定。');return;}
     try{
-      const utterance=new SpeechSynthesisUtterance(clean(japanese));
+      const utterance=new SpeechSynthesisUtterance(String(japanese||'').trim());
       utterance.lang='ja-JP';
       utterance.rate=rate;
       utterance.voice=chosenVoice;
@@ -95,7 +95,8 @@
     const article=make('article','quote-card');
     if(spotlight)article.classList.add('spotlight-card');
     const head=make('div','quote-head');
-    const badge=make('span','quote-label','進擊的巨人 · '+(groupFor(item.group)?.title||'經典台詞'));
+    const isOriginal=item.kind==='original';
+    const badge=make('span','quote-label'+(isOriginal?' original':''),(isOriginal?'主題原創':'劇中名句')+' · '+(groupFor(item.group)?.title||'經典台詞'));
     const favorited=state.favorites.has(item.id);
     const favorite=make('button','favorite'+(favorited?' active':''),favorited?'★':'☆');
     favorite.type='button';
@@ -114,7 +115,13 @@
     item.parts.forEach(part=>phrase.append(phraseUnit(part)));
     article.append(phrase,make('p','meaning',item.zh));
     const footer=make('div','quote-foot');
-    footer.append(make('span','','ATTACK ON TITAN'),make('span','','點選上方詞語聽發音'));
+    footer.append(make('span','',item.speaker?'人物 · '+item.speaker:(isOriginal?'原創日文練習':'ATTACK ON TITAN')));
+    if(!isOriginal&&item.source){
+      const link=make('a','source-link','台詞出處');
+      link.href=item.source;link.target='_blank';link.rel='noopener noreferrer';
+      link.setAttribute('aria-label','查看這句台詞的外部參考資料');
+      footer.append(link);
+    }
     article.append(footer);
     const controls=make('div','quote-controls');
     const play=make('button','play-button','♪　整句播放');
@@ -134,6 +141,7 @@
   }
   function matches(){
     return LINES.filter(item=>{
+      if(state.kind!=='all'&&(item.kind||'excerpt')!==state.kind)return false;
       if(state.category==='favorites'&&!state.favorites.has(item.id))return false;
       if(state.category!=='all'&&state.category!=='favorites'&&state.category!==item.group)return false;
       if(!state.query)return true;
@@ -172,6 +180,11 @@
   }
   function render(){
     renderNav();
+    document.querySelectorAll('#sourceFilters button').forEach(button=>{
+      const active=state.kind===button.dataset.kind;
+      button.classList.toggle('active',active);
+      button.setAttribute('aria-pressed',String(active));
+    });
     renderToggles();
     const found=matches();
     $('resultCount').textContent=found.length+' 句';
@@ -196,7 +209,7 @@
       const reset=make('button','reset-button','顯示全部');
       reset.type='button';
       reset.addEventListener('click',()=>{
-        state.category='all';state.query='';state.spotlight=null;
+        state.category='all';state.kind='all';state.query='';state.spotlight=null;
         $('searchInput').value='';render();
       });
       empty.append(reset);host.append(empty);
@@ -217,6 +230,9 @@
     state.spotlight=null;
     render();
   });
+  document.querySelectorAll('#sourceFilters button').forEach(button=>button.addEventListener('click',()=>{
+    state.kind=button.dataset.kind;state.spotlight=null;render();
+  }));
   $('randomBtn').addEventListener('click',()=>{
     const pool=matches();
     if(!pool.length){notice('目前沒有符合條件的台詞。');return;}
@@ -235,6 +251,6 @@
     refreshVoice();
     window.speechSynthesis.addEventListener?.('voiceschanged',refreshVoice);
   }
-  $('totalLines').textContent=LINES.length+' 句日文台詞';
+  $('totalLines').textContent=LINES.length+' 句日文練習';
   render();
 })();
