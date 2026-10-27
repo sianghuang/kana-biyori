@@ -62,10 +62,16 @@
   };
   const safeRemove=key=>{try{localStorage.removeItem(key)}catch{}};
   const saved=safeRead(KEY,null);
+  // Upgrade older, previously cached built-in lyrics without overwriting custom songs.
+  const oldBuiltin=typeof saved==='string'&&
+    saved.startsWith('(To you…yes my love to you yes my love to you you…to you) || ')&&
+    saved.includes('stay with me…真夜中[まよなか]のドアをたたき')&&
+    saved.includes('二人[ふたり]の瞬間[とき]を抱[だ]いてまだ忘[わす]れず　暖[あたた]めてた');
+  if(oldBuiltin)safeRemove(KEY);
   const modes=safeRead(MODE,{});
   const savedDone=safeRead(PROGRESS,[]);
   const state={
-    raw:typeof saved==='string'&&saved.trim()?saved:BUILTIN,
+    raw:typeof saved==='string'&&saved.trim()&&!oldBuiltin?saved:BUILTIN,
     lines:[],done:new Set(Array.isArray(savedDone)?savedDone:[]),
     hideJapanese:!!modes?.hideJapanese,hideReadings:!!modes?.hideReadings,
     hideNotes:!!modes?.hideNotes,speed:[.7,.85,1].includes(modes?.speed)?modes.speed:.85,
@@ -170,10 +176,11 @@
     $('stopAll').disabled=true;
     updatePlaying(-1);
   }
+  const lineLang=line=>/^stay with me$/i.test(line.display)?'en-US':'ja-JP';
   function playLine(line,index){
     stopAudio();
     updatePlaying(index);
-    speech.speak(line.display,{preference:voicePreference(),rate:state.speed,
+    speech.speak(line.display,{preference:voicePreference(),rate:state.speed,lang:lineLang(line),
       onEnd:()=>updatePlaying(-1),
       onError:()=>{updatePlaying(-1);notice('語音播放失敗，可回首頁設定改用「基本發音」。')}
     });
@@ -182,7 +189,7 @@
     stopAudio();
     const word=token.word.trim();
     if(!word)return;
-    speech.speak(word,{preference:voicePreference(),rate:state.speed*.93,
+    speech.speak(word,{preference:voicePreference(),rate:state.speed*.93,lang:/^[A-Za-z]+$/.test(word)?'en-US':'ja-JP',
       onError:()=>notice('無法播放這個詞語，請確認裝置是否支援日文語音。')});
   }
   function playAll(){
@@ -199,7 +206,7 @@
       const card=$('songContent').querySelector('[data-index="'+index+'"]');
       if(card)card.scrollIntoView?.({block:'center',behavior:'smooth'});
       const ok=speech.speak(state.lines[index].display,{
-        rate:state.speed,preference:voicePreference(),
+        rate:state.speed,preference:voicePreference(),lang:lineLang(state.lines[index]),
         onEnd:()=>next(index+1),
         onError:()=>{stopAudio();notice('朗讀中斷，可選「基本發音」再試。')}
       });
