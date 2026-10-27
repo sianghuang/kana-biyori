@@ -282,6 +282,7 @@ body{background:#f7f6f2}
 
   <dialog id="helpDialog" class="help-dialog"><div class="dialog-content"><div class="dialog-top"><h2>操作方式</h2><button id="closeHelp" aria-label="關閉說明" class="icon-button">×</button></div><ol><li>看到假名，先自己唸出來。</li><li>按「看答案」確認讀音與例字。</li><li>按「下一題」繼續；也能用 ♪ 聽發音。</li><li>想增添趣味，可在設定開啟 ANIME 彩蛋，少數題目會額外附上與當前假名相符的動漫台詞。</li></ol><p>空白鍵／Enter：下一步，P：聽假名。單字分類參考 N5～N3，會盡量輪替例字。</p></div></dialog>
   <script src="./bilingual-vocab.js"></script>
+    <script src="./japanese-speech.js?v=20261027c"></script>
    <script>
 /* 精選短篇動漫名台詞／招式，與 N4/N5 詞庫獨立，離線也可使用。*/
 window.KANA_ANIME_QUOTES = String.raw`
@@ -1135,60 +1136,40 @@ function refreshGrid(){const container=el('kanaGrid');container.replaceChildren(
 function setMode(next){if(state.mode===next)return;state.mode=next;updateVocabCount();$$('.mode-btn').forEach(b=>{const active=b.dataset.mode===next;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});refreshGrid();if(state.card){const hira=state.card.hira;showQuestion(hira)}persist()}
 function toggleAdvanced(checked){state.advanced=checked;if(state.card&&!possibleKana().includes(state.card.hira))showQuestion();refreshGrid();persist()}
 function setLevel(v){state.level=v;state.candidatesCache.clear();updateVocabCount();if(state.stage==='answer'){fetchExamples();renderWord()}persist()}
-// Browser voice lists vary by device. Prefer Google Japanese and exclude
-// Kyoto/Kyoko voices reported to be silent; keep other voices as fallbacks.
-const UNAVAILABLE_JA_VOICE=/(?:kyoto|kyoko|kyōko|kyouko|きょうこ|京都)/i;
-const GOOGLE_JA_VOICE=/google/i;
-const FEMALE_JA_VOICE=/nanami|aoi|mayu|shiori|sakura|o-ren|mizuki|haruka|yuna|sayaka|hikari|yumi|女性|女声|女聲|female/i;
-const MALE_JA_VOICE=/keita|daichi|naoki|masaru|takumi|ichiro|otoya|hattori|男性|男声|男聲|male/i;
-const voiceKey=v=>[v.name,v.lang,v.voiceURI].join('|');
-const voiceName=v=>`${v.name||''} ${v.voiceURI||''}`;
-const isGoogleVoice=v=>GOOGLE_JA_VOICE.test(voiceName(v));
-const japaneseVoices=()=>('speechSynthesis'in window)?window.speechSynthesis.getVoices().filter(v=>/^ja(?:-|$)/i.test(v.lang||'')&&!UNAVAILABLE_JA_VOICE.test(voiceName(v))):[];
-function preferredVoice(voices){
-  if(!voices.length)return null;
-  const chosen=voices.find(v=>voiceKey(v)===state.voiceId);
-  if(chosen)return chosen;
-  const google=voices.filter(isGoogleVoice);
-  const candidates=google.length?google:voices;
-  const rank=v=>{
-    const name=v.name||'';
-    const gender=FEMALE_JA_VOICE.test(name)?2:MALE_JA_VOICE.test(name)?0:1;
-    return gender*10+(/^ja-jp$/i.test(v.lang)?3:0);
-  };
-  return [...candidates].sort((a,b)=>rank(b)-rank(a))[0];
-}
+// Shared Japanese TTS: Google first, with a permanent native ja-JP fallback.
+const JAPANESE_SPEECH=window.KanaJapaneseSpeech;
 function refreshVoiceOptions(){
   const select=el('voiceSelect');if(!select)return;
-  const voices=japaneseVoices(),active=preferredVoice(voices);
+  const options=JAPANESE_SPEECH.voices(),preferred=state.voiceId;
   select.replaceChildren();
-  if(!voices.length){
+  const google=document.createElement('option');
+  google.value='google';google.textContent='Google 日語優先（推薦）';select.append(google);
+  const basic=document.createElement('option');
+  basic.value='system';basic.textContent='基本發音（系統日語）';select.append(basic);
+  for(const voice of [...options].sort((a,b)=>Number(JAPANESE_SPEECH.isGoogle(b))-Number(JAPANESE_SPEECH.isGoogle(a)))){
     const option=document.createElement('option');
-    option.value='';option.textContent='尚無可用日文語音';select.append(option);
-  }else{
-    const ordered=[...voices].sort((a,b)=>Number(isGoogleVoice(b))-Number(isGoogleVoice(a)));
-    for(const voice of ordered){
-      const option=document.createElement('option');
-      option.value=voiceKey(voice);option.textContent=voice.name+' · '+voice.lang;select.append(option);
-    }
-    select.value=voiceKey(active);
+    option.value=JAPANESE_SPEECH.voiceKey(voice);
+    option.textContent=voice.name+' · '+voice.lang;
+    select.append(option);
   }
-  select.disabled=!voices.length;
-  el('voiceHint').textContent=!('speechSynthesis'in window)?'此瀏覽器不支援語音播放。':
-    !voices.length?'尚未偵測到可用的日文語音，請確認裝置語音設定。':
-    voices.some(isGoogleVoice)?'優先使用 Google 日文語音，也可試聽其他聲音。':
-    '此裝置沒有 Google 日文語音，已改用其他可用的日文聲音。';
+  const selected=preferred==='system'||preferred==='google'||options.some(v=>JAPANESE_SPEECH.voiceKey(v)===preferred)?preferred:'google';
+  select.value=selected;
+  select.disabled=!JAPANESE_SPEECH.supported();
+  el('voiceHint').textContent=!JAPANESE_SPEECH.supported()?
+    '此瀏覽器不支援語音播放，請使用支援語音合成的瀏覽器。':
+    !options.length?
+    '語音清單尚未載入或沒有日文語音；仍可試聽「基本發音」，由系統嘗試以日文播放。':
+    options.some(JAPANESE_SPEECH.isGoogle)?
+    '優先使用 Google 日語；有問題可切換「基本發音」。':
+    '未偵測到 Google 日語，會改用裝置日文語音或基本發音。';
 }
 function playJapanese(text,rate=.82){
-  if(!('speechSynthesis'in window)||typeof SpeechSynthesisUtterance==='undefined'){
-    alert('這個瀏覽器不支援語音播放。請改用最新版 Chrome、Safari 或 Edge。');return;
-  }
-  const synth=window.speechSynthesis,utter=new SpeechSynthesisUtterance(text);
-  utter.lang='ja-JP';utter.rate=rate;
-  const voice=preferredVoice(japaneseVoices());
-  if(!voice){alert('尚未找到可用的日文語音。請確認瀏覽器或裝置的語音設定。');return;}
-  utter.voice=voice;
-  synth.cancel();synth.speak(utter);
+  JAPANESE_SPEECH.speak(text,{rate,preference:state.voiceId,onError:reason=>{
+    const message=reason==='unsupported'?'這個瀏覽器不支援語音播放。':
+      '裝置無法播放日文語音，請試用「基本發音」或安裝系統日文語音包。';
+    el('voiceHint').textContent=message;
+    alert(message);
+  }});
 }
 function speakKana(){if(!state.card||state.stage==='ready')return;const kana=state.card.script==='katakana'?hiraToKata(state.card.hira):state.card.hira;playJapanese(kana,.7)}
 function speak(){if(!state.primary)return;playJapanese(state.card?.script==='katakana'?hiraToKata(state.primary.reading):state.primary.reading,.82)}
