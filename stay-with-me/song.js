@@ -5,8 +5,6 @@
   const KEY='kana-biyori-stay-with-me-lyrics-v1';
   const PROGRESS='kana-biyori-stay-with-me-progress-v1';
   const MODE='kana-biyori-stay-with-me-options-v1';
-  const MAX_TEXT=24000;
-  const MAX_LINES=200;
   // The complete lyric practice is derived exclusively from text supplied by the user.
   const BUILTIN=window.STAY_WITH_ME_BUILTIN||'';
   const KANA={
@@ -71,7 +69,6 @@
   const modes=safeRead(MODE,{});
   const savedDone=safeRead(PROGRESS,[]);
   const state={
-    raw:typeof saved==='string'&&saved.trim()&&!oldBuiltin?saved:BUILTIN,
     lines:[],done:new Set(Array.isArray(savedDone)?savedDone:[]),
     hideJapanese:!!modes?.hideJapanese,hideReadings:!!modes?.hideReadings,
     hideNotes:!!modes?.hideNotes,speed:[.7,.85,1].includes(modes?.speed)?modes.speed:.85,
@@ -295,8 +292,7 @@
       card.append(head,words);
       if(line.note)card.append(newEl('p','line-note',line.note));
       const footer=newEl('div','line-footer');
-      const hasUnannotated=/[\p{Script=Han}々ヶヵ]/u.test(line.original.replace(RUBY,''));
-      const hint=newEl('span','line-hint',hasUnannotated?'漢字若需讀音，可在編輯處加 [かな]':'點詞語聽音，再試著跟讀整行');
+      const hint=newEl('span','line-hint','點詞語聽音，再試著跟讀整行');
       const play=newEl('button','btn-line-play','♪　聽這一行');
       play.type='button';
       play.disabled=!speech?.supported();
@@ -307,55 +303,6 @@
       host.append(card);
     });
   }
-  function applyLyrics(){
-    const source=$('lyricInput').value;
-    if(source.length>MAX_TEXT){notice('歌詞過長，請縮短至 '+MAX_TEXT+' 字以內。');return}
-    const entries=parse(source);
-    if(entries.length>MAX_LINES){notice('目前最多支援 '+MAX_LINES+' 行，請調整分行。');return}
-    if(!entries.length){notice('請先貼上至少一行日文歌詞。');return}
-    stopAudio();
-    state.raw=source;
-    state.lines=entries;
-    const keys=new Set(entries.map(line=>line.key));
-    state.done=new Set([...state.done].filter(key=>keys.has(key)));
-    const savedLyrics=safeWrite(KEY,source);
-    safeWrite(PROGRESS,[...state.done]);
-    renderCards();renderProgress();showModes();
-    $('study').hidden=false;$('emptyPanel').hidden=true;
-    $('clearBtn').hidden=source===BUILTIN;
-    $('editor').open=false;
-    $('playAll').disabled=!speech?.supported();
-    notice(savedLyrics?'已建立 '+entries.length+' 行練習，保存在此瀏覽器。':'已建立練習；此瀏覽器無法保存資料。');
-    $('study').scrollIntoView?.({block:'start',behavior:'smooth'});
-  }
-  function restoreBuiltin(){
-    if(state.raw===BUILTIN)return;
-    if(!window.confirm('確定還原網站提供的歌曲歌詞？你自行修改的歌詞及進度會被清除。'))return;
-    stopAudio();
-    safeRemove(KEY);safeRemove(PROGRESS);
-    state.raw=BUILTIN;state.done.clear();
-    state.lines=parse(BUILTIN);
-    $('lyricInput').value=BUILTIN;
-    renderCards();renderProgress();showModes();
-    $('study').hidden=false;$('emptyPanel').hidden=true;
-    $('editor').open=false;$('clearBtn').hidden=true;
-    $('playAll').disabled=!speech?.supported();
-    notice('已還原完整歌曲歌詞與假名、中文提示。');
-  }
-  $('applyBtn').addEventListener('click',applyLyrics);
-  $('clearBtn').addEventListener('click',restoreBuiltin);
-  $('importFile').addEventListener('change',async event=>{
-    const file=event.target.files?.[0];
-    if(!file)return;
-    if(file.size>65536){notice('文字檔過大，請使用 64 KB 以下的 TXT。');return}
-    try{
-      const value=await file.text();
-      if(value.length>MAX_TEXT){notice('歌詞過長，請使用 '+MAX_TEXT+' 字以下的文字檔。');return}
-      $('lyricInput').value=value;
-      notice('文字檔已載入，可檢查後按「建立整首練習」。');
-    }catch{notice('讀取文字檔失敗，請改用複製貼上。')}
-    event.target.value='';
-  });
   for(const [id,key] of [['hideJapanese','hideJapanese'],['hideReadings','hideReadings'],['hideNotes','hideNotes']]){
     $(id).addEventListener('click',()=>{state[key]=!state[key];persistModes();showModes()});
   }
@@ -367,19 +314,21 @@
   $('playAll').addEventListener('click',playAll);
   $('stopAll').addEventListener('click',stopAudio);
   window.addEventListener('pagehide',stopAudio);
-  $('lyricInput').value=state.raw;
   showModes();
-  if(state.raw&&state.raw.length<=MAX_TEXT){
-    const loaded=parse(state.raw);
-    if(loaded.length<=MAX_LINES&&loaded.length){
-      state.lines=loaded;
-      if(oldBuiltin)migrateOldProgress(saved,loaded);
-      $('study').hidden=false;
-      $('emptyPanel').hidden=true;
-      $('clearBtn').hidden=state.raw===BUILTIN;
-      $('editor').open=false;
-      $('playAll').disabled=!speech?.supported();
-      renderCards();renderProgress();
-    }
+  const loaded=parse(BUILTIN);
+  if(loaded.length){
+    state.lines=loaded;
+    if(oldBuiltin)migrateOldProgress(saved,loaded);
+    // The study page now always uses the fixed built-in song.
+    // Ignore stale completion IDs from previously imported custom text.
+    const valid=new Set(loaded.map(line=>line.key));
+    const prior=state.done.size;
+    state.done=new Set([...state.done].filter(key=>valid.has(key)));
+    if(state.done.size!==prior)safeWrite(PROGRESS,[...state.done]);
+    $('study').hidden=false;
+    $('emptyPanel').hidden=true;
+    $('playAll').disabled=!speech?.supported();
+    renderCards();
+    renderProgress();
   }
 })();
