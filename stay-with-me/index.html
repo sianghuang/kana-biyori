@@ -4,11 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#f7f6f2">
-  <meta name="description" content="松原美紀〈真夜中のドア～Stay With Me〉日文歌詞練習工具：貼上自己的歌詞，逐行聽發音、加註假名、羅馬拼音與跟讀進度。">
+  <meta name="description" content="松原美紀〈真夜中のドア～Stay With Me〉完整日文歌詞整首跟讀：逐行假名、羅馬拼音與繁體中文翻譯，逐詞發音、連續朗讀和跟讀進度。">
   <title>Stay With Me · 日文歌詞練習｜かな日和</title>
   <link rel="stylesheet" href="./song.css?v=20261027a">
   <script defer src="../japanese-speech.js?v=20261027e"></script>
-  <script defer src="./song.js?v=20261027a"></script>
+  <script defer src="./lyrics.js?v=20261027b"></script>
+  <script defer src="./song.js?v=20261027b"></script>
 </head>
 <body>
 <div class="shell">
@@ -22,30 +23,26 @@
         <span class="eyebrow">CITY POP · JAPANESE LYRICS PRACTICE</span>
         <p class="artist">松原みき · 1979</p>
         <h1>真夜中のドア<span>～Stay With Me</span></h1>
-        <p class="hero-copy">把喜歡的歌曲變成日文練習：逐行看、逐詞聽、整段跟讀，慢慢記住日文的節奏。</p>
+        <p class="hero-copy">完整歌詞已準備好：逐行看假名與中文、逐詞聽發音、整首跟讀，慢慢記住日文的節奏。</p>
         <div class="hero-meta"><span>日文語音跟讀</span><span>假名與羅馬拼音</span><span>逐行練習進度</span></div>
       </div>
       <div class="vinyl" aria-hidden="true"><div class="vinyl-label"><span>STAY</span><span>WITH ME</span></div></div>
     </header>
     <section class="editor-area" aria-labelledby="editorTitle">
-      <details id="editor" class="editor" open>
-        <summary><span><strong id="editorTitle">匯入歌詞</strong><small>使用你有權使用的歌詞，內容只存放在此瀏覽器</small></span><span class="fold" aria-hidden="true">⌄</span></summary>
+      <details id="editor" class="editor">
+        <summary><span><strong id="editorTitle">檢視／編輯歌詞</strong><small>完整歌曲已收錄 · 可依個人需求編輯或匯入</small></span><span class="fold" aria-hidden="true">⌄</span></summary>
         <div class="editor-inner">
-          <p class="explain">這個公開網站不預載受著作權保護的完整歌詞。貼上你取得的日文歌詞即可產生整首逐行練習；也支援從文字檔匯入。</p>
-          <label class="field-label" for="lyricInput">日文歌詞（每行一句，空行分段）</label>
-          <textarea id="lyricInput" rows="8" spellcheck="false" placeholder="在這裡貼上日文歌詞…
-可以直接貼一般日文，不需要特殊格式。
-
-想顯示假名：漢字[かんじ]
-想加中文提示：日文句子 || 中文意思"></textarea>
+          <p class="explain">已使用你提供的完整歌詞建立練習，含漢字讀音與逐行中文。修改下方內容後按「套用修改」，也能匯入自己的 TXT 歌詞。</p>
+          <label class="field-label" for="lyricInput">歌曲歌詞與註解（每行一句，空行分段）</label>
+          <textarea id="lyricInput" rows="8" spellcheck="false" placeholder="可在此編輯預設的完整歌詞。
+標註形式：漢字[かんじ]，或在行尾加入 || 中文意思"></textarea>
           <p class="syntax">選用標註：<code>夜[よる]の街[まち]</code> 顯示假名；<code>日文 || 中文註解</code> 顯示自訂中文。一般歌詞不加標註也能整句發音。</p>
           <div class="editor-actions">
-            <button id="applyBtn" type="button" class="btn-primary">建立整首練習 <span aria-hidden="true">→</span></button>
+            <button id="applyBtn" type="button" class="btn-primary">套用修改 <span aria-hidden="true">→</span></button>
             <label class="file-import">匯入 TXT 檔<input id="importFile" type="file" accept=".txt,text/plain"></label>
-            <button id="demoBtn" type="button" class="btn-secondary">試看原創示範</button>
-            <button id="clearBtn" type="button" class="btn-text" hidden>清除本機歌詞</button>
+            <button id="clearBtn" type="button" class="btn-text" hidden>還原預設歌詞</button>
           </div>
-          <p class="local-note">不需註冊、不上傳伺服器。此裝置的瀏覽器會記住你的歌詞與練習進度，清除網站資料後就會消失。</p>
+          <p class="local-note">不需註冊；你在此修改的歌詞與學習進度只會保存在目前瀏覽器中。重新整理不會遺失；按「還原預設歌詞」即可恢復本頁完整練習版。</p>
         </div>
       </details>
     </section>
@@ -71,8 +68,8 @@
       <div class="filter-row"><span id="lineCount" aria-live="polite"></span><span class="speech-hint">使用瀏覽器合成日語朗讀，非原唱歌曲音檔</span></div>
       <div id="songContent" class="song-content"></div>
     </section>
-    <section id="emptyPanel" class="empty-panel" aria-label="尚未匯入歌詞"><span class="empty-icon" aria-hidden="true">♪</span><h2>從喜歡的旋律，開始學日文</h2><p>將歌詞貼到上方，就能進行整首逐行跟讀、單詞聽音與背誦練習。也可以先試看原創示範句。</p></section>
-    <p class="disclaimer">本頁提供個人語言學習工具，不收錄原唱音源或完整歌詞。漢字讀音請自行加註 <code>漢字[かな]</code> 以確保準確；沒有加註的漢字仍可點選聽發音，但不會自動產生假名。</p>
+    <section id="emptyPanel" class="empty-panel" aria-label="歌詞載入提示"><span class="empty-icon" aria-hidden="true">♪</span><h2>準備開始整首日文練習</h2><p>若歌詞未顯示，請重新整理頁面，或在上方「檢視／編輯歌詞」確認內容。</p></section>
+    <p class="disclaimer">本站使用你提供的文字製作學習練習，歌詞著作權歸原權利人所有；本頁不收錄原唱音源。漢字已加上假名，羅馬拼音為輔助學習，連音與歌曲唱腔可能不同於語音合成。</p>
   </main>
   <footer><span>かな日和 · City Pop 歌詞練習</span><a href="../">回到五十音練習</a></footer>
 </div>
