@@ -41,7 +41,7 @@ window.KanaJapaneseSpeech=(()=>{
     if(chosenVoice(preference)&&isGoogle(chosenVoice(preference)))return 'google';
     return 'japanese';
   }
-  function speak(text,{rate=.82,preference=GOOGLE,onError=()=>{},onEnd=()=>{}}={}){
+  function speak(text,{rate=.82,preference=GOOGLE,onError=()=>{},onEnd=()=>{},lang='ja-JP'}={}){
     if(!supported()){onError('unsupported');return false}
     if(!String(text||'').trim())return false;
     const synth=window.speechSynthesis;
@@ -51,7 +51,7 @@ window.KanaJapaneseSpeech=(()=>{
       if(requestId!==lastRequest)return;
       try{
         const utterance=new SpeechSynthesisUtterance(utterText);
-        utterance.lang='ja-JP';
+        utterance.lang=lang;
         utterance.rate=rate;
         if(selected)utterance.voice=selected;
         utterance.onend=()=>{if(requestId===lastRequest)onEnd()};
@@ -71,7 +71,7 @@ window.KanaJapaneseSpeech=(()=>{
     };
     // Even when getVoices() is empty, an utterance with lang=ja-JP and no
     // explicit voice may still be spoken by the device's own TTS engine.
-    attempt(chosenVoice(preference),true);
+    attempt(/^ja(?:[-_]|$)/i.test(lang)?chosenVoice(preference):null,true);
     return true;
   }
   function stop(){++lastRequest;if(supported())window.speechSynthesis.cancel()}
