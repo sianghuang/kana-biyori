@@ -150,7 +150,7 @@ body{background:#f7f6f2}
 .main-kana.ready-kana{font-size:clamp(105px,12vw,144px);font-weight:350;color:#b9beb8;filter:none;user-select:none}
 
 /* Independent anime sentence practice: compact entry, without changing card controls. */
-.anime-practice-link{display:flex;align-items:center;gap:12px;min-height:49px;margin:-3px 0 15px;padding:11px 16px;border:1px solid #e5dfd5;background:#f2eee6;border-radius:12px;text-decoration:none;color:#48594d;transition:background .15s,border-color .15s}
+.anime-practice-link{display:flex;align-items:center;gap:12px;min-height:49px;margin:2px 0 0;padding:11px 16px;border:1px solid #e5dfd5;background:#f2eee6;border-radius:12px;text-decoration:none;color:#48594d;transition:background .15s,border-color .15s}
 .anime-practice-link:hover{background:#ede7db;border-color:#d7baaa}
 .anime-practice-kicker{flex:none;letter-spacing:.5px;font-size:10px;font-weight:800;color:#b86b54}
 .anime-practice-link strong{font-size:13px;font-weight:780;min-width:0}
@@ -194,12 +194,6 @@ body{background:#f7f6f2}
             </div>
           </details>
         </div>
-        <a class="anime-practice-link" href="./anime/" aria-label="前往進擊的巨人動漫整句練習">
-          <span class="anime-practice-kicker">ANIME · 台詞專區</span>
-          <strong>進擊的巨人 · 整句練習</strong>
-          <span class="anime-practice-arrow" aria-hidden="true">↗</span>
-        </a>
-
         <div class="flashcard" id="flashcard" aria-live="polite">
           <div class="card-topline">
             <span class="card-id" id="cardId">準備開始</span>
@@ -276,6 +270,11 @@ body{background:#f7f6f2}
           </section>
         </details>
       </aside>
+        <a class="anime-practice-link" href="./anime/" aria-label="前往進擊的巨人動漫整句練習">
+          <span class="anime-practice-kicker">ANIME · 台詞專區</span>
+          <strong>進擊的巨人 · 整句練習</strong>
+          <span class="anime-practice-arrow" aria-hidden="true">↗</span>
+        </a>
     </main>
     <details class="credits-details"><summary>詞庫來源與授權</summary><footer class="footer"><span>Made for daily Japanese practice · 純 JavaScript，無後端。</span><span>詞彙分級僅供參考 · 雙語資料來自 <a href="https://github.com/ringooai/open-vocabularies" target="_blank" rel="noopener noreferrer">Ringoo Open Vocabularies</a>（MIT），另含本站精選詞彙 · <a href="./THIRD_PARTY_LICENSES.md">授權資訊</a></span></footer></details>
   </div>
