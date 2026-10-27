@@ -148,6 +148,14 @@ body{background:#f7f6f2}
 .anime-easter-meta button{font:inherit;border:1px solid #e7d3c5;border-radius:20px;background:#fffcf9;color:#b46351;font-size:12px;font-weight:700;padding:7px 12px}
 @media(max-width:750px){.anime-easter-title{font-size:14px}.anime-easter details summary{padding:12px}}
 .main-kana.ready-kana{font-size:clamp(105px,12vw,144px);font-weight:350;color:#b9beb8;filter:none;user-select:none}
+
+/* Independent anime sentence practice: compact entry, without changing card controls. */
+.anime-practice-link{display:flex;align-items:center;gap:12px;min-height:49px;margin:-3px 0 15px;padding:11px 16px;border:1px solid #e5dfd5;background:#f2eee6;border-radius:12px;text-decoration:none;color:#48594d;transition:background .15s,border-color .15s}
+.anime-practice-link:hover{background:#ede7db;border-color:#d7baaa}
+.anime-practice-kicker{flex:none;letter-spacing:.5px;font-size:10px;font-weight:800;color:#b86b54}
+.anime-practice-link strong{font-size:13px;font-weight:780;min-width:0}
+.anime-practice-arrow{margin-left:auto;font-size:18px;color:#aa735d}
+@media(max-width:500px){.anime-practice-link{gap:8px;padding:11px 13px;flex-wrap:wrap}.anime-practice-kicker{font-size:9px}.anime-practice-link strong{font-size:12px}.anime-practice-arrow{margin-left:auto}}
 </style>
 </head>
 <body>
@@ -186,6 +194,11 @@ body{background:#f7f6f2}
             </div>
           </details>
         </div>
+        <a class="anime-practice-link" href="./anime/" aria-label="前往進擊的巨人動漫整句練習">
+          <span class="anime-practice-kicker">ANIME · 台詞專區</span>
+          <strong>進擊的巨人 · 整句練習</strong>
+          <span class="anime-practice-arrow" aria-hidden="true">↗</span>
+        </a>
 
         <div class="flashcard" id="flashcard" aria-live="polite">
           <div class="card-topline">
