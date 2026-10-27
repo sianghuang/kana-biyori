@@ -1173,7 +1173,8 @@ function playJapanese(text,rate=.82){
   const synth=window.speechSynthesis,utter=new SpeechSynthesisUtterance(text);
   utter.lang='ja-JP';utter.rate=rate;
   const voice=preferredVoice(japaneseVoices());
-  if(voice)utter.voice=voice;
+  if(!voice){alert('尚未找到可用的日文語音。請確認瀏覽器或裝置的語音設定。');return;}
+  utter.voice=voice;
   synth.cancel();synth.speak(utter);
 }
 function speakKana(){if(!state.card||state.stage==='ready')return;const kana=state.card.script==='katakana'?hiraToKata(state.card.hira):state.card.hira;playJapanese(kana,.7)}
