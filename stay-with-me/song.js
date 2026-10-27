@@ -129,6 +129,29 @@
     }
     return results;
   }
+  function migrateOldProgress(previousText,newLines){
+    // The earlier combined English/Japanese lines became two separate cards;
+    // retain completed state for both corresponding cards.
+    const before=parse(previousText);
+    const migrated=new Set();
+    let target=0;
+    for(const oldLine of before){
+      const combined=oldLine.display.startsWith('stay with me…');
+      const japanese=combined?oldLine.display.slice('stay with me…'.length):oldLine.display;
+      if(combined&&newLines[target]?.display==='stay with me'&&newLines[target+1]?.display===japanese){
+        if(state.done.has(oldLine.key)){
+          migrated.add(newLines[target].key);
+          migrated.add(newLines[target+1].key);
+        }
+        target+=2;
+      }else if(newLines[target]?.display===oldLine.display){
+        if(state.done.has(oldLine.key))migrated.add(newLines[target].key);
+        target++;
+      }
+    }
+    state.done=migrated;
+    safeWrite(PROGRESS,[...migrated]);
+  }
   function voicePreference(){
     try{
       const data=JSON.parse(localStorage.getItem('kanabiyori_state_v2')||'{}');
@@ -350,6 +373,7 @@
     const loaded=parse(state.raw);
     if(loaded.length<=MAX_LINES&&loaded.length){
       state.lines=loaded;
+      if(oldBuiltin)migrateOldProgress(saved,loaded);
       $('study').hidden=false;
       $('emptyPanel').hidden=true;
       $('clearBtn').hidden=state.raw===BUILTIN;
