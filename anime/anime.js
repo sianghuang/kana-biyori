@@ -139,6 +139,9 @@
       if(!state.query)return true;
       const g=groupFor(item.group);
       return [item.jp,item.zh,item.series,g?.title||'',
+        item.parts.map(part=>part[1]).join(''),
+        item.parts.map(part=>part[1]).join(' '),
+        item.parts.map(part=>part[2]).join(' '),
         ...item.parts.flatMap(part=>[part[1],part[2]])]
         .some(field=>String(field).toLocaleLowerCase().includes(state.query));
     });
