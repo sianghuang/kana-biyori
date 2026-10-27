@@ -7,8 +7,8 @@
   const MODE='kana-biyori-stay-with-me-options-v1';
   const MAX_TEXT=24000;
   const MAX_LINES=200;
-  const SAMPLE='夜[よる]の街[まち]を歩[ある]く || 夜裡走在街上\n音楽[おんがく]が聴[き]こえる || 聽見音樂傳來\n君[きみ]の声[こえ]を思[おも]い出[だ]す || 回想起你的聲音';
-  // This deliberately contains no song lyrics; real lyrics are provided by the learner.
+  // The complete lyric practice is derived exclusively from text supplied by the user.
+  const BUILTIN=window.STAY_WITH_ME_BUILTIN||'';
   const KANA={
     あ:'a',い:'i',う:'u',え:'e',お:'o',か:'ka',き:'ki',く:'ku',け:'ke',こ:'ko',
     さ:'sa',し:'shi',す:'su',せ:'se',そ:'so',た:'ta',ち:'chi',つ:'tsu',て:'te',と:'to',
@@ -61,11 +61,11 @@
     try{localStorage.setItem(key,JSON.stringify(value));return true}catch{return false}
   };
   const safeRemove=key=>{try{localStorage.removeItem(key)}catch{}};
-  const saved=safeRead(KEY,'');
+  const saved=safeRead(KEY,null);
   const modes=safeRead(MODE,{});
   const savedDone=safeRead(PROGRESS,[]);
   const state={
-    raw:typeof saved==='string'?saved:'',
+    raw:typeof saved==='string'&&saved.trim()?saved:BUILTIN,
     lines:[],done:new Set(Array.isArray(savedDone)?savedDone:[]),
     hideJapanese:!!modes?.hideJapanese,hideReadings:!!modes?.hideReadings,
     hideNotes:!!modes?.hideNotes,speed:[.7,.85,1].includes(modes?.speed)?modes.speed:.85,
@@ -292,33 +292,28 @@
     safeWrite(PROGRESS,[...state.done]);
     renderCards();renderProgress();showModes();
     $('study').hidden=false;$('emptyPanel').hidden=true;
-    $('clearBtn').hidden=false;
+    $('clearBtn').hidden=source===BUILTIN;
     $('editor').open=false;
     $('playAll').disabled=!speech?.supported();
     notice(savedLyrics?'已建立 '+entries.length+' 行練習，保存在此瀏覽器。':'已建立練習；此瀏覽器無法保存資料。');
     $('study').scrollIntoView?.({block:'start',behavior:'smooth'});
   }
-  function clearLyrics(){
-    if(!state.raw&&!$('lyricInput').value)return;
-    if(!window.confirm('確定清除此瀏覽器儲存的歌詞與進度嗎？'))return;
+  function restoreBuiltin(){
+    if(state.raw===BUILTIN)return;
+    if(!window.confirm('確定還原網站提供的歌曲歌詞？你自行修改的歌詞及進度會被清除。'))return;
     stopAudio();
-    state.raw='';state.lines=[];state.done.clear();
     safeRemove(KEY);safeRemove(PROGRESS);
-    $('lyricInput').value='';
-    $('songContent').replaceChildren();
-    $('study').hidden=true;$('emptyPanel').hidden=false;
-    $('clearBtn').hidden=true;
-    $('editor').open=true;
-    notice('已清除此瀏覽器的歌詞及練習進度。');
+    state.raw=BUILTIN;state.done.clear();
+    state.lines=parse(BUILTIN);
+    $('lyricInput').value=BUILTIN;
+    renderCards();renderProgress();showModes();
+    $('study').hidden=false;$('emptyPanel').hidden=true;
+    $('editor').open=false;$('clearBtn').hidden=true;
+    $('playAll').disabled=!speech?.supported();
+    notice('已還原完整歌曲歌詞與假名、中文提示。');
   }
   $('applyBtn').addEventListener('click',applyLyrics);
-  $('clearBtn').addEventListener('click',clearLyrics);
-  $('demoBtn').addEventListener('click',()=>{
-    if(state.raw&&state.raw!==SAMPLE&&!window.confirm('示範句會取代正在使用的歌詞。要繼續嗎？'))return;
-    $('lyricInput').value=SAMPLE;
-    applyLyrics();
-    notice('已載入三句原創示範（不是原歌歌詞）。');
-  });
+  $('clearBtn').addEventListener('click',restoreBuiltin);
   $('importFile').addEventListener('change',async event=>{
     const file=event.target.files?.[0];
     if(!file)return;
@@ -350,7 +345,7 @@
       state.lines=loaded;
       $('study').hidden=false;
       $('emptyPanel').hidden=true;
-      $('clearBtn').hidden=false;
+      $('clearBtn').hidden=state.raw===BUILTIN;
       $('editor').open=false;
       $('playAll').disabled=!speech?.supported();
       renderCards();renderProgress();
