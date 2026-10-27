@@ -37,35 +37,21 @@
     target.hidden=false;
   }
 
-  // 與首頁相同：優先 Google 日語，排除可能無聲的 Kyoto/Kyoko。
-  const unavailable=/(?:kyoto|kyoko|kyōko|kyouko|きょうこ|京都)/i;
-  const female=/nanami|aoi|mayu|shiori|sakura|o-ren|mizuki|haruka|yuna|sayaka|hikari|yumi|女性|女声|女聲|female/i;
-  let chosenVoice=null;
-  function refreshVoice(){
-    if(!VOICE_READY)return;
-    const voices=window.speechSynthesis.getVoices().filter(voice=>
-      /^ja(?:-|$)/i.test(voice.lang||'')&&!unavailable.test((voice.name||'')+' '+(voice.voiceURI||'')));
-    const google=voices.filter(voice=>/google/i.test((voice.name||'')+' '+(voice.voiceURI||'')));
-    const candidates=google.length?google:voices;
-    chosenVoice=[...candidates].sort((a,b)=>
-      Number(female.test(b.name||''))-Number(female.test(a.name||'')))[0]||null;
+  // Same speech engine as the kana home page: even an empty voice list
+  // can use the browser's native ja-JP fallback.
+  const JAPANESE_SPEECH=window.KanaJapaneseSpeech;
+  function savedVoicePreference(){
+    try{
+      const saved=JSON.parse(localStorage.getItem('kanabiyori_state_v2')||'{}');
+      return typeof saved.voiceId==='string'?saved.voiceId:'google';
+    }catch{return 'google'}
   }
   function say(japanese,rate=.82){
-    if(!VOICE_READY){notice('瀏覽器不支援語音播放，請改用 Chrome、Safari 或 Edge。');return;}
-    refreshVoice();
-    if(!chosenVoice){notice('尚未載入可用的日文語音，請稍後重新試聽或檢查語音設定。');return;}
-    try{
-      const utterance=new SpeechSynthesisUtterance(String(japanese||'').trim());
-      utterance.lang='ja-JP';
-      utterance.rate=rate;
-      utterance.voice=chosenVoice;
-      utterance.onerror=event=>{
-        if(!['canceled','interrupted'].includes(event.error))notice('無法播放日文，請檢查裝置的日文語音設定。');
-      };
-      $('toast').hidden=true;
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
-    }catch{notice('無法播放日文，請檢查裝置的日文語音設定。');}
+    $('toast').hidden=true;
+    JAPANESE_SPEECH.speak(japanese,{rate,preference:savedVoicePreference(),onError:reason=>{
+      notice(reason==='unsupported'?'此瀏覽器不支援語音播放。':
+        '無法播放日文語音。可在首頁的設定中選「基本發音」，或確認裝置的日文語音包。');
+    }});
   }
   function spokenWord(part){
     const written=clean(part[0]);
@@ -247,10 +233,6 @@
   $('meaningToggle').addEventListener('click',()=>{
     state.hideMeaning=!state.hideMeaning;save();renderToggles();
   });
-  if(VOICE_READY){
-    refreshVoice();
-    window.speechSynthesis.addEventListener?.('voiceschanged',refreshVoice);
-  }
   $('totalLines').textContent=LINES.length+' 句日文練習';
   render();
 })();
