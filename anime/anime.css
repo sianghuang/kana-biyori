@@ -37,6 +37,10 @@ main{padding:30px 0 48px}
 .category-chip.active{color:#fff;background:var(--dark);border-color:var(--dark)}
 .category-chip:hover:not(.active){border-color:#d4b09c;color:var(--accent)}
 .filter-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:8px}
+.source-options{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.source-options button{border:0;border-radius:8px;padding:8px 11px;background:transparent;color:#868a7f;font-size:11px;font-weight:740}
+.source-options button.active{color:#a75e49;background:#f3e8df}
+.source-options button:hover:not(.active){background:#eee9e0}
 .study-options{display:flex;gap:7px;flex-wrap:wrap}
 .study-options button{border:1px solid #e7dfd6;color:#82867e;background:#fffdf9;border-radius:8px;padding:8px 11px;font-size:11px;font-weight:740}
 .study-options button[aria-pressed="true"]{background:#f3e8df;color:#a55b48;border-color:#e8c8b9}
@@ -50,6 +54,9 @@ main{padding:30px 0 48px}
 .quote-card{min-width:0;display:flex;flex-direction:column;gap:13px;background:var(--paper);border:1px solid #e9e5de;border-radius:15px;box-shadow:0 7px 26px #635b4909;padding:19px}
 .quote-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .quote-label{background:#f3e8df;border-radius:5px;padding:5px 8px;color:#ae624b;font-size:10px;font-weight:800}
+.quote-label.original{background:#edf0e9;color:#627868}
+.source-link{font-size:11px;font-weight:700;color:#ad755e;text-decoration:none}
+.source-link:hover{text-decoration:underline}
 .favorite{font-size:24px;line-height:1;color:#bdbbb2;min-width:36px;min-height:36px;border:0;background:transparent;border-radius:8px}
 .favorite:hover,.favorite.active{color:#c18561}
 .japanese{margin:0;font-size:clamp(18px,2.25vw,23px);line-height:1.7;font-weight:750;overflow-wrap:anywhere;word-break:normal;letter-spacing:.35px}
@@ -97,7 +104,7 @@ footer a{color:#6f8273;text-decoration:none}
   .phrase-units{gap:6px 5px}
   .phrase-unit{padding:5px 3px}
   .unit-jp{font-size:20px}
-  .filter-row{flex-wrap:nowrap}.study-options button{font-size:10.5px;padding:8px}
+  .filter-row{flex-wrap:wrap;gap:6px}.source-options{width:100%;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap}.source-options button{font-size:10.5px;padding:8px 9px}.study-options button{font-size:10.5px;padding:8px}
   footer{padding-bottom:28px}
 }
 @media(max-width:375px){.hero h1{font-size:26px}.brand strong{font-size:15px}.top-links a{padding:9px;font-size:11px}.japanese{font-size:19px}.unit-jp{font-size:18px}.unit-roman{font-size:10px}}
