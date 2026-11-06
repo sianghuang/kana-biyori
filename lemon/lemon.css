@@ -1,0 +1,10 @@
+:root{--accent:#8b772d;--warm:#f4efd9}
+.hero{background:linear-gradient(114deg,#edf0df,#faf3d9 60%,#eee6cf)}
+.eyebrow,.overline{color:#82702d}.vinyl-label{background:#ac923b;border-color:#dbc66b}
+.import-panel{margin:20px 0;padding:18px 20px;background:var(--paper);border:1px solid var(--line);border-radius:14px}
+.import-panel summary{cursor:pointer;font-weight:750;font-size:14px}
+.import-panel p{font-size:12px;line-height:1.8;color:#687267}
+.import-panel label{display:block;font-size:12px;margin:12px 0 8px}
+.import-panel textarea{display:block;width:100%;resize:vertical;padding:12px;border:1px solid #d8d6c7;border-radius:8px;background:#fffefa;color:var(--ink);font:inherit;font-size:14px;line-height:1.7}
+.import-panel textarea:focus-visible{outline:3px solid #bca64a;outline-offset:3px}
+.import-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
