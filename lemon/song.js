@@ -5,7 +5,7 @@
   const KEY='kana-biyori-lemon-lyrics-v1';
   const PROGRESS='kana-biyori-lemon-progress-v1';
   const MODE='kana-biyori-lemon-options-v1';
-  // Built-in examples are original; custom text stays in this browser.
+  // Built-in lyrics and translations supplied by the user; custom text stays local.
   const BUILTIN=window.LEMON_BUILTIN||'';
   const KANA={
     あ:'a',い:'i',う:'u',え:'e',お:'o',か:'ka',き:'ki',く:'ku',け:'ke',こ:'ko',
@@ -294,7 +294,7 @@
     safeWrite(PROGRESS,[...state.done]);
     $('study').hidden=!state.lines.length;
     $('emptyPanel').hidden=!!state.lines.length;
-    $('studyTitle').textContent=custom?'我的歌詞跟讀練習':'原創暖身練習';
+    $('studyTitle').textContent=custom?'我的歌詞跟讀練習':'Lemon 整首跟讀練習';
     $('playAll').disabled=!speech?.supported()||!state.lines.length;
     renderCards();renderProgress();
   }
@@ -313,6 +313,6 @@
   $('resetLyrics').addEventListener('click',()=>{
     safeRemove(KEY);$('lyricsInput').value='';
     loadText(BUILTIN,false);
-    $('importStatus').textContent='已回到原創暖身練習。';
+    $('importStatus').textContent='已回到Lemon 整首跟讀練習。';
   });
 })();
